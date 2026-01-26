@@ -386,7 +386,7 @@
         <p><i class="fas fa-phone"></i> +62 821 3005 3330</p>
         <p><i class="fas fa-envelope"></i> misbendiljatiwetan@gmail.com</p>
         <div class="map-box" style="width: 100%; height: 250px; margin-top: 20px; border-radius: 10px; overflow: hidden;">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.067939214643!2d111.9607924758904!3d-8.09455448095447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e47153a25b7f%3A0xcc99a627fe8b89a2!2sMadrasah%20Ibtidaiyah%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1769393474698!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.067939214643!2d111.9607924758904!3d-8.09455448095447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e47153a25b7f%3A0xcc99a627fe8b89a2!2sMadrasah%20Ibtidaiyah%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1769430698984!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
       <form class="contact-form" onsubmit="event.preventDefault(); alert('Pesan terkirim! Terima kasih.');">
@@ -432,121 +432,131 @@
   <a href="https://wa.me/6282130053330?text=Assalammualaikum%20Admin%20MI%20Bendiljati%20Wetan..." class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
   <script>
-   // 1. PENGELOLAAN TEMA
-  function toggleTheme() {
-    const b = document.body;
-    const icon = document.getElementById('theme-icon');
-    if (b.getAttribute('data-theme') === 'dark') {
-      b.setAttribute('data-theme', 'light');
-      icon.classList.replace('fa-sun', 'fa-moon');
-    } else {
-      b.setAttribute('data-theme', 'dark');
-      icon.classList.replace('fa-moon', 'fa-sun');
-    }
-  }
+    // Konfigurasi API
+    const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
 
-  // 2. NAVIGASI MOBILE
-  function toggleMenu() {
-    document.getElementById('main-nav').classList.toggle('active');
-    document.getElementById('menu-btn').classList.toggle('open');
-  }
-
-  function scrollToSection(id) {
-    document.getElementById('main-nav').classList.remove('active');
-    document.getElementById('menu-btn').classList.remove('open');
-    if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    else {
-      const el = document.getElementById(id);
-      if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
-    }
-  }
-
-  // 3. EFEK REVEAL SAAT SCROLL
-  window.addEventListener('scroll', () => {
-    document.querySelectorAll('.reveal').forEach(r => {
-      if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
-    });
-  });
-
-  // 4. PENGAMBILAN DATA DARI API GOOGLE SHEETS
-  // MASUKKAN URL WEB APP ANDA DI SINI
-  const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
-
-  async function muatDataDinamis() {
-    try {
-      const response = await fetch(API_URL);
-      const data = await response.json();
-      renderSemuaData(data);
-    } catch (err) {
-      console.error("Gagal memuat data:", err);
-      // Sembunyikan loader jika gagal
-      document.querySelectorAll('.loader').forEach(l => l.style.display = 'none');
-    }
-  }
-
-  // Jalankan saat halaman dibuka
-  window.onload = muatDataDinamis;
-
-  function renderSemuaData(data) {
-    if(!data) return;
-
-    // A. Render Dashboard Stats
-    document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
-    document.getElementById('count-guru').innerText = data.dashboard.guru || 0;
-    document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
-
-    // B. Render Slider
-    const sliderCont = document.getElementById('slider');
-    if(data.slider && data.slider.length > 0) {
-      sliderCont.innerHTML = '';
-      data.slider.forEach((url, i) => {
-        const li = document.createElement('li');
-        li.style.backgroundImage = `url('${url}')`;
-        if(i === 0) li.classList.add('active');
-        sliderCont.appendChild(li);
-      });
-      startSliderCycle();
-    }
-
-    // C. Render Layanan
-    const listLayanan = document.getElementById('main-services-list');
-    listLayanan.innerHTML = '';
-    data.layanan.forEach(row => {
-      listLayanan.innerHTML += `
-        <a href="${row[1]}" target="_blank" class="card">
-          <i class="${row[2]}"></i>
-          <h3>${row[0]}</h3>
-          <p>Klik untuk akses layanan</p>
-        </a>`;
-    });
-
-    // D. Render Prestasi
-    const listPrestasi = document.getElementById('prestasi-list');
-    listPrestasi.innerHTML = '';
-    data.prestasi.forEach(row => {
-      listPrestasi.innerHTML += `
-        <div class="prestasi-card card" style="padding:0; overflow:hidden; text-align:left;">
-          <img src="${row[2]}" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
-          <div style="padding:20px;">
-            <h3 style="color:var(--primary);margin:0; font-size:1.1rem">${row[0]}</h3>
-            <p style="color:var(--accent);font-weight:bold; font-size:0.8rem">${row[1]}</p>
-          </div>
-        </div>`;
-    });
-    
-    window.dispatchEvent(new Event('scroll'));
-  }
-
-  function startSliderCycle() {
-    setInterval(() => {
-      const slides = document.querySelectorAll('#slider li');
-      if(slides.length > 1) {
-        let cur = Array.from(slides).findIndex(s => s.classList.contains('active'));
-        slides[cur].classList.remove('active');
-        slides[(cur + 1) % slides.length].classList.add('active');
+    // 1. PENGELOLAAN TEMA
+    function toggleTheme() {
+      const b = document.body;
+      const icon = document.getElementById('theme-icon');
+      if (b.getAttribute('data-theme') === 'dark') {
+        b.setAttribute('data-theme', 'light');
+        icon.classList.replace('fa-sun', 'fa-moon');
+      } else {
+        b.setAttribute('data-theme', 'dark');
+        icon.classList.replace('fa-moon', 'fa-sun');
       }
-    }, 5000);
-  }
+    }
+
+    // 2. NAVIGASI MOBILE
+    function toggleMenu() {
+      document.getElementById('main-nav').classList.toggle('active');
+      document.getElementById('menu-btn').classList.toggle('open');
+    }
+
+    function scrollToSection(id) {
+      document.getElementById('main-nav').classList.remove('active');
+      document.getElementById('menu-btn').classList.remove('open');
+      if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      else {
+        const el = document.getElementById(id);
+        if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+      }
+    }
+
+    // 3. EFEK REVEAL SAAT SCROLL
+    window.addEventListener('scroll', () => {
+      document.querySelectorAll('.reveal').forEach(r => {
+        if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
+      });
+    });
+
+    // 4. PEMUATAN DATA DINAMIS (Optimized for GitHub)
+    async function muatData() {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        renderSemuaData(data);
+      } catch (err) {
+        console.error("Gagal memuat data dari Spreadsheet:", err);
+      }
+    }
+
+    window.onload = muatData;
+
+    function optimizeCloudinary(url, width = 1280) {
+      if (url.includes('cloudinary.com')) {
+        // Otomatis tambah f_auto (format terbaik), q_auto (kualitas cerdas), dan resizing
+        return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width}/`);
+      }
+      return url;
+    }
+
+    function renderSemuaData(data) {
+      if(!data) return;
+
+      // A. Dashboard Stats
+      document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
+      document.getElementById('count-guru').innerText = data.dashboard.guru || 0;
+      document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
+
+      // B. Slider dengan Cloudinary Optimization
+      const sliderCont = document.getElementById('slider');
+      if(data.slider && data.slider.length > 0) {
+        sliderCont.innerHTML = '';
+        data.slider.forEach((url, i) => {
+          const li = document.createElement('li');
+          const optUrl = optimizeCloudinary(url);
+          li.style.backgroundImage = `url('${optUrl}')`;
+          if(i === 0) {
+            li.classList.add('active');
+            li.setAttribute('fetchpriority', 'high');
+          }
+          sliderCont.appendChild(li);
+        });
+        startSliderCycle();
+      }
+
+      // C. Layanan
+      const listLayanan = document.getElementById('main-services-list');
+      listLayanan.innerHTML = '';
+      data.layanan.forEach(row => {
+        listLayanan.innerHTML += `
+          <a href="${row[1]}" target="_blank" class="card">
+            <i class="${row[2]}"></i>
+            <h3>${row[0]}</h3>
+            <p>Klik untuk akses layanan</p>
+          </a>`;
+      });
+
+      // D. Prestasi
+      const listPrestasi = document.getElementById('prestasi-list');
+      listPrestasi.innerHTML = '';
+      data.prestasi.forEach(row => {
+        const imgUrl = optimizeCloudinary(row[2], 600); // Ukuran lebih kecil untuk galeri
+        listPrestasi.innerHTML += `
+          <div class="prestasi-card card" style="padding:0; overflow:hidden; text-align:left;">
+            <img src="${imgUrl}" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
+            <div style="padding:20px;">
+              <h3 style="color:var(--primary);margin:0; font-size:1.1rem">${row[0]}</h3>
+              <p style="color:var(--accent);font-weight:bold; font-size:0.8rem">${row[1]}</p>
+            </div>
+          </div>`;
+      });
+      
+      window.dispatchEvent(new Event('scroll'));
+    }
+
+    function startSliderCycle() {
+      setInterval(() => {
+        const slides = document.querySelectorAll('#slider li');
+        if(slides.length > 1) {
+          let cur = Array.from(slides).findIndex(s => s.classList.contains('active'));
+          slides[cur].classList.remove('active');
+          slides[(cur + 1) % slides.length].classList.add('active');
+        }
+      }, 5000);
+    }
   </script>
 </body>
 </html>
