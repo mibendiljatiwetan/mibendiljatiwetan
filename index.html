@@ -227,48 +227,39 @@
   }
 
  @media (max-width: 992px) {
-  /* Membuat hero sedikit lebih pendek di HP agar teks tidak terpotong */
-  .hero-container { height: 60vh; }
-  
-  .hero-content h2 { font-size: 1.8rem; }
-  
-  /* Layout Layanan jadi 2 kolom agar hemat ruang */
-  #main-services-list {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-  }
-  
-  /* Layout Prestasi jadi 1 kolom agar gambar tetap fokus */
-  #prestasi-list {
-    grid-template-columns: 1fr;
-  }
-
-  /* Memperbesar ukuran font pada tombol agar mudah ditekan jari */
-  .btn-cta, .btn-submit {
-    width: 100%;
-    margin: 10px 0 !important;
-    padding: 15px;
-  }
-  
-  /* Posisi WA Float agar tidak menutupi konten penting */
-  .wa-float {
-    width: 50px;
-    height: 50px;
-    bottom: 20px;
-    right: 20px;
-    font-size: 25px;
-  }
-}
+    header, .top-bar, .section-padding, footer { padding-left: 5%; padding-right: 5%; }
+    .menu-toggle { display: flex; }
+    .brand h1 { font-size: 0.85rem; }
+    
+    nav {
+      position: fixed; top: 0; right: -100%;
+      width: 280px; height: 100vh;
+      background: var(--card);
+      padding: 100px 30px;
+      transition: 0.4s ease-in-out;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+      z-index: 3000;
+    }
     nav.active { right: 0; }
     nav ul { flex-direction: column; gap: 20px; }
     
+    .hero-container { height: 60vh; }
+    .hero-content h2 { font-size: 1.8rem; }
+    
     .dashboard-container { grid-template-columns: 1fr; width: 90%; margin-top: -30px; }
+    
+    #main-services-list { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    #prestasi-list { grid-template-columns: 1fr; }
+    
     .contact-wrapper { grid-template-columns: 1fr; }
     .top-bar { display: none; }
 
     .menu-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
     .menu-toggle.open span:nth-child(2) { opacity: 0; }
     .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+    
+    .wa-float { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 25px; }
+    .btn-cta, .btn-submit { width: 100%; margin: 10px 0 !important; padding: 15px; }
   }
 
   .reveal { opacity: 0; transform: translateY(30px); transition: 1s all ease; }
