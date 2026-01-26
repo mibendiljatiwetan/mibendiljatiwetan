@@ -226,20 +226,39 @@
     font-size: 30px; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   }
 
-  @media (max-width: 992px) {
-    header, .top-bar, .section-padding, footer { padding-left: 5%; padding-right: 5%; }
-    .menu-toggle { display: flex; }
-    .brand h1 { font-size: 0.85rem; }
-    
-    nav {
-      position: fixed; top: 0; right: -100%;
-      width: 280px; height: 100vh;
-      background: var(--card);
-      padding: 100px 30px;
-      transition: 0.4s ease-in-out;
-      box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-      z-index: 3000;
-    }
+ @media (max-width: 992px) {
+  /* Membuat hero sedikit lebih pendek di HP agar teks tidak terpotong */
+  .hero-container { height: 60vh; }
+  
+  .hero-content h2 { font-size: 1.8rem; }
+  
+  /* Layout Layanan jadi 2 kolom agar hemat ruang */
+  #main-services-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+  
+  /* Layout Prestasi jadi 1 kolom agar gambar tetap fokus */
+  #prestasi-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Memperbesar ukuran font pada tombol agar mudah ditekan jari */
+  .btn-cta, .btn-submit {
+    width: 100%;
+    margin: 10px 0 !important;
+    padding: 15px;
+  }
+  
+  /* Posisi WA Float agar tidak menutupi konten penting */
+  .wa-float {
+    width: 50px;
+    height: 50px;
+    bottom: 20px;
+    right: 20px;
+    font-size: 25px;
+  }
+}
     nav.active { right: 0; }
     nav ul { flex-direction: column; gap: 20px; }
     
