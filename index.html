@@ -495,12 +495,12 @@
     window.onload = muatData;
 
     function optimizeCloudinary(url, width = 1280) {
-      if (url.includes('cloudinary.com')) {
-        // Otomatis tambah f_auto (format terbaik), q_auto (kualitas cerdas), dan resizing
-        return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width}/`);
-      }
-      return url;
-    }
+  if (url && url.includes('cloudinary.com')) {
+    // Optimasi otomatis: format ringan (webp), kualitas cerdas, dan ukuran pas
+    return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width},c_fill,ar_16:9/`);
+  }
+  return url;
+}
 
     function renderSemuaData(data) {
       if(!data) return;
@@ -510,18 +510,23 @@
       document.getElementById('count-guru').innerText = data.dashboard.guru || 0;
       document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
 
-      // B. Slider dengan Cloudinary Optimization
+     // B. Slider dengan Optimasi Kecepatan Maksimal
       const sliderCont = document.getElementById('slider');
       if(data.slider && data.slider.length > 0) {
         sliderCont.innerHTML = '';
         data.slider.forEach((url, i) => {
           const li = document.createElement('li');
           const optUrl = optimizeCloudinary(url);
-          li.style.backgroundImage = `url('${optUrl}')`;
+          
           if(i === 0) {
             li.classList.add('active');
+            // Teknik Preload: Memaksa browser download gambar pertama lebih dulu
+            const imgPreload = new Image();
+            imgPreload.src = optUrl;
             li.setAttribute('fetchpriority', 'high');
           }
+          
+          li.style.backgroundImage = `url('${optUrl}')`;
           sliderCont.appendChild(li);
         });
         startSliderCycle();
