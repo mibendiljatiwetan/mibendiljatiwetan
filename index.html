@@ -9,7 +9,6 @@
   <meta name="description" content="Portal Resmi MI Bendiljati Wetan Sumbergempol Tulungagung. Madrasah berbasis teknologi digital dengan kurikulum islami modern.">
   
   <link rel="preconnect" href="https://res.cloudinary.com">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
   
@@ -32,80 +31,45 @@
     }
 
     * { box-sizing: border-box; }
-    
     html, body {
-      margin: 0; padding: 0;
+      margin: 0; padding: 0; 
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg); color: var(--text);
-      scroll-behavior: smooth;
-      overflow-x: hidden;
+      scroll-behavior: smooth; overflow-x: hidden;
     }
 
-    /* Pengumuman Atas */
+    /* Pengumuman Ticker */
     .announcement-bar {
-      background: var(--accent);
-      color: var(--primary);
-      padding: 8px 0;
-      font-size: 0.8rem;
-      font-weight: 600;
-      overflow: hidden;
-      white-space: nowrap;
+      background: var(--accent); color: var(--primary);
+      padding: 8px 0; font-size: 0.8rem; font-weight: 600;
+      overflow: hidden; white-space: nowrap;
     }
-    .ticker {
-      display: inline-block;
-      animation: ticker 30s linear infinite;
-    }
-    @keyframes ticker {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
+    .ticker { display: inline-block; animation: ticker 30s linear infinite; padding-left: 100%; }
+    @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-    /* Baris Atas / Top Info */
+    /* Top Bar Info */
     .top-bar {
-      background: var(--primary);
-      color: white;
-      padding: 10px 10%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
+      background: var(--primary); color: white;
+      padding: 10px 10%; display: flex;
+      justify-content: space-between; align-items: center; font-size: 0.8rem;
     }
 
-    /* Header Navigasi */
+    /* Header Nav */
     header {
-      background: var(--glass);
-      backdrop-filter: blur(15px);
-      padding: 15px 10%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 2000;
+      background: var(--glass); backdrop-filter: blur(15px);
+      padding: 15px 10%; display: flex;
+      justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 2000;
       box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     }
-
     .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer; }
     .brand img { height: 45px; }
     .brand h1 { font-size: 1rem; margin: 0; color: var(--primary); font-weight: 800; }
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 25px;
-      margin: 0; padding: 0;
-    }
-    nav ul li a {
-      text-decoration: none;
-      color: var(--text);
-      font-weight: 700;
-      font-size: 0.85rem;
-      transition: var(--transition);
-      cursor: pointer;
-    }
-    nav ul li a:hover { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+    nav ul li a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; }
 
-    /* Slider Hero */
+    /* Hero Slider */
     .hero-container { position: relative; height: 80vh; background: #000; overflow: hidden; }
     .bg-slideshow { list-style: none; padding: 0; margin: 0; }
     .bg-slideshow li {
@@ -114,114 +78,67 @@
       opacity: 0; transition: opacity 1s ease-in-out;
     }
     .bg-slideshow li.active { opacity: 0.6; }
-
     .hero-overlay {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
+      position: absolute; inset: 0; display: flex;
+      align-items: center; justify-content: center;
       text-align: center; color: white; padding: 0 5%;
     }
-    .hero-content h2 { font-size: clamp(1.8rem, 5vw, 3rem); margin-bottom: 20px; line-height: 1.2; }
-    .hero-content p { font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px; }
 
     /* Dashboard Stats */
     .dashboard-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      width: 80%;
-      margin: -50px auto 50px;
-      background: var(--card);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 100;
-      text-align: center;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+      width: 80%; margin: -50px auto 50px; background: var(--card);
+      padding: 30px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      position: relative; z-index: 100; text-align: center;
     }
     .stat-item h3 { font-size: 2.2rem; color: var(--primary); margin: 0; }
-    .stat-item p { margin: 5px 0 0; font-weight: 600; color: #666; }
 
-    /* Section & Cards */
+    /* Grid & Card */
     .section-padding { padding: 80px 10%; }
     .section-title { text-align: center; margin-bottom: 50px; }
-    .section-title h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; }
-
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-    }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
     .card {
-      background: var(--card);
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      transition: var(--transition);
-      border: 1px solid rgba(0,0,0,0.05);
-      text-decoration: none;
-      color: inherit;
+      background: var(--card); padding: 30px; border-radius: 15px; text-align: center;
+      transition: var(--transition); border: 1px solid rgba(0,0,0,0.05);
+      text-decoration: none; color: inherit;
     }
     .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
     .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
 
-    /* Testimoni */
-    .testi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-    }
-    .testi-card {
-      background: rgba(255,255,255,0.05);
-      padding: 30px;
-      border-radius: 15px;
-      border: 1px solid rgba(0,0,0,0.1);
+    /* Testimonial */
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+    .testi-card { 
+      background: rgba(255,255,255,0.05); padding: 30px; border-radius: 15px; 
+      border: 1px solid rgba(0,0,0,0.1); position: relative;
     }
 
-    /* Kontak & Form */
-    .contact-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 50px;
-      background: var(--card);
-      padding: 40px;
-      border-radius: 20px;
-    }
+    /* Kontak */
+    .contact-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; background: var(--card); padding: 40px; border-radius: 20px; }
     .contact-form { display: flex; flex-direction: column; gap: 15px; }
-    .contact-form input, .contact-form textarea {
-      padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;
-    }
-    .btn-submit, .btn-cta {
-      background: var(--accent); color: var(--primary); border: none;
-      padding: 12px 25px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s;
-    }
+    .contact-form input, .contact-form textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+    .btn-submit { background: var(--accent); color: var(--primary); border: none; padding: 12px 25px; border-radius: 8px; font-weight: 800; cursor: pointer; }
 
-    /* Footer */
-    footer { background: var(--primary); color: white; padding: 60px 10% 20px; }
-
-    /* Floating WhatsApp */
+    /* Floating WA */
     .wa-float {
       position: fixed; bottom: 30px; right: 30px;
-      background: #25d366; color: white;
-      width: 60px; height: 60px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
+      background: #25d366; color: white; width: 60px; height: 60px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-size: 30px; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
-    /* Mobile Style */
+    /* Mobile */
     @media (max-width: 992px) {
       header, .top-bar, .section-padding { padding-left: 5%; padding-right: 5%; }
       .top-bar { display: none; }
       .menu-toggle { display: flex; flex-direction: column; gap: 5px; cursor: pointer; }
-      .menu-toggle span { width: 25px; height: 3px; background: var(--primary); border-radius: 2px; }
-      
+      .menu-toggle span { width: 25px; height: 3px; background: var(--primary); }
       nav {
         position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
         background: var(--card); padding: 100px 30px; transition: 0.4s; z-index: 3000;
-        box-shadow: -10px 0 30px rgba(0,0,0,0.1);
       }
       nav.active { right: 0; }
       nav ul { flex-direction: column; }
-      .dashboard-container { grid-template-columns: 1fr; width: 90%; margin-top: -30px; }
+      .dashboard-container { grid-template-columns: 1fr; width: 90%; }
       #main-services-list { grid-template-columns: repeat(2, 1fr); gap: 15px; }
       .contact-wrapper { grid-template-columns: 1fr; }
     }
@@ -241,7 +158,7 @@
 
   <div class="top-bar">
     <div><i class="fas fa-envelope"></i> misbendiljatiwetan@gmail.com</div>
-    <div style="display: flex; align-items: center; gap: 15px;">
+    <div style="display: flex; gap: 15px;">
       <a href="https://www.facebook.com/share/1AgqiAvPx1/?mibextid=wwXIfr" style="color:white" target="_blank"><i class="fab fa-facebook"></i></a>
       <a href="https://www.instagram.com/mibendiljatiwetan_official?igsh=MW5lcHprM3NwaXYybQ==" style="color:white" target="_blank"><i class="fab fa-instagram"></i></a>
       <i class="fas fa-moon" id="theme-icon" style="cursor:pointer" onclick="toggleTheme()"></i>
@@ -276,8 +193,8 @@
         <h2 class="reveal">Madrasah Unggul<br><span style="color:var(--accent)">Berbasis Teknologi</span></h2>
         <p class="reveal">Menyiapkan generasi islami yang cerdas dan adaptif di era digital.</p>
         <div class="reveal">
-          <button onclick="scrollToSection('main-services')" class="btn-cta">LAYANAN KAMI</button>
-          <button onclick="scrollToSection('contact-section')" class="btn-cta" style="background:transparent; border:2px solid var(--accent); color:white; margin-left:10px;">SPMB</button>
+          <button onclick="scrollToSection('main-services')" class="btn-submit">LAYANAN KAMI</button>
+          <button onclick="scrollToSection('contact-section')" class="btn-submit" style="background:transparent; border:2px solid var(--accent); color:white; margin-left:10px;">SPMB</button>
         </div>
       </div>
     </div>
@@ -294,8 +211,7 @@
       <h2>Layanan Digital</h2>
       <p>Akses berbagai kemudahan layanan pendidikan dalam satu genggaman.</p>
     </div>
-    <div class="grid-container reveal" id="main-services-list">
-      </div>
+    <div class="grid-container reveal" id="main-services-list"></div>
   </section>
 
   <section id="fasilitas-section" class="section-padding" style="background: rgba(0,0,0,0.02)">
@@ -317,8 +233,7 @@
       <h2>Galeri Prestasi</h2>
       <p>Bukti nyata dedikasi dan kualitas pendidikan kami.</p>
     </div>
-    <div class="grid-container reveal" id="prestasi-list">
-      </div>
+    <div class="grid-container reveal" id="prestasi-list"></div>
   </section>
 
   <section class="section-padding" style="background: var(--primary); color: white;">
@@ -347,25 +262,23 @@
         <p><i class="fas fa-phone"></i> +62 821 3005 3330</p>
         <p><i class="fas fa-envelope"></i> misbendiljatiwetan@gmail.com</p>
         <div style="width:100%; height:250px; margin-top:20px; border-radius:15px; overflow:hidden;">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.0!2d111.9!3d-8.1!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwMDYnNDUuNiJTIDExMcKwNTcnMzIuNCJF!5e0!3m2!1sid!2sid!4v123456789" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.40742137934!2d111.9616!3d-8.1157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwMDYnNTYuNSJTIDExMcKwNTcnNDEuNyJF!5e0!3m2!1sid!2sid!4v1620000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
       </div>
-      <form class="contact-form">
-        <h3 style="color:var(--primary)">Kirim Pesan</h3>
+      <form class="contact-form" onsubmit="event.preventDefault(); alert('Pesan terkirim!');">
+        <h3>Kirim Pesan</h3>
         <input type="text" placeholder="Nama Lengkap" required>
         <input type="email" placeholder="Email Aktif" required>
         <textarea placeholder="Pesan Anda..." rows="5" required></textarea>
-        <button type="button" class="btn-submit" onclick="alert('Pesan terkirim!')">KIRIM SEKARANG</button>
+        <button type="submit" class="btn-submit">KIRIM SEKARANG</button>
       </form>
     </div>
   </section>
 
-  <footer>
-    <div style="text-align:center; padding-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1)">
-      <h4 style="color:var(--accent)">MI BENDILJATI WETAN</h4>
-      <p>Membangun generasi cerdas, berkarakter, dan islami.</p>
-    </div>
-    <p style="text-align:center; font-size:0.8rem; padding-top:20px">© 2026 MI Bendiljati Wetan. All Rights Reserved. Terakreditasi B.</p>
+  <footer style="background: var(--primary); color: white; padding: 40px 10%; text-align: center;">
+    <h4 style="color:var(--accent)">MI BENDILJATI WETAN</h4>
+    <p>Membangun generasi cerdas, berkarakter, dan islami.</p>
+    <p style="font-size:0.8rem; margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">© 2026 MI Bendiljati Wetan. All Rights Reserved. Terakreditasi B.</p>
   </footer>
 
   <a href="https://wa.me/6282130053330" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -383,7 +296,6 @@
 
     function toggleMenu() {
       document.getElementById('main-nav').classList.toggle('active');
-      document.getElementById('menu-btn').classList.toggle('open');
     }
 
     function scrollToSection(id) {
@@ -392,10 +304,9 @@
       window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
     }
 
-    // Fungsi Optimasi Gambar Cloudinary
-    function optImg(url, width = 800) {
+    function optImg(url, w = 800) {
       if (!url || !url.includes('cloudinary.com')) return url;
-      return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width},c_fill,ar_16:9/`);
+      return url.replace('/upload/', `/upload/f_auto,q_auto,w_${w},c_fill,ar_16:9/`);
     }
 
     async function loadData() {
@@ -403,12 +314,10 @@
         const res = await fetch(API_URL);
         const data = await res.json();
         
-        // Stats
         document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
         document.getElementById('count-guru').innerText = data.dashboard.guru || 0;
         document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
 
-        // Slider
         const slider = document.getElementById('slider');
         if(data.slider.length > 0) {
           slider.innerHTML = data.slider.map((url, i) => `
@@ -416,31 +325,27 @@
           `).join('');
         }
 
-        // Layanan
         document.getElementById('main-services-list').innerHTML = data.layanan.map(row => `
-          <a href="${row[1]}" target="_blank" class="card">
-            <i class="${row[2]}"></i>
-            <h3>${row[0]}</h3>
-            <p>Klik untuk akses</p>
-          </a>
+          <a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Akses Layanan</p></a>
         `).join('');
 
-        // Prestasi
         document.getElementById('prestasi-list').innerHTML = data.prestasi.map(row => `
           <div class="card" style="padding:0; overflow:hidden; text-align:left;">
             <img src="${optImg(row[2], 500)}" style="width:100%; height:200px; object-fit:cover" loading="lazy">
-            <div style="padding:20px">
-              <h3>${row[0]}</h3>
-              <p style="color:var(--accent); font-weight:bold">${row[1]}</p>
-            </div>
+            <div style="padding:20px"><h3>${row[0]}</h3><p style="color:var(--accent); font-weight:bold">${row[1]}</p></div>
           </div>
         `).join('');
 
         window.dispatchEvent(new Event('scroll'));
-      } catch (err) { console.error("Error:", err); }
+      } catch (e) { console.error(e); }
     }
 
-    // Slider Interval
+    window.addEventListener('scroll', () => {
+      document.querySelectorAll('.reveal').forEach(r => {
+        if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
+      });
+    });
+
     setInterval(() => {
       const slides = document.querySelectorAll('#slider li');
       if(slides.length < 2) return;
@@ -448,13 +353,6 @@
       slides[cur].classList.remove('active');
       slides[(cur + 1) % slides.length].classList.add('active');
     }, 5000);
-
-    // Reveal Animation on Scroll
-    window.addEventListener('scroll', () => {
-      document.querySelectorAll('.reveal').forEach(r => {
-        if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
-      });
-    });
 
     window.onload = loadData;
   </script>
