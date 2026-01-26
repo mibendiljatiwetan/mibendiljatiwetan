@@ -471,71 +471,20 @@
     // Ganti dengan URL yang Anda salin dari Google Apps Script tadi
 const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
 
-async function muatData() {
+    window.onload = async () => {
   try {
+    // Mengambil data dari Google Sheets via API
     const response = await fetch(API_URL);
     const data = await response.json();
+    
+    // Memanggil fungsi render yang sudah Anda buat sebelumnya
     renderSemuaData(data);
-  } catch (error) {
-    console.error("Gagal mengambil data:", error);
-    // Jika gagal, tampilkan angka default agar tidak kosong
-    document.getElementById('count-siswa').innerText = "500+";
+  } catch (err) {
+    console.error("Data Error:", err);
+    // Jika error, kita hilangkan loader agar tidak berputar selamanya
+    document.querySelectorAll('.loader').forEach(l => l.style.display = 'none');
   }
-}
-
-// Jalankan fungsi saat halaman dimuat
-window.onload = muatData;
-
-    function renderSemuaData(data) {
-      if(!data || data.error) return console.error("Error dari Server:", data ? data.error : "Unknown");
-
-      // A. Render Dashboard Stats
-      document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
-      document.getElementById('count-guru').innerText = data.dashboard.guru || 0;
-      document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
-
-      // B. Render Slider
-      const sliderCont = document.getElementById('slider');
-      if(data.slider && data.slider.length > 0) {
-        sliderCont.innerHTML = '';
-        data.slider.forEach((url, i) => {
-          const li = document.createElement('li');
-          li.style.backgroundImage = `url('${url}')`;
-          if(i === 0) li.classList.add('active');
-          sliderCont.appendChild(li);
-        });
-        startSliderCycle();
-      }
-
-      // C. Render Layanan
-      const listLayanan = document.getElementById('main-services-list');
-      listLayanan.innerHTML = '';
-      data.layanan.forEach(row => {
-        listLayanan.innerHTML += `
-          <a href="${row[1]}" target="_blank" class="card">
-            <i class="${row[2]}"></i>
-            <h3>${row[0]}</h3>
-            <p>Klik untuk akses layanan</p>
-          </a>`;
-      });
-
-      // D. Render Prestasi
-      const listPrestasi = document.getElementById('prestasi-list');
-      listPrestasi.innerHTML = '';
-      data.prestasi.forEach(row => {
-        listPrestasi.innerHTML += `
-          <div class="prestasi-card card" style="padding:0; overflow:hidden; text-align:left;">
-            <img src="${row[2]}" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
-            <div style="padding:20px;">
-              <h3 style="color:var(--primary);margin:0; font-size:1.1rem">${row[0]}</h3>
-              <p style="color:var(--accent);font-weight:bold; font-size:0.8rem">${row[1]}</p>
-            </div>
-          </div>`;
-      });
-      
-      // Trigger reveal manual untuk data yang baru muncul
-      window.dispatchEvent(new Event('scroll'));
-    }
+};
 
     function startSliderCycle() {
       setInterval(() => {
