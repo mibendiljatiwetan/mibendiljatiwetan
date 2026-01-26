@@ -258,19 +258,30 @@
     <div class="contact-wrapper reveal">
       <div class="contact-info">
         <h2 style="color:var(--primary)">Hubungi Kami</h2>
-        <p><i class="fas fa-map-marker-alt"></i> Sumbergempol, Tulungagung, Jatim</p>
-        <p><i class="fas fa-phone"></i> +62 821 3005 3330</p>
-        <p><i class="fas fa-envelope"></i> misbendiljatiwetan@gmail.com</p>
-        <div style="width:100%; height:250px; margin-top:20px; border-radius:15px; overflow:hidden;">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.067939214643!2d111.9607924758904!3d-8.09455448095447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e47153a25b7f%3A0xcc99a627fe8b89a2!2sMadrasah%20Ibtidaiyah%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1769434044782!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <p><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> Jl. Bendiljati Wetan, Kec. Sumbergempol, Kabupaten Tulungagung, Jawa Timur 66291</p>
+        <p><i class="fas fa-phone" style="color:var(--accent)"></i> +62 821 3005 3330</p>
+        <p><i class="fas fa-envelope" style="color:var(--accent)"></i> misbendiljatiwetan@gmail.com</p>
+        
+        <div style="width:100%; height:300px; margin-top:20px; border-radius:15px; overflow:hidden; border: 2px solid var(--accent);">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.7788481434915!2d111.9649568740523!3d-8.1239920813133!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e20300a2902b%3A0x6442655a5b565a0c!2sMI%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid" 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
       </div>
-      <form class="contact-form" onsubmit="event.preventDefault(); alert('Pesan terkirim!');">
-        <h3>Kirim Pesan</h3>
+      
+      <form class="contact-form" onsubmit="event.preventDefault(); window.open('https://wa.me/6282130053330?text=Halo%20Admin,%20saya%20ingin%20bertanya...', '_blank');">
+        <h3 style="color:var(--primary)">Kirim Pesan</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 10px;">Hubungi kami langsung melalui WhatsApp untuk respon lebih cepat.</p>
         <input type="text" placeholder="Nama Lengkap" required>
         <input type="email" placeholder="Email Aktif" required>
-        <textarea placeholder="Pesan Anda..." rows="5" required></textarea>
-        <button type="submit" class="btn-submit">KIRIM SEKARANG</button>
+        <textarea placeholder="Apa yang bisa kami bantu?" rows="5" required></textarea>
+        <button type="submit" class="btn-submit"><i class="fab fa-whatsapp"></i> KIRIM VIA WHATSAPP</button>
       </form>
     </div>
   </section>
