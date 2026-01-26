@@ -432,70 +432,121 @@
   <a href="https://wa.me/6282130053330?text=Assalammualaikum%20Admin%20MI%20Bendiljati%20Wetan..." class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
   <script>
-    // 1. PENGELOLAAN TEMA
-    function toggleTheme() {
-      const b = document.body;
-      const icon = document.getElementById('theme-icon');
-      if (b.getAttribute('data-theme') === 'dark') {
-        b.setAttribute('data-theme', 'light');
-        icon.classList.replace('fa-sun', 'fa-moon');
-      } else {
-        b.setAttribute('data-theme', 'dark');
-        icon.classList.replace('fa-moon', 'fa-sun');
-      }
+   // 1. PENGELOLAAN TEMA
+  function toggleTheme() {
+    const b = document.body;
+    const icon = document.getElementById('theme-icon');
+    if (b.getAttribute('data-theme') === 'dark') {
+      b.setAttribute('data-theme', 'light');
+      icon.classList.replace('fa-sun', 'fa-moon');
+    } else {
+      b.setAttribute('data-theme', 'dark');
+      icon.classList.replace('fa-moon', 'fa-sun');
     }
+  }
 
-    // 2. NAVIGASI MOBILE
-    function toggleMenu() {
-      document.getElementById('main-nav').classList.toggle('active');
-      document.getElementById('menu-btn').classList.toggle('open');
+  // 2. NAVIGASI MOBILE
+  function toggleMenu() {
+    document.getElementById('main-nav').classList.toggle('active');
+    document.getElementById('menu-btn').classList.toggle('open');
+  }
+
+  function scrollToSection(id) {
+    document.getElementById('main-nav').classList.remove('active');
+    document.getElementById('menu-btn').classList.remove('open');
+    if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else {
+      const el = document.getElementById(id);
+      if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
     }
+  }
 
-    function scrollToSection(id) {
-      document.getElementById('main-nav').classList.remove('active');
-      document.getElementById('menu-btn').classList.remove('open');
-      if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-      else {
-        const el = document.getElementById(id);
-        if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
-      }
+  // 3. EFEK REVEAL SAAT SCROLL
+  window.addEventListener('scroll', () => {
+    document.querySelectorAll('.reveal').forEach(r => {
+      if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
+    });
+  });
+
+  // 4. PENGAMBILAN DATA DARI API GOOGLE SHEETS
+  // MASUKKAN URL WEB APP ANDA DI SINI
+  const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
+
+  async function muatDataDinamis() {
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      renderSemuaData(data);
+    } catch (err) {
+      console.error("Gagal memuat data:", err);
+      // Sembunyikan loader jika gagal
+      document.querySelectorAll('.loader').forEach(l => l.style.display = 'none');
     }
+  }
 
-    // 3. EFEK REVEAL SAAT SCROLL
-    window.addEventListener('scroll', () => {
-      document.querySelectorAll('.reveal').forEach(r => {
-        if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
+  // Jalankan saat halaman dibuka
+  window.onload = muatDataDinamis;
+
+  function renderSemuaData(data) {
+    if(!data) return;
+
+    // A. Render Dashboard Stats
+    document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
+    document.getElementById('count-guru').innerText = data.dashboard.guru || 0;
+    document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
+
+    // B. Render Slider
+    const sliderCont = document.getElementById('slider');
+    if(data.slider && data.slider.length > 0) {
+      sliderCont.innerHTML = '';
+      data.slider.forEach((url, i) => {
+        const li = document.createElement('li');
+        li.style.backgroundImage = `url('${url}')`;
+        if(i === 0) li.classList.add('active');
+        sliderCont.appendChild(li);
       });
+      startSliderCycle();
+    }
+
+    // C. Render Layanan
+    const listLayanan = document.getElementById('main-services-list');
+    listLayanan.innerHTML = '';
+    data.layanan.forEach(row => {
+      listLayanan.innerHTML += `
+        <a href="${row[1]}" target="_blank" class="card">
+          <i class="${row[2]}"></i>
+          <h3>${row[0]}</h3>
+          <p>Klik untuk akses layanan</p>
+        </a>`;
     });
 
-    // Ganti dengan URL yang Anda salin dari Google Apps Script tadi
-const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
-
-    window.onload = async () => {
-  try {
-    // Mengambil data dari Google Sheets via API
-    const response = await fetch(API_URL);
-    const data = await response.json();
+    // D. Render Prestasi
+    const listPrestasi = document.getElementById('prestasi-list');
+    listPrestasi.innerHTML = '';
+    data.prestasi.forEach(row => {
+      listPrestasi.innerHTML += `
+        <div class="prestasi-card card" style="padding:0; overflow:hidden; text-align:left;">
+          <img src="${row[2]}" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
+          <div style="padding:20px;">
+            <h3 style="color:var(--primary);margin:0; font-size:1.1rem">${row[0]}</h3>
+            <p style="color:var(--accent);font-weight:bold; font-size:0.8rem">${row[1]}</p>
+          </div>
+        </div>`;
+    });
     
-    // Memanggil fungsi render yang sudah Anda buat sebelumnya
-    renderSemuaData(data);
-  } catch (err) {
-    console.error("Data Error:", err);
-    // Jika error, kita hilangkan loader agar tidak berputar selamanya
-    document.querySelectorAll('.loader').forEach(l => l.style.display = 'none');
+    window.dispatchEvent(new Event('scroll'));
   }
-};
 
-    function startSliderCycle() {
-      setInterval(() => {
-        const slides = document.querySelectorAll('#slider li');
-        if(slides.length > 1) {
-          let cur = Array.from(slides).findIndex(s => s.classList.contains('active'));
-          slides[cur].classList.remove('active');
-          slides[(cur + 1) % slides.length].classList.add('active');
-        }
-      }, 5000);
-    }
+  function startSliderCycle() {
+    setInterval(() => {
+      const slides = document.querySelectorAll('#slider li');
+      if(slides.length > 1) {
+        let cur = Array.from(slides).findIndex(s => s.classList.contains('active'));
+        slides[cur].classList.remove('active');
+        slides[(cur + 1) % slides.length].classList.add('active');
+      }
+    }, 5000);
+  }
   </script>
 </body>
 </html>
