@@ -3,322 +3,158 @@
 <head>
   <base target="_top">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   
   <title>MI Bendiljati Wetan - Madrasah Digital Unggul & Berprestasi</title>
-  <meta name="description" content="Portal Resmi MI Bendiljati Wetan Sumbergempol Tulungagung. Madrasah berbasis teknologi digital dengan kurikulum islami modern.">
-  <meta name="keywords" content="MI Bendiljati Wetan, Madrasah Tulungagung, Sekolah Digital, PPDB MI Bendiljati">
+  <meta name="description" content="Portal Resmi MI Bendiljati Wetan Sumbergempol Tulungagung.">
   
+  <link rel="preconnect" href="https://res.cloudinary.com">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
   
   <style>
-  :root {
-    --primary: #043927;
-    --accent: #d4af37;
-    --bg: #fdfdfd;
-    --text: #1a1c1b;
-    --card: #ffffff;
-    --glass: rgba(255, 255, 255, 0.95);
-    --transition: 0.3s ease-in-out;
-  }
-
-  [data-theme="dark"] {
-    --bg: #0b110f;
-    --text: #e4e6e5;
-    --card: #151d1a;
-    --glass: rgba(21, 29, 26, 0.95);
-  }
-
-  * { box-sizing: border-box; }
-
-  html, body {
-    margin: 0; padding: 0; 
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg); color: var(--text);
-    scroll-behavior: smooth;
-    overflow-x: hidden;
-    width: 100%;
-  }
-
-  .announcement-bar {
-    background: var(--accent);
-    color: var(--primary);
-    padding: 8px 0;
-    font-size: 0.8rem;
-    font-weight: 600;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .ticker {
-    display: inline-block;
-    animation: ticker 30s linear infinite;
-    padding-left: 100%;
-  }
-  @keyframes ticker {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(-100%, 0); }
-  }
-
-  .top-bar {
-    background: var(--primary);
-    color: white;
-    padding: 10px 10%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.8rem;
-  }
-
-  header {
-    background: var(--glass);
-    backdrop-filter: blur(15px);
-    padding: 15px 10%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 2000;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-  }
-
-  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer; }
-  .brand img { height: 45px; }
-  .brand h1 { font-size: 1rem; margin: 0; color: var(--primary); font-weight: 800; text-align: left; }
-
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 25px;
-    margin: 0; padding: 0;
-  }
-  nav ul li a {
-    text-decoration: none;
-    color: var(--text);
-    font-weight: 700;
-    font-size: 0.85rem;
-    transition: var(--transition);
-    cursor: pointer;
-  }
-  nav ul li a:hover { color: var(--accent); }
-
-  .menu-toggle {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    z-index: 3001;
-  }
-  .menu-toggle span {
-    width: 25px; height: 3px;
-    background: var(--primary);
-    transition: 0.3s;
-    border-radius: 2px;
-  }
-
-  .hero-container { position: relative; height: 80vh; background: #000; overflow: hidden; }
-  .bg-slideshow { list-style: none; padding: 0; margin: 0; }
-  .bg-slideshow li {
-    position: absolute; width: 100%; height: 100%;
-    background-size: cover; background-position: center;
-    opacity: 0; transition: opacity 1s ease-in-out;
-  }
-  .bg-slideshow li.active { opacity: 0.6; }
-
-  .hero-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    text-align: center; color: white; padding: 0 5%;
-  }
-  .hero-content h2 { font-size: clamp(1.8rem, 5vw, 3rem); margin-bottom: 20px; line-height: 1.2; }
-  .hero-content p { font-size: 1.1rem; max-width: 600px; margin: 0 auto 30px; }
-
-  .dashboard-container {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    width: 80%;
-    margin: -50px auto 50px;
-    background: var(--card);
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    z-index: 100;
-    text-align: center;
-  }
-  .stat-item { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .stat-item h3 { font-size: 2.2rem; color: var(--primary); margin: 0; }
-  .stat-item p { margin: 5px 0 0; font-weight: 600; color: #666; }
-
-  .section-padding { padding: 80px 10%; }
-  .section-title { text-align: center; margin-bottom: 50px; }
-  .section-title h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; }
-
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-  }
-  .card {
-    background: var(--card);
-    padding: 30px;
-    border-radius: 15px;
-    text-align: center;
-    transition: var(--transition);
-    border: 1px solid rgba(0,0,0,0.05);
-    text-decoration: none;
-    color: inherit;
-  }
-  .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-  .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
-
-  .testi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-  }
-  .testi-card {
-    background: rgba(255,255,255,0.1);
-    padding: 30px;
-    border-radius: 15px;
-    backdrop-filter: blur(5px);
-    text-align: left;
-  }
-  .testi-user { display: flex; align-items: center; gap: 15px; margin-top: 20px; }
-  .testi-user img { width: 50px; height: 50px; border-radius: 50%; }
-
-  .contact-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
-    background: var(--card);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    text-align: left;
-  }
-  .contact-form { display: flex; flex-direction: column; gap: 15px; }
-  .contact-form input, .contact-form textarea {
-    padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;
-  }
-  .btn-submit, .btn-cta {
-    background: var(--accent); color: var(--primary); border: none;
-    padding: 12px 25px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s;
-  }
-
-  footer { background: var(--primary); color: white; padding: 60px 10% 20px; text-align: left; }
-  .footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 40px;
-    margin-bottom: 40px;
-  }
-  .footer-col ul { list-style: none; padding: 0; }
-  .footer-col ul li { margin-bottom: 10px; cursor: pointer; }
-
-  .wa-float {
-    position: fixed; bottom: 30px; right: 30px;
-    background: #25d366; color: white;
-    width: 60px; height: 60px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 30px; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  }
-
- @media (max-width: 992px) {
-    header, .top-bar, .section-padding, footer { padding-left: 5%; padding-right: 5%; }
-    .menu-toggle { display: flex; }
-    .brand h1 { font-size: 0.85rem; }
-    
-    nav {
-      position: fixed; top: 0; right: -100%;
-      width: 280px; height: 100vh;
-      background: var(--card);
-      padding: 100px 30px;
-      transition: 0.4s ease-in-out;
-      box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-      z-index: 3000;
+    :root {
+      --primary: #043927; --accent: #d4af37; --bg: #fdfdfd;
+      --text: #1a1c1b; --card: #ffffff; --glass: rgba(255, 255, 255, 0.95);
+      --transition: 0.3s ease-in-out;
     }
-    nav.active { right: 0; }
-    nav ul { flex-direction: column; gap: 20px; }
-    
-    .hero-container { height: 60vh; }
-    .hero-content h2 { font-size: 1.8rem; }
-    
-    .dashboard-container { grid-template-columns: 1fr; width: 90%; margin-top: -30px; }
-    
-    #main-services-list { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-    #prestasi-list { grid-template-columns: 1fr; }
-    
-    .contact-wrapper { grid-template-columns: 1fr; }
-    .top-bar { display: none; }
 
-    .menu-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
-    .menu-toggle.open span:nth-child(2) { opacity: 0; }
-    .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
-    
-    .wa-float { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 25px; }
-    .btn-cta, .btn-submit { width: 100%; margin: 10px 0 !important; padding: 15px; }
-  }
+    [data-theme="dark"] {
+      --bg: #0b110f; --text: #e4e6e5; --card: #151d1a; --glass: rgba(21, 29, 26, 0.95);
+    }
 
-  .reveal { opacity: 0; transform: translateY(30px); transition: 1s all ease; }
-  .reveal.active { opacity: 1; transform: translateY(0); }
-  .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--accent); border-radius: 50%; width: 30px; height: 30px; animation: spin 2s linear infinite; margin: auto; }
-  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    * { box-sizing: border-box; }
+    body { 
+      margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; 
+      background: var(--bg); color: var(--text); overflow-x: hidden; scroll-behavior: smooth;
+    }
+
+    /* Ticker */
+    .announcement-bar { background: var(--accent); color: var(--primary); padding: 8px 0; font-size: 0.8rem; font-weight: 600; overflow: hidden; white-space: nowrap; }
+    .ticker { display: inline-block; animation: ticker 30s linear infinite; padding-left: 100%; }
+    @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+
+    /* Header & Nav */
+    .top-bar { background: var(--primary); color: white; padding: 10px 10%; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; }
+    header { 
+      background: var(--glass); backdrop-filter: blur(15px); padding: 15px 10%; 
+      display: flex; justify-content: space-between; align-items: center; 
+      position: sticky; top: 0; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer; }
+    .brand img { height: 45px; }
+    .brand h1 { font-size: 1rem; margin: 0; color: var(--primary); font-weight: 800; }
+
+    nav ul { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+    nav ul li a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.85rem; transition: var(--transition); cursor: pointer; }
+    nav ul li a:hover { color: var(--accent); }
+
+    /* Hero */
+    .hero-container { position: relative; height: 80vh; background: #000; overflow: hidden; }
+    .bg-slideshow { list-style: none; padding: 0; margin: 0; }
+    .bg-slideshow li { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: opacity 1s ease-in-out; }
+    .bg-slideshow li.active { opacity: 0.6; }
+    .hero-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 0 5%; }
+    .hero-content h2 { font-size: clamp(1.8rem, 5vw, 3rem); margin-bottom: 20px; line-height: 1.2; }
+
+    /* Dashboard & Grid */
+    .dashboard-container { 
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+      width: 80%; margin: -50px auto 50px; background: var(--card);
+      padding: 30px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      position: relative; z-index: 100; text-align: center;
+    }
+    .stat-item h3 { font-size: 2.2rem; color: var(--primary); margin: 0; }
+    .section-padding { padding: 80px 10%; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+    
+    .card { 
+      background: var(--card); padding: 30px; border-radius: 15px; text-align: center; 
+      transition: var(--transition); border: 1px solid rgba(0,0,0,0.05); text-decoration: none; color: inherit;
+    }
+    .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+    .card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 20px; }
+
+    /* Testimoni & Contact */
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+    .testi-card { background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; backdrop-filter: blur(5px); }
+    .contact-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; background: var(--card); padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .contact-form { display: flex; flex-direction: column; gap: 15px; }
+    .contact-form input, .contact-form textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+    .btn-submit, .btn-cta { background: var(--accent); color: var(--primary); border: none; padding: 12px 25px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+
+    /* WA & Footer */
+    .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    footer { background: var(--primary); color: white; padding: 60px 10% 20px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 992px) {
+      header, .top-bar, .section-padding, footer { padding-left: 5%; padding-right: 5%; }
+      .top-bar { display: none; }
+      .menu-toggle { display: flex; flex-direction: column; gap: 5px; cursor: pointer; z-index: 3001; }
+      .menu-toggle span { width: 25px; height: 3px; background: var(--primary); transition: 0.3s; }
+      
+      nav { position: fixed; top: 0; right: -100%; width: 280px; height: 100vh; background: var(--card); padding: 100px 30px; transition: 0.4s ease-in-out; z-index: 3000; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+      nav.active { right: 0; }
+      nav ul { flex-direction: column; }
+      
+      .dashboard-container { grid-template-columns: 1fr; width: 90%; margin-top: -30px; }
+      #main-services-list { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+      .hero-container { height: 60vh; }
+      .contact-wrapper { grid-template-columns: 1fr; }
+      
+      .menu-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+      .menu-toggle.open span:nth-child(2) { opacity: 0; }
+      .menu-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+    }
+
+    .reveal { opacity: 0; transform: translateY(30px); transition: 1s all ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 
 <body id="top" data-theme="light">
 
   <div class="announcement-bar">
-    <div class="ticker">
-      Selamat datang di Portal Layanan Digital Terintegrasi MI Bendiljati Wetan    |    ✨ Pendaftaran Siswa Baru Tahun Pelajaran 2026/2027 Telah Dibuka!    |    🏆 Madrasah Unggul, Berprestasi, dan Berbasis Teknologi Digital.
-    </div>
+    <div class="ticker">✨ Pendaftaran Siswa Baru TP 2026/2027 Telah Dibuka! | Madrasah Digital Tulungagung | Unggul, Berprestasi, dan Berbasis Teknologi Digital.</div>
   </div>
 
   <div class="top-bar">
     <div><i class="fas fa-envelope"></i> misbendiljatiwetan@gmail.com</div>
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <a href="https://www.facebook.com/share/1AgqiAvPx1/?mibextid=wwXIfr" style="color:white" target="_blank"><i class="fab fa-facebook"></i></a>
-      <a href="https://www.instagram.com/mibendiljatiwetan_official?igsh=MW5lcHprM3NwaXYybQ==" style="color:white" target="_blank"><i class="fab fa-instagram"></i></a>
-      <i class="fas fa-moon theme-toggle" id="theme-icon" style="cursor:pointer" onclick="toggleTheme()"></i>
+    <div style="display: flex; gap: 15px;">
+      <a href="#" style="color:white"><i class="fab fa-facebook"></i></a>
+      <a href="#" style="color:white"><i class="fab fa-instagram"></i></a>
+      <i class="fas fa-moon" id="theme-icon" style="cursor:pointer" onclick="toggleTheme()"></i>
     </div>
   </div>
 
   <header>
-    <a onclick="scrollToSection('top')" class="brand">
+    <a onclick="location.reload()" class="brand">
       <img src="https://i.ibb.co.com/jcSRVbd/MIB.png" alt="Logo">
       <h1>MI BENDILJATI WETAN</h1>
     </a>
-    <div class="nav-container">
-      <nav id="main-nav">
-        <ul>
-          <li><a onclick="scrollToSection('top')">BERANDA</a></li>
-          <li><a onclick="scrollToSection('main-services')">LAYANAN</a></li>
-          <li><a onclick="scrollToSection('prestasi-section')">PRESTASI</a></li>
-          <li><a onclick="scrollToSection('fasilitas-section')">FASILITAS</a></li>
-          <li><a onclick="scrollToSection('contact-section')">KONTAK</a></li>
-        </ul>
-      </nav>
-      <div class="menu-toggle" id="menu-btn" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
-      </div>
-    </div>
+    <div class="menu-toggle" id="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+    <nav id="main-nav">
+      <ul>
+        <li><a onclick="scrollToSection('top')">BERANDA</a></li>
+        <li><a onclick="scrollToSection('main-services')">LAYANAN</a></li>
+        <li><a onclick="scrollToSection('prestasi-section')">PRESTASI</a></li>
+        <li><a onclick="scrollToSection('fasilitas-section')">FASILITAS</a></li>
+        <li><a onclick="scrollToSection('contact-section')">KONTAK</a></li>
+      </ul>
+    </nav>
   </header>
 
   <section class="hero-container">
     <ul class="bg-slideshow" id="slider">
-       <li class="active" style="background-image: url('https://images.unsplash.com/photo-1523050853064-dbad350c700a?q=80&w=1920')"></li>
+      <li class="active" style="background-image: url('https://images.unsplash.com/photo-1523050853064-dbad350c700a?q=80&w=800')"></li>
     </ul>
     <div class="hero-overlay">
       <div class="hero-content">
         <h2 class="reveal">Madrasah Unggul<br><span style="color:var(--accent)">Berbasis Teknologi</span></h2>
-        <p class="reveal">Menyiapkan generasi islami yang cerdas dan adaptif di era digital.</p>
-        <div class="reveal">
-          <button onclick="scrollToSection('main-services')" class="btn-cta">LAYANAN KAMI</button>
-          <button onclick="scrollToSection('contact-section')" class="btn-cta" style="background:transparent; border:2px solid var(--accent); color:white; margin-left:10px;">SPMB</button>
-        </div>
+        <p class="reveal">Menyiapkan generasi islami yang cerdas di era digital.</p>
+        <button onclick="scrollToSection('main-services')" class="btn-cta">LAYANAN KAMI</button>
       </div>
     </div>
   </section>
@@ -332,133 +168,70 @@
   <section id="main-services" class="section-padding">
     <div class="section-title reveal">
       <h2>Layanan Digital</h2>
-      <p>Akses berbagai kemudahan layanan pendidikan dalam satu genggaman.</p>
+      <p>Akses berbagai kemudahan layanan pendidikan.</p>
     </div>
-    <div class="grid-container reveal" id="main-services-list">
-      <div class="loader"></div>
-    </div>
+    <div class="grid-container reveal" id="main-services-list"></div>
   </section>
 
   <section id="fasilitas-section" class="section-padding" style="background: rgba(0,0,0,0.02)">
-    <div class="section-title reveal">
-      <h2>Fasilitas Madrasah</h2>
-      <p>Lingkungan belajar yang nyaman didukung fasilitas modern.</p>
-    </div>
+    <div class="section-title reveal"><h2>Fasilitas Madrasah</h2></div>
     <div class="grid-container reveal">
-      <div class="card"><i class="fas fa-school"></i><h3>Ruang Kelas</h3><p>Ruang Kelas bersih dengan fasilitas yang baik dan Modern.</p></div>
-      <div class="card"><i class="fas fa-mosque"></i><h3>Musholla</h3><p>Pusat kegiatan ibadah dan pembentukan karakter islami.</p></div>
-      <div class="card"><i class="fas fa-book-reader"></i><h3>Perpustakaan</h3><p>Koleksi buku lengkap untuk menumbuhkan minat baca.</p></div>
-      <div class="card"><i class="fas fa-clinic-medical"></i><h3>Ruang UKS</h3><p>Ruang UKS dengan fasilitas yang baik.</p></div>
-      <div class="card"><i class="fas fa-toilet"></i><h3>Toilet</h3><p>Toilet dengan jumlah yang cukup dan ada fasilitas disabilitas.</p></div>
+      <div class="card"><i class="fas fa-school"></i><h3>Ruang Kelas</h3><p>Fasilitas Modern & Nyaman.</p></div>
+      <div class="card"><i class="fas fa-mosque"></i><h3>Musholla</h3><p>Pusat Karakter Islami.</p></div>
+      <div class="card"><i class="fas fa-book-reader"></i><h3>Perpustakaan</h3><p>Koleksi Buku Lengkap.</p></div>
     </div>
   </section>
 
   <section id="prestasi-section" class="section-padding">
-    <div class="section-title reveal">
-      <h2>Galeri Prestasi</h2>
-      <p>Bukti nyata dedikasi dan kualitas pendidikan kami.</p>
-    </div>
-    <div class="grid-container reveal" id="prestasi-list">
-      <div class="loader"></div>
-    </div>
+    <div class="section-title reveal"><h2>Galeri Prestasi</h2></div>
+    <div class="grid-container reveal" id="prestasi-list"></div>
   </section>
 
   <section class="section-padding" style="background: var(--primary); color: white;">
-    <div class="section-title reveal">
-      <h2 style="color:white">Apa Kata Wali Murid?</h2>
-    </div>
+    <div class="section-title reveal"><h2 style="color:white">Apa Kata Wali Murid?</h2></div>
     <div class="testi-grid reveal">
-      <div class="testi-card">
-        <i class="fas fa-quote-right" style="color:var(--accent); font-size: 2rem;"></i>
-        <p>"Sangat puas dengan perkembangan anak saya sejak sekolah di sini. Program tilawah dan IT-nya sangat seimbang."</p>
-        <div class="testi-user">
-          <img src="https://img.icons8.com/fluent/1200/test-account.jpg" alt="User">
-          <div class="testi-info"><h4>Ibu Siti Aminah</h4><span>Wali Murid Kelas 5</span></div>
-        </div>
-      </div>
-      <div class="testi-card">
-        <i class="fas fa-quote-right" style="color:var(--accent); font-size: 2rem;"></i>
-        <p>"Fasilitas digitalnya memudahkan saya memantau absensi anak secara real-time. Madrasah yang sangat maju!"</p>
-        <div class="testi-user">
-          <img src="https://img.icons8.com/fluent/1200/test-account.jpg" alt="User">
-          <div class="testi-info"><h4>Bapak Ahmad</h4><span>Wali Murid Kelas 2</span></div>
-        </div>
-      </div>
+      <div class="testi-card"><p>"Sangat puas dengan perkembangan anak saya. Program IT-nya luar biasa."</p><b>- Ibu Siti Aminah</b></div>
+      <div class="testi-card"><p>"Fasilitas digital memudahkan pantau absensi secara real-time."</p><b>- Bapak Ahmad</b></div>
     </div>
   </section>
 
   <section id="contact-section" class="section-padding">
     <div class="contact-wrapper reveal">
       <div class="contact-info">
-        <h2 style="color:var(--primary)">Hubungi Kami</h2>
-        <p>Silahkan datang langsung atau hubungi kami melalui saluran berikut:</p>
-        <p><i class="fas fa-map-marker-alt"></i> Sumbergempol, Tulungagung, Jatim</p>
+        <h2>Hubungi Kami</h2>
         <p><i class="fas fa-phone"></i> +62 821 3005 3330</p>
         <p><i class="fas fa-envelope"></i> misbendiljatiwetan@gmail.com</p>
-        <div class="map-box" style="width: 100%; height: 250px; margin-top: 20px; border-radius: 10px; overflow: hidden;">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.067939214643!2d111.9607924758904!3d-8.09455448095447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e47153a25b7f%3A0xcc99a627fe8b89a2!2sMadrasah%20Ibtidaiyah%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1769430698984!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.4447656643264!2d111.9567!3d-8.1067!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e30000000001%3A0x0!2zOMKwMDYnMjQuMSJTIDExMcKwNTcnMjQuMSJF!5e0!3m2!1sid!2sid!4v1700000000000" width="100%" height="250" style="border:0; border-radius:10px; margin-top:20px;" allowfullscreen="" loading="lazy"></iframe>
       </div>
-      <form class="contact-form" onsubmit="event.preventDefault(); alert('Pesan terkirim! Terima kasih.');">
-        <h3 style="color:var(--primary)">Kirim Pesan</h3>
-        <input type="text" placeholder="Nama Lengkap" required>
-        <input type="email" placeholder="Email Aktif" required>
-        <input type="text" placeholder="Subjek (Contoh: Info SPMB)">
-        <textarea placeholder="Tulis pesan Anda di sini..." rows="5" required></textarea>
+      <form class="contact-form" onsubmit="event.preventDefault(); alert('Pesan terkirim!');">
+        <h3>Kirim Pesan</h3>
+        <input type="text" placeholder="Nama" required>
+        <input type="email" placeholder="Email" required>
+        <textarea placeholder="Pesan" rows="4" required></textarea>
         <button type="submit" class="btn-submit">KIRIM SEKARANG</button>
       </form>
     </div>
   </section>
-  
+
   <footer>
-    <div class="footer-grid">
-      <div class="footer-col">
-        <h4 style="color:var(--accent)">MI BENDILJATI WETAN</h4>
-        <p>Membangun generasi cerdas, berkarakter, dan islami dengan dukungan teknologi masa kini.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Tautan Cepat</h4>
-        <ul>
-          <li onclick="scrollToSection('top')">Beranda</li>
-          <li onclick="scrollToSection('prestasi-section')">Prestasi</li>
-          <li onclick="scrollToSection('main-services')">Layanan Digital</li>
-          <li onclick="scrollToSection('contact-section')">SPMB Online</li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Media Sosial</h4>
-        <div style="display: flex; gap: 15px; font-size: 1.5rem;">
-          <a href="https://www.facebook.com/share/1AgqiAvPx1/?mibextid=wwXIfr" style="color:white" target="_blank"><i class="fab fa-facebook"></i></a>
-          <a href="https://www.instagram.com/mibendiljatiwetan_official?igsh=MW5lcHprM3NwaXYybQ==" style="color:white" target="_blank"><i class="fab fa-instagram"></i></a>
-          <a href="https://www.youtube.com/@mibendiljatiwetan4220" style="color:white" target="_blank"><i class="fab fa-youtube"></i></a>
-        </div>
-      </div>
-    </div>
-    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: center; font-size: 0.8rem;">
-      <p>© 2026 MI Bendiljati Wetan. All Rights Reserved. Terakreditasi B.</p>
+    <div style="text-align:center">
+      <p>© 2026 MI Bendiljati Wetan. Terakreditasi B.</p>
     </div>
   </footer>
 
-  <a href="https://wa.me/6282130053330?text=Assalammualaikum%20Admin%20MI%20Bendiljati%20Wetan..." class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  <a href="https://wa.me/6282130053330" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
   <script>
-    // Konfigurasi API
     const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
 
-    // 1. PENGELOLAAN TEMA
     function toggleTheme() {
       const b = document.body;
       const icon = document.getElementById('theme-icon');
-      if (b.getAttribute('data-theme') === 'dark') {
-        b.setAttribute('data-theme', 'light');
-        icon.classList.replace('fa-sun', 'fa-moon');
-      } else {
-        b.setAttribute('data-theme', 'dark');
-        icon.classList.replace('fa-moon', 'fa-sun');
-      }
+      const isDark = b.getAttribute('data-theme') === 'dark';
+      b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      icon.classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
     }
 
-    // 2. NAVIGASI MOBILE
     function toggleMenu() {
       document.getElementById('main-nav').classList.toggle('active');
       document.getElementById('menu-btn').classList.toggle('open');
@@ -467,111 +240,60 @@
     function scrollToSection(id) {
       document.getElementById('main-nav').classList.remove('active');
       document.getElementById('menu-btn').classList.remove('open');
-      if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-      else {
-        const el = document.getElementById(id);
-        if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
-      }
+      const el = document.getElementById(id);
+      window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
     }
 
-    // 3. EFEK REVEAL SAAT SCROLL
+    function optImg(url, w = 800) {
+      if (!url || !url.includes('cloudinary.com')) return url;
+      return url.replace('/upload/', `/upload/f_auto,q_auto,w_${w},c_fill,ar_16:9/`);
+    }
+
+    async function loadData() {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        
+        document.getElementById('count-siswa').innerText = data.dashboard.siswa;
+        document.getElementById('count-guru').innerText = data.dashboard.guru;
+        document.getElementById('count-ekskul').innerText = data.dashboard.ekskul;
+
+        const sCont = document.getElementById('slider');
+        if(data.slider.length > 0) {
+          sCont.innerHTML = data.slider.map((url, i) => `
+            <li class="${i===0?'active':''}" style="background-image:url('${optImg(url, 1200)}')" ${i===0?'fetchpriority="high"':''}></li>
+          `).join('');
+        }
+
+        document.getElementById('main-services-list').innerHTML = data.layanan.map(row => `
+          <a href="${row[1]}" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Akses Layanan</p></a>
+        `).join('');
+
+        document.getElementById('prestasi-list').innerHTML = data.prestasi.map(row => `
+          <div class="card" style="padding:0; overflow:hidden; text-align:left">
+            <img src="${optImg(row[2], 500)}" style="width:100%; height:200px; object-fit:cover" loading="lazy">
+            <div style="padding:20px"><h3>${row[0]}</h3><p>${row[1]}</p></div>
+          </div>
+        `).join('');
+
+        window.dispatchEvent(new Event('scroll'));
+      } catch (e) { console.error(e); }
+    }
+
     window.addEventListener('scroll', () => {
       document.querySelectorAll('.reveal').forEach(r => {
         if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
       });
     });
 
-    // 4. PEMUATAN DATA DINAMIS (Optimized for GitHub)
-    async function muatData() {
-      try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-        renderSemuaData(data);
-      } catch (err) {
-        console.error("Gagal memuat data dari Spreadsheet:", err);
-      }
-    }
-
-    window.onload = muatData;
-
-    function optimizeCloudinary(url, width = 1280) {
-  if (url && url.includes('cloudinary.com')) {
-    // Optimasi otomatis: format ringan (webp), kualitas cerdas, dan ukuran pas
-    return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width},c_fill,ar_16:9/`);
-  }
-  return url;
-}
-
-    function renderSemuaData(data) {
-      if(!data) return;
-
-      // A. Dashboard Stats
-      document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
-      document.getElementById('count-guru').innerText = data.dashboard.guru || 0;
-      document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
-
-     // B. Slider dengan Optimasi Kecepatan Maksimal
-      const sliderCont = document.getElementById('slider');
-      if(data.slider && data.slider.length > 0) {
-        sliderCont.innerHTML = '';
-        data.slider.forEach((url, i) => {
-          const li = document.createElement('li');
-          const optUrl = optimizeCloudinary(url);
-          
-          if(i === 0) {
-            li.classList.add('active');
-            // Teknik Preload: Memaksa browser download gambar pertama lebih dulu
-            const imgPreload = new Image();
-            imgPreload.src = optUrl;
-            li.setAttribute('fetchpriority', 'high');
-          }
-          
-          li.style.backgroundImage = `url('${optUrl}')`;
-          sliderCont.appendChild(li);
-        });
-        startSliderCycle();
-      }
-
-      // C. Layanan
-      const listLayanan = document.getElementById('main-services-list');
-      listLayanan.innerHTML = '';
-      data.layanan.forEach(row => {
-        listLayanan.innerHTML += `
-          <a href="${row[1]}" target="_blank" class="card">
-            <i class="${row[2]}"></i>
-            <h3>${row[0]}</h3>
-            <p>Klik untuk akses layanan</p>
-          </a>`;
-      });
-
-      // D. Prestasi
-      const listPrestasi = document.getElementById('prestasi-list');
-      listPrestasi.innerHTML = '';
-      data.prestasi.forEach(row => {
-        const imgUrl = optimizeCloudinary(row[2], 600); // Ukuran lebih kecil untuk galeri
-        listPrestasi.innerHTML += `
-          <div class="prestasi-card card" style="padding:0; overflow:hidden; text-align:left;">
-            <img src="${imgUrl}" style="width:100%; height:200px; object-fit:cover;" loading="lazy">
-            <div style="padding:20px;">
-              <h3 style="color:var(--primary);margin:0; font-size:1.1rem">${row[0]}</h3>
-              <p style="color:var(--accent);font-weight:bold; font-size:0.8rem">${row[1]}</p>
-            </div>
-          </div>`;
-      });
-      
-      window.dispatchEvent(new Event('scroll'));
-    }
-
-    function startSliderCycle() {
-      setInterval(() => {
-        const slides = document.querySelectorAll('#slider li');
-        if(slides.length > 1) {
-          let cur = Array.from(slides).findIndex(s => s.classList.contains('active'));
-          slides[cur].classList.remove('active');
-          slides[(cur + 1) % slides.length].classList.add('active');
-        }
-      }, 5000);
-    }
+    window.onload = loadData;
+    setInterval(() => {
+      const slides = document.querySelectorAll('#slider li');
+      if(slides.length < 2) return;
+      let cur = Array.from(slides).findIndex(s => s.classList.contains('active'));
+      slides[cur].classList.remove('active');
+      slides[(cur + 1) % slides.length].classList.add('active');
+    }, 5000);
   </script>
 </body>
 </html>
