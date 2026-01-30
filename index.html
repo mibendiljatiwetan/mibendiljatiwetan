@@ -374,16 +374,18 @@
       window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
     }
 
-   // Tambahkan variabel global ini di paling atas tag <script> Anda
+   // Tambahkan variabel global ini di paling atas
 let allBerita = []; 
+let allGuru = []; // <--- Pastikan ini ada
 
 async function loadData() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
     
-    // Simpan data berita ke variabel global
+    // SIMPAN DATA KE VARIABEL GLOBAL
     allBerita = data.berita || [];
+    allGuru = data.dataGuru || []; // <--- BARIS INI WAJIB ADA
 
     // Counter - Dashboard Stats
     document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
@@ -393,12 +395,12 @@ async function loadData() {
     const guruStat = document.getElementById('count-guru');
     guruStat.innerText = data.dashboard.guru || 0;
     
-    // Ambil elemen pembungkus (card) agar seluruh kotaknya bisa diklik
     const guruCard = guruStat.parentElement; 
-    guruCard.style.cursor = "pointer"; // Ubah kursor jadi tangan
+    guruCard.style.cursor = "pointer";
     guruCard.onclick = function() {
-      openGuruModal(); // Panggil fungsi popup guru
+      openGuruModal();
     };
+    
     // Slider
     const slider = document.getElementById('slider');
     if(data.slider && data.slider.length > 0) {
