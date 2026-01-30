@@ -409,18 +409,28 @@ async function loadData() {
       `).join('');
     }
 
-    // Layanan (DENGAN LOGIKA BERITA)
+    // Layanan (LOGIKA POPUP UNTUK BERITA & GURU)
     document.getElementById('main-services-list').innerHTML = data.layanan.map(row => {
-      // Cek apakah judul layanan mengandung kata "Berita"
-      if (row[0].toLowerCase().includes("berita")) {
+      const judul = row[0].toLowerCase();
+      
+      // Jika judul mengandung "berita" atau "guru", buka modal terkait
+      if (judul.includes("berita")) {
         return `
           <div onclick="openNewsModal()" class="card" style="cursor:pointer">
             <i class="${row[2]}"></i>
             <h3>${row[0]}</h3>
             <p>Klik untuk Baca</p>
           </div>`;
+      } else if (judul.includes("guru") || judul.includes("staf")) {
+        return `
+          <div onclick="openGuruModal()" class="card" style="cursor:pointer">
+            <i class="${row[2]}"></i>
+            <h3>${row[0]}</h3>
+            <p>Klik untuk Lihat</p>
+          </div>`;
       }
-      // Jika bukan berita, tetap gunakan <a> link seperti biasa
+      
+      // Selain itu, gunakan link standar
       return `
         <a href="${row[1]}" target="_blank" class="card">
           <i class="${row[2]}"></i>
