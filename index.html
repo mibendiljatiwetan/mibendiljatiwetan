@@ -344,7 +344,14 @@
   </footer>
 
   <a href="https://wa.me/6282130053330" class="wa-float" target="_blank" aria-label="Chat WhatsApp"><i class="fab fa-whatsapp"></i></a>
-
+  
+  <div id="newsOverlay" class="news-overlay">
+  <div class="news-modal">
+    <button class="close-news" onclick="closeNews()">✕</button>
+    <div id="newsContent" class="news-detail-content"></div>
+  </div>
+</div>
+  
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
 
@@ -453,6 +460,25 @@ function closeNews() {
   document.getElementById('newsOverlay').style.display = 'none';
   document.body.style.overflow = 'auto';
 }
+
+function openGuruModal() {
+  const content = document.getElementById('newsContent');
+  content.innerHTML = `
+    <h2 style="color:var(--primary); text-align:center; margin-bottom:10px;">Tenaga Pendidik</h2>
+    <div class="guru-grid-modal">
+      ${allGuru.length === 0 ? "<p>Data sedang dimuat...</p>" : allGuru.map(g => `
+        <div class="guru-item">
+          <img src="${g[3]}" alt="${g[0]}">
+          <h4>${g[0]}</h4>
+          <p>${g[1]}</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('newsOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+    
     // Scroll Animation
     window.addEventListener('scroll', () => {
       document.querySelectorAll('.reveal').forEach(r => {
@@ -492,12 +518,5 @@ function closeNews() {
     window.open(url, '_blank');
 });
   </script>
-
-  <div id="newsOverlay" class="news-overlay">
-  <div class="news-modal">
-    <button class="close-news" onclick="closeNews()">✕</button>
-    <div id="newsContent" class="news-detail-content"></div>
-  </div>
-</div>
 </body>
 </html>
