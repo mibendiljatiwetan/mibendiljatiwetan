@@ -138,6 +138,25 @@
       font-size: 32px; z-index: 1000; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
     }
 
+    /* Styling Modal Berita */
+.news-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  z-index: 5000; display: none; align-items: center; justify-content: center;
+  backdrop-filter: blur(10px); padding: 20px;
+}
+.news-modal {
+  background: var(--card); width: 100%; max-width: 800px; max-height: 85vh;
+  border-radius: 25px; overflow-y: auto; position: relative;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+}
+.close-news {
+  position: sticky; top: 20px; float: right; margin-right: 20px;
+  background: var(--accent); border: none; width: 40px; height: 40px;
+  border-radius: 50%; cursor: pointer; font-weight: bold; z-index: 100;
+}
+.news-detail-content { padding: 40px; }
+.news-detail-content img { width: 100%; border-radius: 15px; margin-bottom: 25px; object-fit: cover; max-height: 400px; }
+
     /* Mobile Responsive */
     @media (max-width: 992px) {
       header, .section-padding { padding-left: 5%; padding-right: 5%; }
@@ -324,41 +343,94 @@
       window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
     }
 
-    async function loadData() {
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        
-        // Counter
-        document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
-        document.getElementById('count-guru').innerText = data.dashboard.guru || 0;
-        document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
+   // Tambahkan variabel global ini di paling atas tag <script> Anda
+let allBerita = []; 
 
-        // Slider dengan Lazy Loading & Optimasi Image
-        const slider = document.getElementById('slider');
-        if(data.slider.length > 0) {
-          slider.innerHTML = data.slider.map((url, i) => `
-            <li class="${i===0?'active':''}" style="background-image:url('${url.replace('/upload/', '/upload/f_auto,q_auto,w_1200/')}')" ${i===0?'fetchpriority="high"':''}></li>
-          `).join('');
-        }
+async function loadData() {
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    
+    // Simpan data berita ke variabel global
+    allBerita = data.berita || [];
 
-        // Layanan
-        document.getElementById('main-services-list').innerHTML = data.layanan.map(row => `
-          <a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>
-        `).join('');
+    // Counter
+    document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
+    document.getElementById('count-guru').innerText = data.dashboard.guru || 0;
+    document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
 
-        // Prestasi
-        document.getElementById('prestasi-list').innerHTML = data.prestasi.map(row => `
-          <div class="card" style="padding:0; overflow:hidden; text-align:left;">
-            <img src="${row[2].replace('/upload/', '/upload/f_auto,q_auto,w_500/')}" style="width:100%; height:220px; object-fit:cover" loading="lazy">
-            <div style="padding:25px"><h3>${row[0]}</h3><p style="color:var(--accent); font-weight:800; margin-top:5px;">${row[1]}</p></div>
-          </div>
-        `).join('');
-
-        window.dispatchEvent(new Event('scroll'));
-      } catch (e) { console.error("Data Load Error", e); }
+    // Slider
+    const slider = document.getElementById('slider');
+    if(data.slider && data.slider.length > 0) {
+      slider.innerHTML = data.slider.map((url, i) => `
+        <li class="${i===0?'active':''}" style="background-image:url('${url.replace('/upload/', '/upload/f_auto,q_auto,w_1200/')}')" ${i===0?'fetchpriority="high"':''}></li>
+      `).join('');
     }
 
+    // Layanan (DENGAN LOGIKA BERITA)
+    document.getElementById('main-services-list').innerHTML = data.layanan.map(row => {
+      // Cek apakah judul layanan mengandung kata "Berita"
+      if (row[0].toLowerCase().includes("berita")) {
+        return `
+          <div onclick="openNewsModal()" class="card" style="cursor:pointer">
+            <i class="${row[2]}"></i>
+            <h3>${row[0]}</h3>
+            <p>Klik untuk Baca</p>
+          </div>`;
+      }
+      // Jika bukan berita, tetap gunakan <a> link seperti biasa
+      return `
+        <a href="${row[1]}" target="_blank" class="card">
+          <i class="${row[2]}"></i>
+          <h3>${row[0]}</h3>
+          <p>Klik untuk Akses</p>
+        </a>`;
+    }).join('');
+
+    // Prestasi
+    document.getElementById('prestasi-list').innerHTML = data.prestasi.map(row => `
+      <div class="card" style="padding:0; overflow:hidden; text-align:left;">
+        <img src="${row[2].replace('/upload/', '/upload/f_auto,q_auto,w_500/')}" style="width:100%; height:220px; object-fit:cover" loading="lazy">
+        <div style="padding:25px"><h3>${row[0]}</h3><p style="color:var(--accent); font-weight:800; margin-top:5px;">${row[1]}</p></div>
+      </div>
+    `).join('');
+
+    window.dispatchEvent(new Event('scroll'));
+  } catch (e) { 
+    console.error("Data Load Error", e); 
+  }
+}
+
+// Fungsi untuk menampilkan Modal Berita
+function openNewsModal() {
+  const modal = document.getElementById('newsOverlay');
+  const content = document.getElementById('newsContent');
+  
+  if (allBerita.length === 0) {
+    content.innerHTML = "<p style='text-align:center'>Belum ada berita terbaru.</p>";
+  } else {
+    // Menampilkan semua berita yang ada di Sheet Berita
+    content.innerHTML = `
+      <h2 style="color:var(--primary); margin-bottom:20px; text-align:center">Warta Madrasah</h2>
+      ${allBerita.map(item => `
+        <div style="margin-bottom:40px; border-bottom:1px solid #eee; padding-bottom:20px;">
+          <img src="${item[3]}" style="width:100%; border-radius:15px; margin-bottom:15px;">
+          <small style="color:var(--accent); font-weight:bold">${item[1]}</small>
+          <h3 style="margin:10px 0; color:var(--primary)">${item[0]}</h3>
+          <p style="line-height:1.6; color:var(--text); white-space: pre-line;">${item[2]}</p>
+        </div>
+      `).join('')}
+    `;
+  }
+  
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeNews() {
+  document.getElementById('newsOverlay').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
     // Scroll Animation
     window.addEventListener('scroll', () => {
       document.querySelectorAll('.reveal').forEach(r => {
@@ -398,5 +470,12 @@
     window.open(url, '_blank');
 });
   </script>
+
+  <div id="newsOverlay" class="news-overlay">
+  <div class="news-modal">
+    <button class="close-news" onclick="closeNews()">✕</button>
+    <div id="newsContent" class="news-detail-content"></div>
+  </div>
+</div>
 </body>
 </html>
