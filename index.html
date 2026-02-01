@@ -23,6 +23,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
   
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
   <style>
     :root {
       --primary: #043927;
@@ -49,7 +51,6 @@
       scroll-behavior: smooth; overflow-x: hidden;
     }
 
-    /* Pengumuman Ticker */
     .announcement-bar {
       background: var(--accent); color: var(--primary);
       padding: 8px 0; font-size: 0.8rem; font-weight: 600;
@@ -58,14 +59,12 @@
     .ticker { display: inline-block; animation: ticker 30s linear infinite; padding-left: 100%; }
     @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-    /* Top Bar */
     .top-bar {
       background: var(--primary); color: white;
       padding: 10px 10%; display: flex;
       justify-content: space-between; align-items: center; font-size: 0.8rem;
     }
 
-    /* Header Navigasi */
     header {
       background: var(--glass); backdrop-filter: blur(15px);
       padding: 15px 10%; display: flex;
@@ -81,7 +80,6 @@
     nav ul li a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
     nav ul li a:hover { color: var(--accent); }
 
-    /* Slider Hero */
     .hero-container { position: relative; height: 85vh; background: #000; overflow: hidden; }
     .bg-slideshow { list-style: none; padding: 0; margin: 0; }
     .bg-slideshow li {
@@ -97,7 +95,6 @@
     }
     .hero-content h2 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 20px; }
 
-    /* Dashboard Stats */
     .dashboard-container {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
       width: 80%; margin: -60px auto 60px; background: var(--card);
@@ -107,7 +104,6 @@
     .stat-item h3 { font-size: 2.5rem; color: var(--primary); margin: 0; }
     .stat-item p { font-weight: 600; color: #777; margin: 5px 0 0; }
 
-    /* Section Styling */
     .section-padding { padding: 80px 10%; }
     .section-title { text-align: center; margin-bottom: 50px; }
     .section-title h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; }
@@ -122,14 +118,12 @@
     .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
     .card i { font-size: 3rem; color: var(--accent); margin-bottom: 25px; }
 
-    /* Testimoni */
     .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
     .testi-card { 
       background: rgba(255,255,255,0.05); padding: 35px; border-radius: 20px; 
       border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px);
     }
 
-    /* Kontak & Map */
     .contact-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; gap: 50px; background: var(--card); padding: 45px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
     .contact-info p { display: flex; gap: 15px; align-items: flex-start; line-height: 1.6; }
     .contact-form { display: flex; flex-direction: column; gap: 15px; }
@@ -139,7 +133,6 @@
     }
     .btn-submit { background: var(--accent); color: var(--primary); border: none; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
-    /* Floating WA */
     .wa-float {
       position: fixed; bottom: 30px; right: 30px;
       background: #25d366; color: white; width: 65px; height: 65px;
@@ -147,50 +140,33 @@
       font-size: 32px; z-index: 1000; box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
     }
 
-    /* Styling Modal Berita */
-.news-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-  z-index: 5000; display: none; align-items: center; justify-content: center;
-  backdrop-filter: blur(10px); padding: 20px;
-}
-.news-modal {
-  background: var(--card); width: 100%; max-width: 800px; max-height: 85vh;
-  border-radius: 25px; overflow-y: auto; position: relative;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-}
-.close-news {
-  position: sticky; top: 20px; float: right; margin-right: 20px;
-  background: var(--accent); border: none; width: 40px; height: 40px;
-  border-radius: 50%; cursor: pointer; font-weight: bold; z-index: 100;
-}
-.news-detail-content { padding: 40px; }
-.news-detail-content img { width: 100%; border-radius: 15px; margin-bottom: 25px; object-fit: cover; max-height: 400px; }
+    .news-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      z-index: 5000; display: none; align-items: center; justify-content: center;
+      backdrop-filter: blur(10px); padding: 20px;
+    }
+    .news-modal {
+      background: var(--card); width: 100%; max-width: 800px; max-height: 85vh;
+      border-radius: 25px; overflow-y: auto; position: relative;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    }
+    .close-news {
+      position: sticky; top: 20px; float: right; margin-right: 20px;
+      background: var(--accent); border: none; width: 40px; height: 40px;
+      border-radius: 50%; cursor: pointer; font-weight: bold; z-index: 100;
+    }
+    .news-detail-content { padding: 40px; }
+    .news-detail-content img { width: 100%; border-radius: 15px; margin-bottom: 25px; object-fit: cover; max-height: 400px; }
 
-  /* CSS untuk Grid Guru di dalam Modal */
-.guru-grid-modal {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 15px;
-  margin-top: 10px;
-}
+    .guru-grid-modal {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .guru-item { text-align: center; padding: 15px; background: rgba(0,0,0,0.03); border-radius: 15px; }
+    .guru-item img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); margin-bottom: 8px; }
 
-.guru-item {
-  text-align: center;
-  padding: 15px;
-  background: rgba(0,0,0,0.03);
-  border-radius: 15px;
-}
-
-.guru-item img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--accent);
-  margin-bottom: 8px;
-}
-
-    /* Mobile Responsive */
     @media (max-width: 992px) {
       header, .section-padding { padding-left: 5%; padding-right: 5%; }
       .top-bar { display: none; }
@@ -332,16 +308,16 @@
         <p><i class="fas fa-envelope" style="color:var(--accent)"></i> misbendiljatiwetan@gmail.com</p>
         
         <div style="width:100%; height:320px; margin-top:20px; border-radius:15px; overflow:hidden; border: 1px solid #ddd;">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.067939214643!2d111.9607924758904!3d-8.09455448095447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e47153a25b7f%3A0xcc99a627fe8b89a2!2sMadrasah%20Ibtidaiyah%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1769434643567!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15794.402360215!2d111.9166667!3d-8.1166667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwMDcnMDAuMCJTIDExMcKwNTUnMDAuMCJF!5e0!3m2!1sid!2sid!4v1620000000000!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
       </div>
-     <form class="contact-form" id="whatsappForm">
-  <h3>Hubungi Admin</h3>
-  <input type="text" id="wa_nama" placeholder="Nama Lengkap" required>
-  <input type="text" id="wa_kontak" placeholder="Email / No. WhatsApp" required>
-  <textarea id="wa_pesan" placeholder="Pesan atau Pertanyaan Anda..." rows="6" required></textarea>
-  <button type="submit" class="btn-submit">KIRIM PESAN</button>
-</form>
+      <form class="contact-form" id="whatsappForm">
+        <h3>Hubungi Admin</h3>
+        <input type="text" id="wa_nama" placeholder="Nama Lengkap" required>
+        <input type="text" id="wa_kontak" placeholder="Email / No. WhatsApp" required>
+        <textarea id="wa_pesan" placeholder="Pesan atau Pertanyaan Anda..." rows="6" required></textarea>
+        <button type="submit" class="btn-submit">KIRIM PESAN</button>
+      </form>
     </div>
   </section>
 
@@ -357,170 +333,181 @@
   <a href="https://wa.me/6282130053330" class="wa-float" target="_blank" aria-label="Chat WhatsApp"><i class="fab fa-whatsapp"></i></a>
   
   <div id="newsOverlay" class="news-overlay">
-  <div class="news-modal">
-    <button class="close-news" onclick="closeNews()">✕</button>
-    <div id="newsContent" class="news-detail-content"></div>
+    <div class="news-modal">
+      <button class="close-news" onclick="closeNews()">✕</button>
+      <div id="newsContent" class="news-detail-content"></div>
+    </div>
   </div>
-</div>
   
   <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
+    // Variabel Global
+    let allBerita = []; 
+    let allGuru = [];
+    let dataVisiMisi = { visi: "", misi: "" };
 
-  // Variabel Global
-  let allBerita = []; 
-  let allGuru = [];
-  let dataVisiMisi = { visi: "", misi: "" };
+    async function loadData() {
+      try {
+        // AMBIL DATA DARI FILE LOKAL GITHUB
+        const res = await fetch('./data.json');
+        const data = await res.json();
+        
+        allBerita = data.berita || [];
+        allGuru = data.dataGuru || [];
+        dataVisiMisi = data.visiMisi || { visi: "", misi: "" };
 
-  async function loadData() {
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    
-    // Simpan data ke variabel global
-    allBerita = data.berita || [];
-    allGuru = data.dataGuru || [];
-    dataVisiMisi = data.visiMisi || { visi: "", misi: "" };
-
-    // Update Dashboard Stats (Siswa, Guru, Ekskul)
-    // Pastikan ID 'count-siswa' dll sesuai dengan HTML Anda
-    if(data.stats) {
-      animateCounter('count-siswa', data.stats.siswa);
-      animateCounter('count-guru', data.stats.guru);
-      animateCounter('count-ekskul', data.stats.ekskul);
-    }
-
-      // 2. Render Slider
-      const slider = document.getElementById('slider');
-      if(data.slider && data.slider.length > 0) {
-        slider.innerHTML = data.slider.map((url, i) => `
-          <li class="${i===0?'active':''}" style="background-image:url('${url}')"></li>
-        `).join('');
-      }
-
-      // Render Layanan Digital dengan Logika Klik
-    const servicesList = document.getElementById('main-services-list');
-    if(data.layanan) {
-      servicesList.innerHTML = data.layanan.map(row => {
-        const judul = row[0].toLowerCase();
-        if (judul.includes("berita")) {
-          return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
-        } 
-        if (judul.includes("guru") || judul.includes("staf")) {
-          return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+        // 1. Update Dashboard Stats
+        if(data.stats) {
+          animateCounter('count-siswa', data.stats.siswa);
+          animateCounter('count-guru', data.stats.guru);
+          animateCounter('count-ekskul', data.stats.ekskul);
         }
-        if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
-          return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+
+        // 2. Render Slider
+        const slider = document.getElementById('slider');
+        if(data.slider && data.slider.length > 0) {
+          slider.innerHTML = data.slider.map((url, i) => `
+            <li class="${i===0?'active':''}" style="background-image:url('${url}')"></li>
+          `).join('');
         }
-        return `<a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
-      }).join('');
+
+        // 3. Render Layanan Digital dari Objek JSON
+        const servicesList = document.getElementById('main-services-list');
+        if(data.layanan) {
+          servicesList.innerHTML = data.layanan.map(item => {
+            let onClickAttr = "";
+            const judul = item.nama.toLowerCase();
+            
+            if (judul.includes("berita")) onClickAttr = `onclick="openNewsModal()"`;
+            else if (judul.includes("guru") || judul.includes("staf")) onClickAttr = `onclick="openGuruModal()"`;
+            else if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) onClickAttr = `onclick="openVisiModal()"`;
+            else onClickAttr = `onclick="window.open('${item.url}', '_blank')"`;
+
+            return `<div ${onClickAttr} class="card" style="cursor:pointer"><i class="${item.ikon}"></i><h3>${item.nama}</h3><p>Klik untuk Akses</p></div>`;
+          }).join('');
+        }
+
+        // 4. Render Prestasi
+        const prestasiList = document.getElementById('prestasi-list');
+        if(data.prestasi) {
+          prestasiList.innerHTML = data.prestasi.map(item => `
+            <div class="card" style="padding:0; overflow:hidden; text-align:left;">
+              <img src="${item.gambar}" style="width:100%; height:220px; object-fit:cover" loading="lazy">
+              <div style="padding:25px"><h3>${item.judul}</h3><p style="color:var(--accent); font-weight:800; margin-top:5px;">${item.tahun}</p></div>
+            </div>
+          `).join('');
+        }
+
+        window.dispatchEvent(new Event('scroll'));
+
+      } catch (e) { 
+        console.error("Data Load Error", e); 
+      }
     }
 
-      // 4. Render Prestasi
-      const prestasiList = document.getElementById('prestasi-list');
-      if(data.prestasi) {
-        prestasiList.innerHTML = data.prestasi.map(row => `
-          <div class="card" style="padding:0; overflow:hidden; text-align:left;">
-            <img src="${row[2]}" style="width:100%; height:220px; object-fit:cover" loading="lazy">
-            <div style="padding:25px"><h3>${row[0]}</h3><p style="color:var(--accent); font-weight:800; margin-top:5px;">${row[1]}</p></div>
-          </div>
-        `).join('');
-      }
-
-      // Trigger animasi muncul
-      window.dispatchEvent(new Event('scroll'));
-
-    } catch (e) { 
-      console.error("Data Load Error", e); 
+    function animateCounter(id, target) {
+      let current = 0;
+      const increment = target / 50;
+      const el = document.getElementById(id);
+      if(!el) return;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          el.innerText = Math.floor(target);
+          clearInterval(timer);
+        } else {
+          el.innerText = Math.floor(current);
+        }
+      }, 30);
     }
-  }
 
-  // Fungsi Animasi Angka
-  function animateCounter(id, target) {
-    let current = 0;
-    const increment = target / 50;
-    const el = document.getElementById(id);
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        el.innerText = Math.floor(target);
-        clearInterval(timer);
-      } else {
-        el.innerText = Math.floor(current);
-      }
-    }, 30);
-  }
+    function toggleTheme() {
+      const b = document.body;
+      const isDark = b.getAttribute('data-theme') === 'dark';
+      b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      document.getElementById('theme-icon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+    }
 
-  // --- Fungsi UI & Modal ---
-  function toggleTheme() {
-    const b = document.body;
-    const isDark = b.getAttribute('data-theme') === 'dark';
-    b.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.getElementById('theme-icon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
-  }
+    function toggleMenu() {
+      document.getElementById('main-nav').classList.toggle('active');
+    }
 
-  function toggleMenu() {
-    document.getElementById('main-nav').classList.toggle('active');
-  }
+    function scrollToSection(id) {
+      document.getElementById('main-nav').classList.remove('active');
+      const el = document.getElementById(id);
+      window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
+    }
 
-  function scrollToSection(id) {
-    document.getElementById('main-nav').classList.remove('active');
-    const el = document.getElementById(id);
-    window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
-  }
+    function openNewsModal() {
+      const modal = document.getElementById('newsOverlay');
+      const content = document.getElementById('newsContent');
+      content.innerHTML = `<h2 style="text-align:center">Warta Madrasah</h2>` + 
+        (allBerita.length ? allBerita.map(item => `
+          <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
+            <img src="${item.gambar}" style="width:100%; border-radius:10px;">
+            <h3>${item.judul}</h3>
+            <p>${item.isi}</p>
+          </div>`).join('') : "<p>Tidak ada berita.</p>");
+      modal.style.display = 'flex';
+    }
 
-  function openNewsModal() {
-    const modal = document.getElementById('newsOverlay');
-    const content = document.getElementById('newsContent');
-    content.innerHTML = `<h2 style="text-align:center">Warta Madrasah</h2>` + 
-      (allBerita.length ? allBerita.map(item => `
-        <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
-          <img src="${item[3]}" style="width:100%; border-radius:10px;">
-          <h3>${item[0]}</h3>
-          <p>${item[2]}</p>
-        </div>`).join('') : "<p>Tidak ada berita.</p>");
-    modal.style.display = 'flex';
-  }
+    function openGuruModal() {
+      const modal = document.getElementById('newsOverlay');
+      const content = document.getElementById('newsContent');
+      content.innerHTML = `<h2 style="text-align:center">Tenaga Pendidik</h2><div class="guru-grid-modal">` + 
+        allGuru.map(g => `<div class="guru-item"><img src="${g.foto}"><h4>${g.nama}</h4><p>${g.jabatan}</p></div>`).join('') + `</div>`;
+      modal.style.display = 'flex';
+    }
 
-  function openGuruModal() {
-    const modal = document.getElementById('newsOverlay');
-    const content = document.getElementById('newsContent');
-    content.innerHTML = `<h2 style="text-align:center">Tenaga Pendidik</h2><div class="guru-grid-modal">` + 
-      allGuru.map(g => `<div class="guru-item"><img src="${g[3]}"><h4>${g[0]}</h4><p>${g[1]}</p></div>`).join('') + `</div>`;
-    modal.style.display = 'flex';
-  }
+    function openVisiModal() {
+      const modal = document.getElementById('newsOverlay');
+      const content = document.getElementById('newsContent');
+      content.innerHTML = `
+        <div style="padding:20px;">
+          <h2 style="color:var(--primary)">Visi</h2><p>${dataVisiMisi.visi}</p>
+          <h2 style="color:var(--primary)">Misi</h2><div style="white-space:pre-line">${dataVisiMisi.misi}</div>
+        </div>`;
+      modal.style.display = 'flex';
+    }
 
-  function openVisiModal() {
-    const modal = document.getElementById('newsOverlay');
-    const content = document.getElementById('newsContent');
-    content.innerHTML = `
-      <div style="padding:20px;">
-        <h2 style="color:var(--primary)">Visi</h2><p>${dataVisiMisi.visi}</p>
-        <h2 style="color:var(--primary)">Misi</h2><div style="white-space:pre-line">${dataVisiMisi.misi}</div>
-      </div>`;
-    modal.style.display = 'flex';
-  }
+    function closeNews() {
+      document.getElementById('newsOverlay').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
 
-  function closeNews() {
-    document.getElementById('newsOverlay').style.display = 'none';
-    document.body.style.overflow = 'auto';
-  }
-
-  // Auto Slider & Scroll Reveal
-  window.addEventListener('scroll', () => {
-    document.querySelectorAll('.reveal').forEach(r => {
-      if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
+    window.addEventListener('scroll', () => {
+      document.querySelectorAll('.reveal').forEach(r => {
+        if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
+      });
     });
-  });
 
-  setInterval(() => {
-    const s = document.querySelectorAll('#slider li');
-    if(s.length < 2) return;
-    let c = Array.from(s).findIndex(i => i.classList.contains('active'));
-    s[c].classList.remove('active');
-    s[(c + 1) % s.length].classList.add('active');
-  }, 5000);
+    setInterval(() => {
+      const s = document.querySelectorAll('#slider li');
+      if(s.length < 2) return;
+      let c = Array.from(s).findIndex(i => i.classList.contains('active'));
+      s[c].classList.remove('active');
+      s[(c + 1) % s.length].classList.add('active');
+    }, 5000);
 
-  window.onload = loadData;
-</script>
+    // Kirim WA
+    document.getElementById('whatsappForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nama = document.getElementById('wa_nama').value;
+      const pesan = document.getElementById('wa_pesan').value;
+      window.open(`https://wa.me/6282130053330?text=Halo%20Admin,%20saya%20${nama}.%20${pesan}`, '_blank');
+    });
+
+    window.onload = loadData;
+
+    // Login Netlify Identity
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>
