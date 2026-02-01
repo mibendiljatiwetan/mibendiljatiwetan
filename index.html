@@ -376,30 +376,39 @@
 
    // Tambahkan variabel global ini di paling atas
 let allBerita = []; 
-let allGuru = []; // <--- Pastikan ini ada
+let allGuru = [];
+let dataVisiMisi = { visi: "", misi: "" }; // Tambahkan ini
 
 async function loadData() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
     
-    // SIMPAN DATA KE VARIABEL GLOBAL
     allBerita = data.berita || [];
-    allGuru = data.dataGuru || []; // <--- BARIS INI WAJIB ADA
+    allGuru = data.dataGuru || [];
+    dataVisiMisi = data.visiMisi; // Simpan data visi misi dari API
 
-    // Counter - Dashboard Stats
-    document.getElementById('count-siswa').innerText = data.dashboard.siswa || 0;
-    document.getElementById('count-ekskul').innerText = data.dashboard.ekskul || 0;
+    // ... kode dashboard & guru card (tetap sama) ...
 
-    // Bagian GURU agar bisa diklik
-    const guruStat = document.getElementById('count-guru');
-    guruStat.innerText = data.dashboard.guru || 0;
-    
-    const guruCard = guruStat.parentElement; 
-    guruCard.style.cursor = "pointer";
-    guruCard.onclick = function() {
-      openGuruModal();
-    };
+    // Update bagian render Layanan Digital
+    document.getElementById('main-services-list').innerHTML = data.layanan.map(row => {
+      const judul = row[0].toLowerCase();
+      
+      if (judul.includes("berita")) {
+        return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
+      } 
+      
+      if (judul.includes("guru") || judul.includes("staf")) {
+        return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+      }
+
+      // TAMBAHKAN INI: Cek jika judul mengandung Visi atau Misi atau Profil
+      if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
+        return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+      }
+
+      return `<a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
+    }).join('');
     
     // Slider
     const slider = document.getElementById('slider');
@@ -500,6 +509,32 @@ function openGuruModal() {
           <small style="font-style:italic; display:block; line-height:1.2; opacity:0.8;">"${g[2]}"</small>
         </div>
       `).join('')}
+    </div>
+  `;
+  
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function openVisiModal() {
+  const modal = document.getElementById('newsOverlay');
+  const content = document.getElementById('newsContent');
+  
+  content.innerHTML = `
+    <div style="text-align:center; padding: 10px;">
+      <i class="fas fa-mosque" style="font-size:3.5rem; color:var(--accent); margin-bottom:20px;"></i>
+      <h2 style="color:var(--primary); margin-bottom:5px;">Visi & Misi</h2>
+      <p style="opacity:0.6; margin-bottom:30px;">Madrasah Digital Unggul & Berprestasi</p>
+      
+      <div style="background:var(--bg); padding:25px; border-radius:20px; border-left:5px solid var(--accent); text-align:left; margin-bottom:20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <h4 style="color:var(--primary); margin-top:0; letter-spacing:1px;">VISI</h4>
+        <p style="font-size:1.1rem; line-height:1.6; font-style:italic; color:var(--text);">"${dataVisiMisi.visi}"</p>
+      </div>
+      
+      <div style="background:var(--bg); padding:25px; border-radius:20px; border-left:5px solid var(--primary); text-align:left; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <h4 style="color:var(--primary); margin-top:0; letter-spacing:1px;">MISI</h4>
+        <div style="line-height:1.8; color:var(--text); white-space: pre-line;">${dataVisiMisi.misi}</div>
+      </div>
     </div>
   `;
   
