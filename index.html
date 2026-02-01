@@ -13,15 +13,15 @@
   <meta property="og:url" content="https://mibendiljatiwetan.github.io/">
   <meta property="og:title" content="MI Bendiljati Wetan - Madrasah Digital">
   <meta property="og:description" content="Portal Resmi Layanan Digital MI Bendiljati Wetan.">
-  <meta property="og:image" content="https://res.cloudinary.com/derebgfyl/image/upload/v1769782881/MIB_eyz6tv.png">
+  <meta property="og:image" content="https://res.cloudinary.com/derebgfyl/image/upload/f_auto,q_auto/v1769782881/MIB_eyz6tv.png">
 
-  <link rel="icon" href="https://res.cloudinary.com/derebgfyl/image/upload/v1769782881/MIB_eyz6tv.png" />
+  <link rel="preload" as="image" href="https://res.cloudinary.com/derebgfyl/image/upload/f_auto,q_auto/v1769782881/MIB_eyz6tv.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   
   <style>
     :root {
@@ -415,16 +415,18 @@
       }).join('');
     }
 
-      // 4. Render Prestasi
-      const prestasiList = document.getElementById('prestasi-list');
-      if(data.prestasi) {
-        prestasiList.innerHTML = data.prestasi.map(row => `
-          <div class="card" style="padding:0; overflow:hidden; text-align:left;">
-            <img src="${row[2]}" style="width:100%; height:220px; object-fit:cover" loading="lazy">
-            <div style="padding:25px"><h3>${row[0]}</h3><p style="color:var(--accent); font-weight:800; margin-top:5px;">${row[1]}</p></div>
-          </div>
-        `).join('');
-      }
+      // Ganti bagian render prestasi di dalam loadData()
+if(data.prestasi) {
+  prestasiList.innerHTML = data.prestasi.map(row => {
+    // Tambahkan otomatisasi format ke URL Cloudinary jika ada
+    let imgUrl = row[2].replace('/upload/', '/upload/f_auto,q_auto,w_400/'); 
+    return `
+      <div class="card" style="padding:0; overflow:hidden; text-align:left;">
+        <img src="${imgUrl}" style="width:100%; height:220px; object-fit:cover" loading="lazy" alt="${row[0]}">
+        <div style="padding:25px"><h3>${row[0]}</h3><p style="color:var(--accent); font-weight:800; margin-top:5px;">${row[1]}</p></div>
+      </div>`;
+  }).join('');
+}
 
       // Trigger animasi muncul
       window.dispatchEvent(new Event('scroll'));
