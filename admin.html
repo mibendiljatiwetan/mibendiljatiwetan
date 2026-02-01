@@ -3,152 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel MI Bendiljati Wetan</title>
+    <title>Admin Panel - MI Bendiljati Wetan</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #043927; --accent: #d4af37; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; display: none; }
+        :root { --primary: #043927; --accent: #d4af37; --bg: #f8f9fa; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; display: none; }
         header { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom: 5px solid var(--accent); }
-        .container { max-width: 900px; margin: 20px auto; padding: 0 20px; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 30px; }
-        h3 { color: var(--primary); border-left: 5px solid var(--accent); padding-left: 10px; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-add { background: var(--primary); color: white; width: 100%; }
-        .btn-edit { background: #ffc107; color: #000; margin-right: 5px; }
-        .btn-delete { background: #dc3545; color: white; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background: #eee; }
-        .loader { text-align: center; padding: 20px; font-weight: bold; color: var(--primary); }
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        h3 { color: var(--primary); border-left: 5px solid var(--accent); padding-left: 15px; margin-bottom: 20px; }
+        
+        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
+        
+        .btn { padding: 12px 25px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-save { background: var(--primary); color: white; width: 100%; margin-top: 10px; }
+        .btn-edit { background: #ffc107; color: #212529; font-size: 0.8rem; padding: 5px 10px; }
+        .btn-delete { background: #dc3545; color: white; font-size: 0.8rem; padding: 5px 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f1f1f1; color: var(--primary); }
+        
+        .loading-status { text-align: center; padding: 20px; color: #666; font-style: italic; }
+        .badge { padding: 4px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+        .badge-berita { background: #e3f2fd; color: #0d47a1; }
+        .badge-prestasi { background: #fff3e0; color: #e65100; }
     </style>
 </head>
 <body>
 
 <header>
-    <h2><i class="fas fa-user-shield"></i> PANEL MANAJEMEN KONTEN</h2>
+    <h2><i class="fas fa-tools"></i> PENGELOLA KONTEN MADRASAH</h2>
 </header>
 
 <div class="container">
     <div class="card">
         <h3 id="form-title">Tambah Konten Baru</h3>
-        <select id="targetSheet" style="width:100%; padding:10px; margin-bottom:10px;" onchange="toggleFields()">
-            <option value="Berita">Warta/Berita</option>
-            <option value="Prestasi">Prestasi Siswa</option>
-        </select>
-        
-        <input type="hidden" id="old_id">
-        <input type="text" id="inp_1" placeholder="Judul / Nama Prestasi">
-        <input type="text" id="inp_2" placeholder="Tanggal (Berita) / Kategori (Prestasi)">
-        <textarea id="inp_3" placeholder="Isi Berita (Kosongkan jika input Prestasi)" rows="4"></textarea>
-        <input type="text" id="inp_4" placeholder="URL Gambar">
-        
-        <button onclick="saveData()" id="btn-save" class="btn btn-add">SIMPAN DATA</button>
-        <button onclick="resetForm()" id="btn-cancel" class="btn" style="display:none; background:#666; color:white; margin-top:10px; width:100%;">BATAL EDIT</button>
+        <form id="mainForm">
+            <label>Pilih Kategori Konten:</label>
+            <select id="sheetName" onchange="adjustForm()">
+                <option value="Berita">Berita / Warta</option>
+                <option value="Prestasi">Prestasi Siswa</option>
+            </select>
+
+            <input type="hidden" id="old_id"> <input type="text" id="val1" placeholder="Judul Berita / Nama Prestasi" required>
+            <input type="text" id="val2" placeholder="Tanggal (Contoh: 2026-02-01) / Kategori Prestasi" required>
+            <textarea id="val3" placeholder="Isi Berita Lengkap (Kosongkan jika input Prestasi)" rows="5"></textarea>
+            <input type="text" id="val4" placeholder="URL Link Gambar (Contoh: https://...)" required>
+
+            <button type="submit" id="btn-submit" class="btn btn-save">TERBITKAN SEKARANG</button>
+            <button type="button" id="btn-cancel" class="btn" style="display:none; width:100%; margin-top:10px; background:#666; color:white;" onclick="resetForm()">BATAL EDIT</button>
+        </form>
     </div>
 
     <div class="card">
-        <h3>Daftar Konten Terbit</h3>
-        <div id="loader" class="loader">Memuat data dari Google Sheets...</div>
-        <div id="data-list"></div>
+        <h3>Daftar Konten Saat Ini</h3>
+        <div id="loader" class="loading-status">Mengambil data dari server...</div>
+        <div id="table-container">
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th>Tipe</th>
+                        <th>Judul / Konten</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="data-body">
+                    </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec"; // <--- GANTI INI!
+    // 1. KONFIGURASI (Ganti dengan URL Apps Script Anda)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec"; 
     let currentAction = "add";
 
-    // Proteksi Password
-    const auth = prompt("Password Admin:");
-    if(auth === "biasabisa") { document.body.style.display = "block"; loadData(); } 
-    else { alert("Akses Ditolak"); window.location.href="index.html"; }
-
-    async function loadData() {
-        document.getElementById('loader').style.display = "block";
-        const res = await fetch(SCRIPT_URL);
-        const data = await res.json();
-        renderTable("Berita", data.berita);
-        renderTable("Prestasi", data.prestasi);
-        document.getElementById('loader').style.display = "none";
+    // 2. KEAMANAN
+    const pass = prompt("Masukkan Password Admin:");
+    if (pass === "biasabisa") { // Ganti password sesuai keinginan
+        document.body.style.display = "block";
+        fetchData();
+    } else {
+        alert("Password Salah!");
+        window.location.href = "index.html";
     }
 
-    function renderTable(name, items) {
-        let html = `<h4><i class="fas fa-list"></i> Data ${name}</h4><table><tr><th>Judul</th><th>Aksi</th></tr>`;
-        items.forEach(item => {
-            html += `<tr>
-                <td>${item[0]}</td>
-                <td>
-                    <button class="btn btn-edit" onclick="prepareEdit('${name}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">Edit</button>
-                    <button class="btn btn-delete" onclick="deleteData('${name}', '${item[0]}')">Hapus</button>
-                </td>
-            </tr>`;
-        });
-        html += `</table><br>`;
-        const div = document.createElement('div');
-        div.innerHTML = html;
-        document.getElementById('data-list').appendChild(div);
-    }
+    // 3. AMBIL DATA DARI SHEETS
+    async function fetchData() {
+        const loader = document.getElementById('loader');
+        const body = document.getElementById('data-body');
+        loader.style.display = "block";
+        body.innerHTML = "";
 
-    async function saveData() {
-        const sheet = document.getElementById('targetSheet').value;
-        const data = [
-            document.getElementById('inp_1').value,
-            document.getElementById('inp_2').value,
-            document.getElementById('inp_3').value,
-            document.getElementById('inp_4').value
-        ];
+        try {
+            const res = await fetch(SCRIPT_URL);
+            const data = await res.json();
 
-        // Jika prestasi, hapus elemen ke-3 (Isi) agar pas 3 kolom
-        if(sheet === "Prestasi") data.splice(2, 1); 
+            // Render Berita
+            data.berita.forEach(item => renderRow("Berita", item));
+            // Render Prestasi
+            data.prestasi.forEach(item => renderRow("Prestasi", item));
 
-        const payload = {
-            action: currentAction,
-            sheetName: sheet,
-            id: document.getElementById('old_id').value || data[0],
-            data: data
-        };
-
-        const btn = document.getElementById('btn-save');
-        btn.disabled = true; btn.innerText = "Memproses...";
-
-        await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-        alert("Berhasil!");
-        location.reload();
-    }
-
-    async function deleteData(sheet, id) {
-        if(!confirm("Hapus data: " + id + "?")) return;
-        await fetch(SCRIPT_URL, { 
-            method: 'POST', 
-            body: JSON.stringify({ action: "delete", sheetName: sheet, id: id }) 
-        });
-        location.reload();
-    }
-
-    function prepareEdit(sheet, item) {
-        currentAction = "edit";
-        document.getElementById('targetSheet').value = sheet;
-        document.getElementById('form-title').innerText = "Edit Data: " + item[0];
-        document.getElementById('old_id').value = item[0];
-        document.getElementById('inp_1').value = item[0];
-        document.getElementById('inp_2').value = item[1];
-        if(sheet === "Berita") {
-            document.getElementById('inp_3').value = item[2];
-            document.getElementById('inp_4').value = item[3];
-        } else {
-            document.getElementById('inp_4').value = item[2];
+            loader.style.display = "none";
+        } catch (err) {
+            loader.innerHTML = "Gagal memuat data. Periksa koneksi atau URL Script.";
         }
-        document.getElementById('btn-save').innerText = "UPDATE DATA SEKARANG";
-        document.getElementById('btn-cancel').style.display = "block";
-        window.scrollTo(0,0);
     }
 
-    function resetForm() { location.reload(); }
-    
-    function toggleFields() {
-        const sheet = document.getElementById('targetSheet').value;
-        document.getElementById('inp_3').style.display = (sheet === "Prestasi") ? "none" : "block";
+    function renderRow(type, item) {
+        const body = document.getElementById('data-body');
+        const tr = document.createElement('tr');
+        const badgeClass = type === "Berita" ? "badge-berita" : "badge-prestasi";
+        
+        tr.innerHTML = `
+            <td><span class="badge ${badgeClass}">${type}</span></td>
+            <td><strong>${item[0]}</strong><br><small>${item[1]}</small></td>
+            <td>
+                <button class="btn btn-edit" onclick="editData('${type}', ${JSON.stringify(item).replace(/"/g, '&quot;')})"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-delete" onclick="deleteData('${type}', '${item[0]}')"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        body.appendChild(tr);
     }
-</script>
-</body>
-</html>
+
+    // 4. LOGIKA SIMPAN (ADD / EDIT)
+    document.getElementById('mainForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn-submit');
+        const sheet = document.getElementById('sheetName').value;
+        
+        btn.disabled = true;
+        btn
