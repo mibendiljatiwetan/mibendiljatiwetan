@@ -3,76 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin MI Bendiljati Wetan</title>
+    <title>Admin Panel - MI BENDILJATI WETAN</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #043927; --accent: #d4af37; --bg: #f4f7f6; --white: #ffffff; }
-        body { font-family: sans-serif; margin: 0; background: var(--bg); display: none; }
-        .admin-container { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        :root { --primary: #043927; --accent: #d4af37; --bg: #f4f7f6; --white: #ffffff; --danger: #e74c3c; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--bg); display: none; }
+        
+        .admin-container { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
         
         /* Sidebar */
-        .sidebar { background: var(--primary); color: white; padding: 20px; border-right: 4px solid var(--accent); }
-        .nav-item { padding: 12px; margin: 5px 0; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
+        .sidebar { background: var(--primary); color: white; padding: 25px; border-right: 4px solid var(--accent); display: flex; flex-direction: column; }
+        .sidebar-brand { text-align: center; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .sidebar-brand h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; }
+        .sidebar-brand span { color: var(--accent); font-size: 0.8rem; }
+
+        .nav-menu { flex-grow: 1; }
+        .nav-item { padding: 12px 15px; margin: 8px 0; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.8); }
         .nav-item:hover, .nav-item.active { background: var(--accent); color: var(--primary); font-weight: bold; }
         
-        /* Content */
-        main { padding: 30px; }
-        .card { background: var(--white); padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .logout-item { padding: 12px 15px; margin-top: auto; cursor: pointer; border-radius: 8px; display: flex; align-items: center; gap: 12px; color: #ff9999; border: 1px solid rgba(255,153,153,0.2); transition: 0.3s; }
+        .logout-item:hover { background: var(--danger); color: white; }
+
+        /* Content Area */
+        main { padding: 35px; }
+        .card { background: var(--white); padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full { grid-column: span 2; }
         
-        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-top: 5px; }
-        .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-save { background: var(--primary); color: white; width: 100%; }
+        h3 { color: var(--primary); margin-top: 0; border-left: 5px solid var(--accent); padding-left: 15px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 0.9rem; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
+        input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1); }
+
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .btn-save { background: var(--primary); color: white; width: 100%; justify-content: center; }
+        .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
-        .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.7); display: none; align-items: center; justify-content: center; z-index: 100; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: #f8f9fa; color: #666; font-size: 0.8rem; text-transform: uppercase; padding: 15px; text-align: left; }
+        td { padding: 15px; border-bottom: 1px solid #eee; }
+        
+        .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; flex-direction: column; gap: 10px; }
     </style>
 </head>
 <body>
 
-<div id="loading-overlay"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
+<div id="loading-overlay" class="loading-overlay">
+    <i class="fas fa-circle-notch fa-spin fa-3x" style="color: var(--primary)"></i>
+    <span>Sedang memproses...</span>
+</div>
 
 <div class="admin-container">
     <aside class="sidebar">
-        <h3>MI BENDILJATI</h3>
-        <div class="nav-item active" onclick="showSection('dashboard', this)"><i class="fas fa-home"></i> Dashboard</div>
-        <div class="nav-item" onclick="showSection('berita', this)"><i class="fas fa-newspaper"></i> Berita</div>
-        <div class="nav-item" onclick="showSection('prestasi', this)"><i class="fas fa-trophy"></i> Prestasi</div>
-        <div class="nav-item" onclick="showSection('guru', this)"><i class="fas fa-chalkboard-teacher"></i> Data Guru</div>
-        <div class="nav-item" onclick="showSection('layanan', this)"><i class="fas fa-concierge-bell"></i> Layanan</div>
-        <div class="nav-item" onclick="showSection('slider', this)"><i class="fas fa-images"></i> Slider</div>
+        <div class="sidebar-brand">
+            <h2>MI BENDILJATI WETAN</h2>
+            <span>SISTEM KONTEN TERPADU</span>
+        </div>
+        
+        <nav class="nav-menu">
+            <div class="nav-item active" onclick="showSection('dashboard', this)"><i class="fas fa-th-large"></i> Dashboard Utama</div>
+            <div class="nav-item" onclick="showSection('berita', this)"><i class="fas fa-newspaper"></i> Kelola Berita</div>
+            <div class="nav-item" onclick="showSection('prestasi', this)"><i class="fas fa-medal"></i> Prestasi Siswa</div>
+            <div class="nav-item" onclick="showSection('guru', this)"><i class="fas fa-user-tie"></i> Data Guru & Staf</div>
+            <div class="nav-item" onclick="showSection('layanan', this)"><i class="fas fa-hand-holding-heart"></i> Layanan Kami</div>
+            <div class="nav-item" onclick="showSection('slider', this)"><i class="fas fa-images"></i> Galeri Slider</div>
+        </nav>
+
+        <div class="logout-item" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Keluar ke Website</span>
+        </div>
     </aside>
 
     <main>
         <div id="section-dashboard" class="section">
             <div class="card">
-                <h3><i class="fas fa-chart-line"></i> Statistik Sekolah</h3>
+                <h3><i class="fas fa-tachometer-alt"></i> Statistik Sekolah</h3>
                 <div class="grid">
-                    <div><label>Jumlah Siswa</label><input type="number" id="stat-siswa"></div>
-                    <div><label>Jumlah Guru</label><input type="number" id="stat-guru"></div>
-                    <div><label>Jumlah Ekskul</label><input type="number" id="stat-ekskul"></div>
-                    <button class="btn btn-save full" onclick="updateDashboard('stats')">Update Statistik</button>
+                    <div><label>Total Siswa</label><input type="number" id="stat-siswa"></div>
+                    <div><label>Total Guru</label><input type="number" id="stat-guru"></div>
+                    <div><label>Total Ekskul</label><input type="number" id="stat-ekskul"></div>
+                    <button class="btn btn-save full" onclick="updateDashboard('stats')"><i class="fas fa-sync"></i> Simpan Perubahan Statistik</button>
                 </div>
             </div>
             <div class="card">
-                <h3><i class="fas fa-bullseye"></i> Visi & Misi</h3>
+                <h3><i class="fas fa-quote-left"></i> Visi & Misi Madrasah</h3>
                 <label>Visi</label><textarea id="visi-text" rows="2"></textarea>
-                <label>Misi</label><textarea id="misi-text" rows="4"></textarea>
-                <button class="btn btn-save" style="margin-top:10px" onclick="updateDashboard('visiMisi')">Update Visi & Misi</button>
+                <label style="margin-top:15px">Misi</label><textarea id="misi-text" rows="5"></textarea>
+                <button class="btn btn-save" style="margin-top:20px" onclick="updateDashboard('visiMisi')"><i class="fas fa-save"></i> Perbarui Visi & Misi</button>
             </div>
         </div>
 
         <div id="section-crud" class="section" style="display:none">
             <div class="card">
-                <h3 id="form-title">Tambah Data</h3>
-                <div id="dynamic-form" class="grid">
-                    </div>
-                <button class="btn btn-save" style="margin-top:15px" onclick="handleSubmit()" id="btn-submit">Simpan Data</button>
+                <h3 id="form-title">Tambah Data Baru</h3>
+                <div id="dynamic-form" class="grid"></div>
+                <button class="btn btn-save" style="margin-top:20px" onclick="handleSubmit()" id="btn-submit"><i class="fas fa-check-circle"></i> Simpan Data</button>
             </div>
             <div class="card">
-                <h3>Daftar Data</h3>
+                <h3><i class="fas fa-table"></i> Data Tersimpan</h3>
                 <div id="data-list"></div>
             </div>
         </div>
@@ -85,24 +114,37 @@
     let currentTab = 'dashboard';
     let editId = null;
 
-    // Login
-    const pass = prompt("Password Admin:");
-    if (pass === "biasabisa") { document.body.style.display = "block"; loadAllData(); }
-    else { window.location.href = "index.html"; }
+    // Keamanan Login
+    const pass = prompt("Sistem MI BENDILJATI WETAN\nMasukkan Password Admin:");
+    if (pass === "biasabisa") { 
+        document.body.style.display = "block"; 
+        loadAllData(); 
+    } else { 
+        alert("Akses ditolak!");
+        window.location.href = "index.html"; 
+    }
+
+    function handleLogout() {
+        if(confirm("Apakah Anda yakin ingin keluar dari panel admin?")) {
+            window.location.href = "index.html";
+        }
+    }
 
     async function loadAllData() {
         toggleLoader(true);
-        const res = await fetch(SCRIPT_URL);
-        allData = await res.json();
-        
-        // Fill Dashboard
-        document.getElementById('stat-siswa').value = allData.stats.siswa;
-        document.getElementById('stat-guru').value = allData.stats.guru;
-        document.getElementById('stat-ekskul').value = allData.stats.ekskul;
-        document.getElementById('visi-text').value = allData.visiMisi.visi;
-        document.getElementById('misi-text').value = allData.visiMisi.misi;
-        
-        if (currentTab !== 'dashboard') renderCrudTable();
+        try {
+            const res = await fetch(SCRIPT_URL);
+            allData = await res.json();
+            
+            // Dashboard Data
+            document.getElementById('stat-siswa').value = allData.stats.siswa;
+            document.getElementById('stat-guru').value = allData.stats.guru;
+            document.getElementById('stat-ekskul').value = allData.stats.ekskul;
+            document.getElementById('visi-text').value = allData.visiMisi.visi;
+            document.getElementById('misi-text').value = allData.visiMisi.misi;
+            
+            if (currentTab !== 'dashboard') renderCrudTable();
+        } catch (e) { alert("Gagal memuat data dari server."); }
         toggleLoader(false);
     }
 
@@ -123,22 +165,22 @@
     function generateForm() {
         const form = document.getElementById('dynamic-form');
         const configs = {
-            berita: ['Judul', 'Tanggal', 'Isi', 'Link Gambar'],
-            prestasi: ['Nama Prestasi', 'Kategori', 'Link Gambar'],
-            guru: ['Nama Guru', 'Jabatan', 'Link Foto'],
-            layanan: ['Nama Layanan', 'Deskripsi', 'Link Gambar'],
-            slider: ['Link Gambar Slider']
+            berita: ['Judul Berita', 'Tanggal', 'Isi Berita', 'URL Gambar'],
+            prestasi: ['Nama Prestasi', 'Kategori Juara', 'URL Gambar'],
+            guru: ['Nama Lengkap', 'Jabatan/Mapel', 'URL Foto'],
+            layanan: ['Nama Layanan', 'Deskripsi Singkat', 'URL Ikon/Gambar'],
+            slider: ['Link Gambar Slider (HD)']
         };
         
         const fields = configs[currentTab];
         form.innerHTML = fields.map((f, i) => `
-            <div class="${f === 'Isi' || f === 'Deskripsi' ? 'full' : ''}">
+            <div class="${f.includes('Isi') || f.includes('Deskripsi') ? 'full' : ''}">
                 <label>${f}</label>
-                ${f === 'Isi' || f === 'Deskripsi' ? `<textarea id="inp-${i}" rows="4"></textarea>` : `<input type="text" id="inp-${i}">`}
+                ${f.includes('Isi') || f.includes('Deskripsi') ? `<textarea id="inp-${i}" rows="4"></textarea>` : `<input type="text" id="inp-${i}">`}
             </div>
         `).join('');
         editId = null;
-        document.getElementById('btn-submit').innerText = "Simpan Data";
+        document.getElementById('btn-submit').innerHTML = `<i class="fas fa-check-circle"></i> Simpan Data ${currentTab}`;
     }
 
     async function updateDashboard(type) {
@@ -152,9 +194,12 @@
             misi: document.getElementById('misi-text').value
         };
 
-        await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateDashboard', type, data }) });
-        alert("Berhasil!");
-        loadAllData();
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateDashboard', type, data }) });
+            alert("Update Berhasil!");
+            loadAllData();
+        } catch(e) { alert("Update Gagal!"); }
+        toggleLoader(false);
     }
 
     async function handleSubmit() {
@@ -167,16 +212,17 @@
             i++;
         }
 
-        const payload = {
-            action: editId ? 'edit' : 'add',
-            sheetName: sheetMapping[currentTab],
-            id: editId,
-            data: data
-        };
-
-        await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-        alert("Berhasil!");
-        location.reload();
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({
+                action: editId ? 'edit' : 'add',
+                sheetName: sheetMapping[currentTab],
+                id: editId,
+                data: data
+            })});
+            alert("Data Berhasil Disimpan!");
+            location.reload();
+        } catch(e) { alert("Proses Gagal!"); }
+        toggleLoader(false);
     }
 
     function renderCrudTable() {
@@ -184,17 +230,17 @@
         const items = allData[key] || [];
         const container = document.getElementById('data-list');
         
-        let html = `<table><tr><th>Info</th><th>Aksi</th></tr>`;
+        let html = `<table><tr><th>Informasi Utama</th><th style="text-align:right">Aksi</th></tr>`;
         items.forEach(item => {
             html += `<tr>
                 <td><strong>${item[0]}</strong></td>
-                <td>
-                    <button onclick="prepareEdit('${item[0]}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">Edit</button>
-                    <button onclick="deleteData('${item[0]}')" style="color:red">Hapus</button>
+                <td style="text-align:right">
+                    <button class="btn" style="background:#ffc107; padding:6px 12px" onclick="prepareEdit('${item[0]}', ${JSON.stringify(item).replace(/"/g, '&quot;')})"><i class="fas fa-edit"></i></button>
+                    <button class="btn" style="background:var(--danger); color:white; padding:6px 12px" onclick="deleteData('${item[0]}')"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>`;
         });
-        container.innerHTML = html + `</table>`;
+        container.innerHTML = items.length ? html + `</table>` : `<p style="text-align:center; color:#999">Belum ada data di kategori ini.</p>`;
     }
 
     function prepareEdit(id, data) {
@@ -202,12 +248,12 @@
         data.forEach((val, i) => {
             if(document.getElementById(`inp-${i}`)) document.getElementById(`inp-${i}`).value = val;
         });
-        document.getElementById('btn-submit').innerText = "Update Data";
-        window.scrollTo(0,0);
+        document.getElementById('btn-submit').innerHTML = `<i class="fas fa-sync"></i> Perbarui Data ${currentTab}`;
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     async function deleteData(id) {
-        if(!confirm("Hapus data ini?")) return;
+        if(!confirm("Yakin ingin menghapus data ini secara permanen?")) return;
         toggleLoader(true);
         const sheetMapping = { berita: 'Berita', prestasi: 'Prestasi', guru: 'Guru', layanan: 'Layanan', slider: 'Slider' };
         await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', sheetName: sheetMapping[currentTab], id: id }) });
