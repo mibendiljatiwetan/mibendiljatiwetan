@@ -1,9 +1,8 @@
 backend:
   name: github
-  repo: mibendiljatiwetan/mibendiljatiwetan # GANTI DENGAN USERNAME/REPO ANDA
+  repo: mibendiljatiwetan/mibendiljatiwetan
   branch: main
 
-# Pengaturan media (gambar yang diupload via admin akan masuk ke folder ini)
 media_folder: "images"
 public_folder: "images"
 
@@ -18,7 +17,6 @@ collections:
         label: "Database Master Madrasah"
         name: "data"
         fields:
-          # --- SEKSI STATISTIK ---
           - label: "Statistik Dashboard (Angka)"
             name: "stats"
             widget: "object"
@@ -26,7 +24,7 @@ collections:
               - {label: "Jumlah Siswa Aktif", name: "siswa", widget: "number"}
               - {label: "Jumlah Guru & Staf", name: "guru", widget: "number"}
               - {label: "Jumlah Ekstrakurikuler", name: "ekskul", widget: "number"}
-
+          # ... (lanjutkan sisa fields di bawahnya sesuai kode sebelumnya)
           # --- SEKSI SLIDER HERO ---
           - label: "Gambar Slider (Beranda)"
             name: "slider"
