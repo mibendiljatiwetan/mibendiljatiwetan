@@ -355,231 +355,166 @@
 </div>
   
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
 
-    function toggleTheme() {
-      const b = document.body;
-      const isDark = b.getAttribute('data-theme') === 'dark';
-      b.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      document.getElementById('theme-icon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
-    }
+  // Variabel Global
+  let allBerita = []; 
+  let allGuru = [];
+  let dataVisiMisi = { visi: "", misi: "" };
 
-    function toggleMenu() {
-      document.getElementById('main-nav').classList.toggle('active');
-    }
-
-    function scrollToSection(id) {
-      document.getElementById('main-nav').classList.remove('active');
-      const el = document.getElementById(id);
-      window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
-    }
-
-   // Tambahkan variabel global ini di paling atas
-let allBerita = []; 
-let allGuru = [];
-let dataVisiMisi = { visi: "", misi: "" }; // Tambahkan ini
-
-async function loadData() {
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    
-    allBerita = data.berita || [];
-    allGuru = data.dataGuru || [];
-    dataVisiMisi = data.visiMisi; // Simpan data visi misi dari API
-
-    // ... kode dashboard & guru card (tetap sama) ...
-
-    // Update bagian render Layanan Digital
-    document.getElementById('main-services-list').innerHTML = data.layanan.map(row => {
-      const judul = row[0].toLowerCase();
+  async function loadData() {
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
       
-      if (judul.includes("berita")) {
-        return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
-      } 
-      
-      if (judul.includes("guru") || judul.includes("staf")) {
-        return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+      allBerita = data.berita || [];
+      allGuru = data.dataGuru || [];
+      dataVisiMisi = data.visiMisi || { visi: "Visi Belum Diatur", misi: "Misi Belum Diatur" };
+
+      // 1. Render Dashboard Stats (Siswa, Guru, Ekskul)
+      // Asumsi data.stats adalah objek {siswa: 100, guru: 20, ekskul: 10}
+      if(data.stats) {
+        animateCounter('count-siswa', data.stats.siswa || 0);
+        animateCounter('count-guru', data.stats.guru || 0);
+        animateCounter('count-ekskul', data.stats.ekskul || 0);
       }
 
-      // TAMBAHKAN INI: Cek jika judul mengandung Visi atau Misi atau Profil
-      if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
-        return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+      // 2. Render Slider
+      const slider = document.getElementById('slider');
+      if(data.slider && data.slider.length > 0) {
+        slider.innerHTML = data.slider.map((url, i) => `
+          <li class="${i===0?'active':''}" style="background-image:url('${url}')"></li>
+        `).join('');
       }
 
-      return `<a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
-    }).join('');
-    
-    // Slider
-    const slider = document.getElementById('slider');
-    if(data.slider && data.slider.length > 0) {
-      slider.innerHTML = data.slider.map((url, i) => `
-        <li class="${i===0?'active':''}" style="background-image:url('${url.replace('/upload/', '/upload/f_auto,q_auto,w_1200/')}')" ${i===0?'fetchpriority="high"':''}></li>
-      `).join('');
+      // 3. Render Layanan Digital (LOGIKA KLIK)
+      const servicesList = document.getElementById('main-services-list');
+      if(data.layanan) {
+        servicesList.innerHTML = data.layanan.map(row => {
+          const judul = row[0].toLowerCase();
+          const link = row[1];
+          const icon = row[2];
+          
+          if (judul.includes("berita")) {
+            return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${icon}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
+          } 
+          if (judul.includes("guru") || judul.includes("staf")) {
+            return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${icon}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+          }
+          if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
+            return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${icon}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+          }
+          // Default ke link eksternal
+          return `<a href="${link}" target="_blank" class="card"><i class="${icon}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
+        }).join('');
+      }
+
+      // 4. Render Prestasi
+      const prestasiList = document.getElementById('prestasi-list');
+      if(data.prestasi) {
+        prestasiList.innerHTML = data.prestasi.map(row => `
+          <div class="card" style="padding:0; overflow:hidden; text-align:left;">
+            <img src="${row[2]}" style="width:100%; height:220px; object-fit:cover" loading="lazy">
+            <div style="padding:25px"><h3>${row[0]}</h3><p style="color:var(--accent); font-weight:800; margin-top:5px;">${row[1]}</p></div>
+          </div>
+        `).join('');
+      }
+
+      // Trigger animasi muncul
+      window.dispatchEvent(new Event('scroll'));
+
+    } catch (e) { 
+      console.error("Data Load Error", e); 
     }
-
-    // Layanan (LOGIKA POPUP UNTUK BERITA & GURU)
-    document.getElementById('main-services-list').innerHTML = data.layanan.map(row => {
-      const judul = row[0].toLowerCase();
-      
-      // Jika judul mengandung "berita" atau "guru", buka modal terkait
-      if (judul.includes("berita")) {
-        return `
-          <div onclick="openNewsModal()" class="card" style="cursor:pointer">
-            <i class="${row[2]}"></i>
-            <h3>${row[0]}</h3>
-            <p>Klik untuk Baca</p>
-          </div>`;
-      } else if (judul.includes("guru") || judul.includes("staf")) {
-        return `
-          <div onclick="openGuruModal()" class="card" style="cursor:pointer">
-            <i class="${row[2]}"></i>
-            <h3>${row[0]}</h3>
-            <p>Klik untuk Lihat</p>
-          </div>`;
-      }
-      
-      // Selain itu, gunakan link standar
-      return `
-        <a href="${row[1]}" target="_blank" class="card">
-          <i class="${row[2]}"></i>
-          <h3>${row[0]}</h3>
-          <p>Klik untuk Akses</p>
-        </a>`;
-    }).join('');
-
-    // Prestasi
-    document.getElementById('prestasi-list').innerHTML = data.prestasi.map(row => `
-      <div class="card" style="padding:0; overflow:hidden; text-align:left;">
-        <img src="${row[2].replace('/upload/', '/upload/f_auto,q_auto,w_500/')}" style="width:100%; height:220px; object-fit:cover" loading="lazy">
-        <div style="padding:25px"><h3>${row[0]}</h3><p style="color:var(--accent); font-weight:800; margin-top:5px;">${row[1]}</p></div>
-      </div>
-    `).join('');
-
-    window.dispatchEvent(new Event('scroll'));
-  } catch (e) { 
-    console.error("Data Load Error", e); 
   }
-}
 
-// Fungsi untuk menampilkan Modal Berita
-function openNewsModal() {
-  const modal = document.getElementById('newsOverlay');
-  const content = document.getElementById('newsContent');
-  
-  if (allBerita.length === 0) {
-    content.innerHTML = "<p style='text-align:center'>Belum ada berita terbaru.</p>";
-  } else {
-    // Menampilkan semua berita yang ada di Sheet Berita
+  // Fungsi Animasi Angka
+  function animateCounter(id, target) {
+    let current = 0;
+    const increment = target / 50;
+    const el = document.getElementById(id);
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        el.innerText = Math.floor(target);
+        clearInterval(timer);
+      } else {
+        el.innerText = Math.floor(current);
+      }
+    }, 30);
+  }
+
+  // --- Fungsi UI & Modal ---
+  function toggleTheme() {
+    const b = document.body;
+    const isDark = b.getAttribute('data-theme') === 'dark';
+    b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('theme-icon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+  }
+
+  function toggleMenu() {
+    document.getElementById('main-nav').classList.toggle('active');
+  }
+
+  function scrollToSection(id) {
+    document.getElementById('main-nav').classList.remove('active');
+    const el = document.getElementById(id);
+    window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
+  }
+
+  function openNewsModal() {
+    const modal = document.getElementById('newsOverlay');
+    const content = document.getElementById('newsContent');
+    content.innerHTML = `<h2 style="text-align:center">Warta Madrasah</h2>` + 
+      (allBerita.length ? allBerita.map(item => `
+        <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
+          <img src="${item[3]}" style="width:100%; border-radius:10px;">
+          <h3>${item[0]}</h3>
+          <p>${item[2]}</p>
+        </div>`).join('') : "<p>Tidak ada berita.</p>");
+    modal.style.display = 'flex';
+  }
+
+  function openGuruModal() {
+    const modal = document.getElementById('newsOverlay');
+    const content = document.getElementById('newsContent');
+    content.innerHTML = `<h2 style="text-align:center">Tenaga Pendidik</h2><div class="guru-grid-modal">` + 
+      allGuru.map(g => `<div class="guru-item"><img src="${g[3]}"><h4>${g[0]}</h4><p>${g[1]}</p></div>`).join('') + `</div>`;
+    modal.style.display = 'flex';
+  }
+
+  function openVisiModal() {
+    const modal = document.getElementById('newsOverlay');
+    const content = document.getElementById('newsContent');
     content.innerHTML = `
-      <h2 style="color:var(--primary); margin-bottom:20px; text-align:center">Warta Madrasah</h2>
-      ${allBerita.map(item => `
-        <div style="margin-bottom:40px; border-bottom:1px solid #eee; padding-bottom:20px;">
-          <img src="${item[3]}" style="width:100%; border-radius:15px; margin-bottom:15px;">
-          <small style="color:var(--accent); font-weight:bold">${item[1]}</small>
-          <h3 style="margin:10px 0; color:var(--primary)">${item[0]}</h3>
-          <p style="line-height:1.6; color:var(--text); white-space: pre-line;">${item[2]}</p>
-        </div>
-      `).join('')}
-    `;
+      <div style="padding:20px;">
+        <h2 style="color:var(--primary)">Visi</h2><p>${dataVisiMisi.visi}</p>
+        <h2 style="color:var(--primary)">Misi</h2><div style="white-space:pre-line">${dataVisiMisi.misi}</div>
+      </div>`;
+    modal.style.display = 'flex';
   }
-  
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
 
-function closeNews() {
-  document.getElementById('newsOverlay').style.display = 'none';
-  document.body.style.overflow = 'auto';
-}
+  function closeNews() {
+    document.getElementById('newsOverlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
 
-function openGuruModal() {
-  const modal = document.getElementById('newsOverlay');
-  const content = document.getElementById('newsContent');
-  
-  content.innerHTML = `
-    <h2 style="color:var(--primary); text-align:center; margin-bottom:10px;">Tenaga Pendidik</h2>
-    <p style="text-align:center; opacity:0.7; margin-bottom:30px;">Mengenal Guru & Staf MI Bendiljati Wetan</p>
-    <div class="guru-grid-modal">
-      ${allGuru.length === 0 ? "<p style='text-align:center'>Data sedang dimuat...</p>" : allGuru.map(g => `
-        <div class="guru-item">
-          <img src="${g[3]}" alt="${g[0]}" onerror="this.src='https://via.placeholder.com/100'">
-          <h4 style="margin:5px 0; color:var(--primary); font-size:0.95rem;">${g[0]}</h4>
-          <p style="color:var(--accent); font-size:0.8rem; font-weight:bold; margin-bottom:5px;">${g[1]}</p>
-          <small style="font-style:italic; display:block; line-height:1.2; opacity:0.8;">"${g[2]}"</small>
-        </div>
-      `).join('')}
-    </div>
-  `;
-  
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-
-function openVisiModal() {
-  const modal = document.getElementById('newsOverlay');
-  const content = document.getElementById('newsContent');
-  
-  content.innerHTML = `
-    <div style="text-align:center; padding: 10px;">
-      <i class="fas fa-mosque" style="font-size:3.5rem; color:var(--accent); margin-bottom:20px;"></i>
-      <h2 style="color:var(--primary); margin-bottom:5px;">Visi & Misi</h2>
-      <p style="opacity:0.6; margin-bottom:30px;">Madrasah Digital Unggul & Berprestasi</p>
-      
-      <div style="background:var(--bg); padding:25px; border-radius:20px; border-left:5px solid var(--accent); text-align:left; margin-bottom:20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-        <h4 style="color:var(--primary); margin-top:0; letter-spacing:1px;">VISI</h4>
-        <p style="font-size:1.1rem; line-height:1.6; font-style:italic; color:var(--text);">"${dataVisiMisi.visi}"</p>
-      </div>
-      
-      <div style="background:var(--bg); padding:25px; border-radius:20px; border-left:5px solid var(--primary); text-align:left; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-        <h4 style="color:var(--primary); margin-top:0; letter-spacing:1px;">MISI</h4>
-        <div style="line-height:1.8; color:var(--text); white-space: pre-line;">${dataVisiMisi.misi}</div>
-      </div>
-    </div>
-  `;
-  
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-    
-    // Scroll Animation
-    window.addEventListener('scroll', () => {
-      document.querySelectorAll('.reveal').forEach(r => {
-        if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
-      });
+  // Auto Slider & Scroll Reveal
+  window.addEventListener('scroll', () => {
+    document.querySelectorAll('.reveal').forEach(r => {
+      if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
     });
+  });
 
-    // Auto Slider
-    setInterval(() => {
-      const s = document.querySelectorAll('#slider li');
-      if(s.length < 2) return;
-      let c = Array.from(s).findIndex(i => i.classList.contains('active'));
-      s[c].classList.remove('active');
-      s[(c + 1) % s.length].classList.add('active');
-    }, 5000);
+  setInterval(() => {
+    const s = document.querySelectorAll('#slider li');
+    if(s.length < 2) return;
+    let c = Array.from(s).findIndex(i => i.classList.contains('active'));
+    s[c].classList.remove('active');
+    s[(c + 1) % s.length].classList.add('active');
+  }, 5000);
 
-    window.onload = loadData;
-
-    document.getElementById('whatsappForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    // Nomor WhatsApp Admin (Gunakan kode negara 62)
-    const nomorAdmin = "6282130053330"; 
-
-    // Ambil data dari input
-    const nama = document.getElementById('wa_nama').value;
-    const kontak = document.getElementById('wa_kontak').value;
-    const pesan = document.getElementById('wa_pesan').value;
-
-    // Susun pesan untuk WhatsApp
-    const teks = `Halo Admin MI Bendiljati Wetan,%0A%0ASaya *${nama}* (${kontak}) ingin bertanya:%0A%0A"${pesan}"`;
-
-    // URL WhatsApp API
-    const url = `https://wa.me/${nomorAdmin}?text=${teks}`;
-
-    // Buka di tab baru
-    window.open(url, '_blank');
-});
-  </script>
+  window.onload = loadData;
+</script>
 </body>
 </html>
