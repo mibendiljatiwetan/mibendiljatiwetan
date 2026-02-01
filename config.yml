@@ -1,0 +1,35 @@
+backend:
+  name: github
+  repo: USERNAME/NAMA-REPO-ANDA # Ganti dengan username/repo GitHub Anda
+  branch: main
+
+media_folder: "images"
+public_folder: "images"
+
+collections:
+  - name: "konten"
+    label: "Update Website"
+    files:
+      - file: "data.json"
+        label: "Data Master"
+        name: "data"
+        fields:
+          - label: "Statistik"
+            name: "stats"
+            widget: "object"
+            fields:
+              - {label: "Siswa", name: "siswa", widget: "number"}
+              - {label: "Guru", name: "guru", widget: "number"}
+          - label: "Layanan Digital"
+            name: "layanan"
+            widget: "list"
+            fields:
+              - {label: "Nama", name: "nama", widget: "string"}
+              - {label: "URL", name: "url", widget: "string"}
+              - {label: "Ikon FontAwesome", name: "ikon", widget: "string"}
+          - label: "Visi Misi"
+            name: "visiMisi"
+            widget: "object"
+            fields:
+              - {label: "Visi", name: "visi", widget: "string"}
+              - {label: "Misi", name: "misi", widget: "markdown"}
