@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mibendiljatiwetan.github.io/mibendiljatiwetan/sitemap.xml
