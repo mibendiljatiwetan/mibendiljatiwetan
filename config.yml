@@ -1,35 +1,82 @@
 backend:
   name: github
-  repo: USERNAME/NAMA-REPO-ANDA # Ganti dengan username/repo GitHub Anda
+  repo: USERNAME_ANDA/mibendiljatiwetan # GANTI DENGAN USERNAME/REPO ANDA
   branch: main
 
+# Pengaturan media (gambar yang diupload via admin akan masuk ke folder ini)
 media_folder: "images"
 public_folder: "images"
 
 collections:
-  - name: "konten"
-    label: "Update Website"
+  - name: "konfigurasi"
+    label: "Update Konten Website"
+    delete: false
+    editor:
+      preview: false
     files:
       - file: "data.json"
-        label: "Data Master"
+        label: "Database Master Madrasah"
         name: "data"
         fields:
-          - label: "Statistik"
+          # --- SEKSI STATISTIK ---
+          - label: "Statistik Dashboard (Angka)"
             name: "stats"
             widget: "object"
             fields:
-              - {label: "Siswa", name: "siswa", widget: "number"}
-              - {label: "Guru", name: "guru", widget: "number"}
-          - label: "Layanan Digital"
+              - {label: "Jumlah Siswa Aktif", name: "siswa", widget: "number"}
+              - {label: "Jumlah Guru & Staf", name: "guru", widget: "number"}
+              - {label: "Jumlah Ekstrakurikuler", name: "ekskul", widget: "number"}
+
+          # --- SEKSI SLIDER HERO ---
+          - label: "Gambar Slider (Beranda)"
+            name: "slider"
+            widget: "list"
+            field: {label: "Link Gambar", name: "url", widget: "image"}
+
+          # --- SEKSI LAYANAN ---
+          - label: "Menu Layanan Digital"
             name: "layanan"
             widget: "list"
+            summary: "{{fields.nama}}"
             fields:
-              - {label: "Nama", name: "nama", widget: "string"}
-              - {label: "URL", name: "url", widget: "string"}
-              - {label: "Ikon FontAwesome", name: "ikon", widget: "string"}
-          - label: "Visi Misi"
+              - {label: "Nama Layanan", name: "nama", widget: "string"}
+              - {label: "URL Link (Gunakan # jika ingin buka Modal)", name: "url", widget: "string"}
+              - {label: "Ikon FontAwesome (Contoh: fas fa-book)", name: "ikon", widget: "string"}
+
+          # --- SEKSI VISI MISI ---
+          - label: "Profil Visi & Misi"
             name: "visiMisi"
             widget: "object"
             fields:
-              - {label: "Visi", name: "visi", widget: "string"}
-              - {label: "Misi", name: "misi", widget: "markdown"}
+              - {label: "Visi Madrasah", name: "visi", widget: "string"}
+              - {label: "Misi Madrasah (Gunakan Baris Baru)", name: "misi", widget: "markdown"}
+
+          # --- SEKSI GURU ---
+          - label: "Daftar Guru & Staf"
+            name: "dataGuru"
+            widget: "list"
+            summary: "{{fields.nama}}"
+            fields:
+              - {label: "Nama Lengkap", name: "nama", widget: "string"}
+              - {label: "Jabatan", name: "jabatan", widget: "string"}
+              - {label: "Foto Guru", name: "foto", widget: "image"}
+
+          # --- SEKSI PRESTASI ---
+          - label: "Galeri Prestasi Siswa"
+            name: "prestasi"
+            widget: "list"
+            summary: "{{fields.judul}}"
+            fields:
+              - {label: "Judul Prestasi", name: "judul", widget: "string"}
+              - {label: "Tahun / Tingkat", name: "tahun", widget: "string"}
+              - {label: "Foto Kegiatan", name: "gambar", widget: "image"}
+
+          # --- SEKSI BERITA ---
+          - label: "Warta Madrasah (Berita)"
+            name: "berita"
+            widget: "list"
+            summary: "{{fields.judul}}"
+            fields:
+              - {label: "Judul Berita", name: "judul", widget: "string"}
+              - {label: "Isi Berita Lengkap", name: "isi", widget: "markdown"}
+              - {label: "Foto Berita", name: "gambar", widget: "image"}
