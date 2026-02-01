@@ -2,130 +2,209 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Panel MI Bendiljati Wetan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - MI Bendiljati Wetan</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { color: #043927; border-bottom: 3px solid #d4af37; padding-bottom: 10px; }
-        input, textarea, select { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .btn-save { background: #043927; color: white; width: 100%; }
-        .btn-delete { background: #dc3545; color: white; padding: 5px 10px; }
-        .btn-edit { background: #ffc107; color: black; padding: 5px 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: #f8f8f8; }
-        #loading { text-align: center; font-weight: bold; color: #666; }
+        :root { --primary: #043927; --accent: #d4af37; --light: #f8f9fa; --white: #ffffff; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--light); margin: 0; display: none; }
+        
+        /* Layout Sidebar */
+        .admin-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        .sidebar { background: var(--primary); color: white; padding: 30px 20px; border-right: 4px solid var(--accent); }
+        .sidebar h2 { font-size: 1.1rem; text-align: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
+        
+        .nav-link { display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { background: var(--accent); color: var(--primary); font-weight: 800; }
+        
+        /* Main Content */
+        main { padding: 40px; box-sizing: border-box; }
+        .card { background: var(--white); border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        h3 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        
+        /* Form */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full { grid-column: span 2; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
+        input:focus { border-color: var(--accent); outline: none; }
+        
+        .btn { padding: 12px 20px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-save { background: var(--primary); color: white; width: 100%; justify-content: center; }
+        .btn-edit { background: #ffc107; color: #212529; font-size: 0.8rem; }
+        .btn-delete { background: #dc3545; color: white; font-size: 0.8rem; }
+        
+        /* Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: #f1f1f1; text-align: left; padding: 12px; font-size: 0.8rem; color: #666; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .thumb { width: 50px; height: 35px; object-fit: cover; border-radius: 4px; }
+
+        #loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Update Konten Madrasah</h2>
-    
-    <div id="form-section">
-        <select id="sheetName">
-            <option value="Berita">Berita</option>
-            <option value="Prestasi">Prestasi</option>
-        </select>
-        <input type="hidden" id="old_id">
-        <input type="text" id="val1" placeholder="Judul / Nama Prestasi">
-        <input type="text" id="val2" placeholder="Tanggal / Kategori">
-        <textarea id="val3" placeholder="Isi Berita (Kosongkan jika Prestasi)"></textarea>
-        <input type="text" id="val4" placeholder="URL Link Gambar">
-        <button id="btn-submit" class="btn btn-save" onclick="simpanData()">SIMPAN DATA</button>
-        <button id="btn-cancel" class="btn" style="display:none; margin-top:5px; width:100%" onclick="window.location.reload()">BATAL</button>
-    </div>
+<div id="loading-overlay"><i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary)"></i></div>
 
-    <hr>
+<div class="admin-layout">
+    <aside class="sidebar">
+        <h2>MI BENDILJATI WETAN<br><span style="color: var(--accent); font-size: 0.8rem;">ADMIN PANEL</span></h2>
+        <div class="nav-link active" onclick="switchTab('Berita', this)"><i class="fas fa-newspaper"></i> Warta Madrasah</div>
+        <div class="nav-link" onclick="switchTab('Prestasi', this)"><i class="fas fa-trophy"></i> Prestasi Siswa</div>
+        <div class="nav-link" onclick="location.reload()" style="margin-top: 30px;"><i class="fas fa-sync"></i> Refresh Data</div>
+        <div class="nav-link" onclick="location.href='index.html'" style="color: #ffbaba;"><i class="fas fa-external-link-alt"></i> Lihat Web</div>
+    </aside>
 
-    <h3>Daftar Konten Saat Ini</h3>
-    <div id="loading">Memuat data...</div>
-    <div id="daftar-konten"></div>
+    <main>
+        <div class="card">
+            <h3 id="form-title"><i class="fas fa-plus-circle"></i> Tambah Berita Baru</h3>
+            <div class="form-grid">
+                <input type="hidden" id="old_id">
+                <div class="full">
+                    <label>Judul Utama</label>
+                    <input type="text" id="val1" placeholder="Masukkan judul..." required>
+                </div>
+                <div>
+                    <label id="lbl_val2">Tanggal</label>
+                    <input type="text" id="val2" placeholder="2026-02-01" required>
+                </div>
+                <div>
+                    <label>Link Foto (URL)</label>
+                    <input type="text" id="val4" placeholder="https://..." required>
+                </div>
+                <div class="full" id="box_isi">
+                    <label>Isi Berita</label>
+                    <textarea id="val3" rows="4" placeholder="Tulis rincian berita..."></textarea>
+                </div>
+                <div class="full">
+                    <button class="btn btn-save" onclick="simpanData()" id="btn-submit"><i class="fas fa-save"></i> SIMPAN KONTEN</button>
+                    <button class="btn" id="btn-cancel" style="display:none; width:100%; margin-top:10px; background:#666; color:white;" onclick="location.reload()">BATAL EDIT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 id="table-title"><i class="fas fa-list"></i> Daftar Berita</h3>
+            <div id="loading" style="text-align: center; padding: 20px;">Memuat data...</div>
+            <div id="daftar-konten"></div>
+        </div>
+    </main>
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec"; // <-- PASTIIN URL BENAR
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
     let mode = "add";
+    let currentSheet = "Berita";
 
-    // Langsung minta password
+    // Proteksi Password
     const password = prompt("Password Admin:");
     if (password !== "biasabisa") {
-        alert("Salah!");
+        alert("Akses Ditolak!");
         window.location.href = "index.html";
     } else {
+        document.body.style.display = "block";
         fetchData();
     }
 
     async function fetchData() {
+        document.getElementById('loading').style.display = 'block';
         try {
             const res = await fetch(SCRIPT_URL);
             const data = await res.json();
-            const container = document.getElementById('daftar-konten');
-            container.innerHTML = ""; // Bersihkan kontainer
-
-            // 1. Render Tabel Berita
-            let htmlBerita = `<h3><i class="fas fa-newspaper"></i> Daftar Berita</h3><table>
-                <tr><th>Judul Berita</th><th>Aksi</th></tr>`;
-            data.berita.forEach(item => {
-                htmlBerita += `<tr>
-                    <td>${item[0]}</td>
-                    <td>
-                        <button class="btn btn-edit" onclick='siapkanEdit("Berita", ${JSON.stringify(item).replace(/"/g, '&quot;')})'>Edit</button>
-                        <button class="btn btn-delete" onclick="hapusData('Berita', '${item[0]}')">Hapus</button>
-                    </td>
-                </tr>`;
-            });
-            htmlBerita += `</table><br>`;
-
-            // 2. Render Tabel Prestasi
-            let htmlPrestasi = `<h3><i class="fas fa-trophy"></i> Daftar Prestasi</h3><table>
-                <tr><th>Nama Prestasi</th><th>Aksi</th></tr>`;
-            data.prestasi.forEach(item => {
-                htmlPrestasi += `<tr>
-                    <td>${item[0]}</td>
-                    <td>
-                        <button class="btn btn-edit" onclick='siapkanEdit("Prestasi", ${JSON.stringify(item).replace(/"/g, '&quot;')})'>Edit</button>
-                        <button class="btn btn-delete" onclick="hapusData('Prestasi', '${item[0]}')">Hapus</button>
-                    </td>
-                </tr>`;
-            });
-            htmlPrestasi += `</table>`;
-
-            container.innerHTML = htmlBerita + htmlPrestasi;
-            document.getElementById('loading').style.display = 'none';
+            renderTable(currentSheet === "Berita" ? data.berita : data.prestasi);
         } catch (e) {
-            document.getElementById('loading').innerText = "Gagal memuat data.";
+            alert("Gagal memuat data!");
+        }
+        document.getElementById('loading').style.display = 'none';
+    }
+
+    function renderTable(items) {
+        let html = `<table><thead><tr><th>Foto</th><th>Informasi</th><th>Aksi</th></tr></thead><tbody>`;
+        items.forEach(item => {
+            const img = currentSheet === "Berita" ? item[3] : item[2];
+            html += `<tr>
+                <td><img src="${img}" class="thumb"></td>
+                <td><strong>${item[0]}</strong><br><small>${item[1]}</small></td>
+                <td>
+                    <div style="display:flex; gap:5px;">
+                        <button class="btn btn-edit" onclick='siapkanEdit(${JSON.stringify(item).replace(/"/g, '&quot;')})'><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-delete" onclick="hapusData('${item[0]}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>`;
+        });
+        html += `</tbody></table>`;
+        document.getElementById('daftar-konten').innerHTML = html;
+    }
+
+    function switchTab(sheet, el) {
+        currentSheet = sheet;
+        mode = "add";
+        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('form-title').innerHTML = `<i class="fas fa-plus-circle"></i> Tambah ${sheet}`;
+        document.getElementById('table-title').innerHTML = `<i class="fas fa-list"></i> Daftar ${sheet}`;
+        document.getElementById('lbl_val2').innerText = sheet === "Berita" ? "Tanggal" : "Kategori/Tahun";
+        document.getElementById('box_isi').style.display = sheet === "Berita" ? "block" : "none";
+        document.getElementById('btn-submit').innerHTML = `<i class="fas fa-save"></i> SIMPAN ${sheet.toUpperCase()}`;
+        fetchData();
+    }
+
+    async function simpanData() {
+        const btn = document.getElementById('btn-submit');
+        const overlay = document.getElementById('loading-overlay');
+        
+        let rowData = [
+            document.getElementById('val1').value,
+            document.getElementById('val2').value,
+            document.getElementById('val3').value,
+            document.getElementById('val4').value
+        ];
+        if(currentSheet === "Prestasi") rowData.splice(2, 1);
+
+        overlay.style.display = 'flex';
+        try {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: mode,
+                    sheetName: currentSheet,
+                    id: document.getElementById('old_id').value || rowData[0],
+                    data: rowData
+                })
+            });
+            alert("Data berhasil disimpan!");
+            location.reload();
+        } catch (e) {
+            alert("Terjadi kesalahan!");
+            overlay.style.display = 'none';
         }
     }
 
-    function siapkanEdit(type, data) {
+    function siapkanEdit(item) {
         mode = "edit";
-        document.getElementById('sheetName').value = type;
-        document.getElementById('old_id').value = data[0]; // Judul lama sebagai kunci
-        
-        // Mengisi form berdasarkan tipe
-        document.getElementById('val1').value = data[0]; // Judul
-        document.getElementById('val2').value = data[1]; // Tanggal/Kategori
-        
-        if(type === "Berita") {
-            document.getElementById('val3').style.display = "block";
-            document.getElementById('val3').value = data[2]; // Isi
-            document.getElementById('val4').value = data[3]; // Gambar
+        window.scrollTo({top: 0, behavior: 'smooth'});
+        document.getElementById('old_id').value = item[0];
+        document.getElementById('val1').value = item[0];
+        document.getElementById('val2').value = item[1];
+        if(currentSheet === "Berita") {
+            document.getElementById('val3').value = item[2];
+            document.getElementById('val4').value = item[3];
         } else {
-            document.getElementById('val3').style.display = "none";
-            document.getElementById('val3').value = "";      // Kosongkan isi
-            document.getElementById('val4').value = data[2]; // Gambar (di prestasi index ke-2)
+            document.getElementById('val4').value = item[2];
         }
-        
-        document.getElementById('btn-submit').innerText = "UPDATE DATA " + type.toUpperCase();
+        document.getElementById('btn-submit').innerHTML = `<i class="fas fa-sync"></i> UPDATE ${currentSheet.toUpperCase()}`;
         document.getElementById('btn-cancel').style.display = "block";
-        window.scrollTo(0,0);
     }
 
-    async function hapusData(sheet, id) {
-        if(!confirm("Hapus " + id + "?")) return;
-        await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({action: "delete", sheetName: sheet, id: id}) });
+    async function hapusData(id) {
+        if(!confirm("Hapus '" + id + "'?")) return;
+        document.getElementById('loading-overlay').style.display = 'flex';
+        await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            body: JSON.stringify({action: "delete", sheetName: currentSheet, id: id}) 
+        });
         location.reload();
     }
 </script>
