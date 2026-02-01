@@ -3,210 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - MI Bendiljati Wetan</title>
+    <title>Super Admin MI Bendiljati Wetan</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #043927; --accent: #d4af37; --light: #f8f9fa; --white: #ffffff; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--light); margin: 0; display: none; }
+        :root { --primary: #043927; --accent: #d4af37; --bg: #f4f7f6; --white: #ffffff; }
+        body { font-family: sans-serif; margin: 0; background: var(--bg); display: none; }
+        .admin-container { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
         
-        /* Layout Sidebar */
-        .admin-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
-        .sidebar { background: var(--primary); color: white; padding: 30px 20px; border-right: 4px solid var(--accent); }
-        .sidebar h2 { font-size: 1.1rem; text-align: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
+        /* Sidebar */
+        .sidebar { background: var(--primary); color: white; padding: 20px; border-right: 4px solid var(--accent); }
+        .nav-item { padding: 12px; margin: 5px 0; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
+        .nav-item:hover, .nav-item.active { background: var(--accent); color: var(--primary); font-weight: bold; }
         
-        .nav-link { display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: rgba(255,255,255,0.7); text-decoration: none; border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { background: var(--accent); color: var(--primary); font-weight: 800; }
-        
-        /* Main Content */
-        main { padding: 40px; box-sizing: border-box; }
-        .card { background: var(--white); border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        h3 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
-        
-        /* Form */
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        /* Content */
+        main { padding: 30px; }
+        .card { background: var(--white); padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .full { grid-column: span 2; }
-        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; box-sizing: border-box; }
-        input:focus { border-color: var(--accent); outline: none; }
         
-        .btn { padding: 12px 20px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-save { background: var(--primary); color: white; width: 100%; justify-content: center; }
-        .btn-edit { background: #ffc107; color: #212529; font-size: 0.8rem; }
-        .btn-delete { background: #dc3545; color: white; font-size: 0.8rem; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; margin-top: 5px; }
+        .btn { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-save { background: var(--primary); color: white; width: 100%; }
         
-        /* Table */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th { background: #f1f1f1; text-align: left; padding: 12px; font-size: 0.8rem; color: #666; }
-        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
-        .thumb { width: 50px; height: 35px; object-fit: cover; border-radius: 4px; }
-
-        #loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+        .loading-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.7); display: none; align-items: center; justify-content: center; z-index: 100; }
     </style>
 </head>
 <body>
 
-<div id="loading-overlay"><i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary)"></i></div>
+<div id="loading-overlay"><i class="fas fa-spinner fa-spin fa-2x"></i></div>
 
-<div class="admin-layout">
+<div class="admin-container">
     <aside class="sidebar">
-        <h2>MI BENDILJATI WETAN<br><span style="color: var(--accent); font-size: 0.8rem;">ADMIN PANEL</span></h2>
-        <div class="nav-link active" onclick="switchTab('Berita', this)"><i class="fas fa-newspaper"></i> Warta Madrasah</div>
-        <div class="nav-link" onclick="switchTab('Prestasi', this)"><i class="fas fa-trophy"></i> Prestasi Siswa</div>
-        <div class="nav-link" onclick="location.reload()" style="margin-top: 30px;"><i class="fas fa-sync"></i> Refresh Data</div>
-        <div class="nav-link" onclick="location.href='index.html'" style="color: #ffbaba;"><i class="fas fa-external-link-alt"></i> Lihat Web</div>
+        <h3>MI BENDILJATI</h3>
+        <div class="nav-item active" onclick="showSection('dashboard', this)"><i class="fas fa-home"></i> Dashboard</div>
+        <div class="nav-item" onclick="showSection('berita', this)"><i class="fas fa-newspaper"></i> Berita</div>
+        <div class="nav-item" onclick="showSection('prestasi', this)"><i class="fas fa-trophy"></i> Prestasi</div>
+        <div class="nav-item" onclick="showSection('guru', this)"><i class="fas fa-chalkboard-teacher"></i> Data Guru</div>
+        <div class="nav-item" onclick="showSection('layanan', this)"><i class="fas fa-concierge-bell"></i> Layanan</div>
+        <div class="nav-item" onclick="showSection('slider', this)"><i class="fas fa-images"></i> Slider</div>
     </aside>
 
     <main>
-        <div class="card">
-            <h3 id="form-title"><i class="fas fa-plus-circle"></i> Tambah Berita Baru</h3>
-            <div class="form-grid">
-                <input type="hidden" id="old_id">
-                <div class="full">
-                    <label>Judul Utama</label>
-                    <input type="text" id="val1" placeholder="Masukkan judul..." required>
+        <div id="section-dashboard" class="section">
+            <div class="card">
+                <h3><i class="fas fa-chart-line"></i> Statistik Sekolah</h3>
+                <div class="grid">
+                    <div><label>Jumlah Siswa</label><input type="number" id="stat-siswa"></div>
+                    <div><label>Jumlah Guru</label><input type="number" id="stat-guru"></div>
+                    <div><label>Jumlah Ekskul</label><input type="number" id="stat-ekskul"></div>
+                    <button class="btn btn-save full" onclick="updateDashboard('stats')">Update Statistik</button>
                 </div>
-                <div>
-                    <label id="lbl_val2">Tanggal</label>
-                    <input type="text" id="val2" placeholder="2026-02-01" required>
-                </div>
-                <div>
-                    <label>Link Foto (URL)</label>
-                    <input type="text" id="val4" placeholder="https://..." required>
-                </div>
-                <div class="full" id="box_isi">
-                    <label>Isi Berita</label>
-                    <textarea id="val3" rows="4" placeholder="Tulis rincian berita..."></textarea>
-                </div>
-                <div class="full">
-                    <button class="btn btn-save" onclick="simpanData()" id="btn-submit"><i class="fas fa-save"></i> SIMPAN KONTEN</button>
-                    <button class="btn" id="btn-cancel" style="display:none; width:100%; margin-top:10px; background:#666; color:white;" onclick="location.reload()">BATAL EDIT</button>
-                </div>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-bullseye"></i> Visi & Misi</h3>
+                <label>Visi</label><textarea id="visi-text" rows="2"></textarea>
+                <label>Misi</label><textarea id="misi-text" rows="4"></textarea>
+                <button class="btn btn-save" style="margin-top:10px" onclick="updateDashboard('visiMisi')">Update Visi & Misi</button>
             </div>
         </div>
 
-        <div class="card">
-            <h3 id="table-title"><i class="fas fa-list"></i> Daftar Berita</h3>
-            <div id="loading" style="text-align: center; padding: 20px;">Memuat data...</div>
-            <div id="daftar-konten"></div>
+        <div id="section-crud" class="section" style="display:none">
+            <div class="card">
+                <h3 id="form-title">Tambah Data</h3>
+                <div id="dynamic-form" class="grid">
+                    </div>
+                <button class="btn btn-save" style="margin-top:15px" onclick="handleSubmit()" id="btn-submit">Simpan Data</button>
+            </div>
+            <div class="card">
+                <h3>Daftar Data</h3>
+                <div id="data-list"></div>
+            </div>
         </div>
     </main>
 </div>
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
-    let mode = "add";
-    let currentSheet = "Berita";
+    let allData = {};
+    let currentTab = 'dashboard';
+    let editId = null;
 
-    // Proteksi Password
-    const password = prompt("Password Admin:");
-    if (password !== "biasabisa") {
-        alert("Akses Ditolak!");
-        window.location.href = "index.html";
-    } else {
-        document.body.style.display = "block";
-        fetchData();
+    // Login
+    const pass = prompt("Password Admin:");
+    if (pass === "biasabisa") { document.body.style.display = "block"; loadAllData(); }
+    else { window.location.href = "index.html"; }
+
+    async function loadAllData() {
+        toggleLoader(true);
+        const res = await fetch(SCRIPT_URL);
+        allData = await res.json();
+        
+        // Fill Dashboard
+        document.getElementById('stat-siswa').value = allData.stats.siswa;
+        document.getElementById('stat-guru').value = allData.stats.guru;
+        document.getElementById('stat-ekskul').value = allData.stats.ekskul;
+        document.getElementById('visi-text').value = allData.visiMisi.visi;
+        document.getElementById('misi-text').value = allData.visiMisi.misi;
+        
+        if (currentTab !== 'dashboard') renderCrudTable();
+        toggleLoader(false);
     }
 
-    async function fetchData() {
-        document.getElementById('loading').style.display = 'block';
-        try {
-            const res = await fetch(SCRIPT_URL);
-            const data = await res.json();
-            renderTable(currentSheet === "Berita" ? data.berita : data.prestasi);
-        } catch (e) {
-            alert("Gagal memuat data!");
+    function showSection(tab, el) {
+        currentTab = tab;
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
+        
+        document.getElementById('section-dashboard').style.display = tab === 'dashboard' ? 'block' : 'none';
+        document.getElementById('section-crud').style.display = tab === 'dashboard' ? 'none' : 'block';
+        
+        if (tab !== 'dashboard') {
+            generateForm();
+            renderCrudTable();
         }
-        document.getElementById('loading').style.display = 'none';
     }
 
-    function renderTable(items) {
-        let html = `<table><thead><tr><th>Foto</th><th>Informasi</th><th>Aksi</th></tr></thead><tbody>`;
+    function generateForm() {
+        const form = document.getElementById('dynamic-form');
+        const configs = {
+            berita: ['Judul', 'Tanggal', 'Isi', 'Link Gambar'],
+            prestasi: ['Nama Prestasi', 'Kategori', 'Link Gambar'],
+            guru: ['Nama Guru', 'Jabatan', 'Link Foto'],
+            layanan: ['Nama Layanan', 'Deskripsi', 'Link Gambar'],
+            slider: ['Link Gambar Slider']
+        };
+        
+        const fields = configs[currentTab];
+        form.innerHTML = fields.map((f, i) => `
+            <div class="${f === 'Isi' || f === 'Deskripsi' ? 'full' : ''}">
+                <label>${f}</label>
+                ${f === 'Isi' || f === 'Deskripsi' ? `<textarea id="inp-${i}" rows="4"></textarea>` : `<input type="text" id="inp-${i}">`}
+            </div>
+        `).join('');
+        editId = null;
+        document.getElementById('btn-submit').innerText = "Simpan Data";
+    }
+
+    async function updateDashboard(type) {
+        toggleLoader(true);
+        const data = type === 'stats' ? {
+            siswa: document.getElementById('stat-siswa').value,
+            guru: document.getElementById('stat-guru').value,
+            ekskul: document.getElementById('stat-ekskul').value
+        } : {
+            visi: document.getElementById('visi-text').value,
+            misi: document.getElementById('misi-text').value
+        };
+
+        await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'updateDashboard', type, data }) });
+        alert("Berhasil!");
+        loadAllData();
+    }
+
+    async function handleSubmit() {
+        toggleLoader(true);
+        const sheetMapping = { berita: 'Berita', prestasi: 'Prestasi', guru: 'Guru', layanan: 'Layanan', slider: 'Slider' };
+        const data = [];
+        let i = 0;
+        while(document.getElementById(`inp-${i}`)) {
+            data.push(document.getElementById(`inp-${i}`).value);
+            i++;
+        }
+
+        const payload = {
+            action: editId ? 'edit' : 'add',
+            sheetName: sheetMapping[currentTab],
+            id: editId,
+            data: data
+        };
+
+        await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+        alert("Berhasil!");
+        location.reload();
+    }
+
+    function renderCrudTable() {
+        const key = currentTab === 'guru' ? 'dataGuru' : currentTab;
+        const items = allData[key] || [];
+        const container = document.getElementById('data-list');
+        
+        let html = `<table><tr><th>Info</th><th>Aksi</th></tr>`;
         items.forEach(item => {
-            const img = currentSheet === "Berita" ? item[3] : item[2];
             html += `<tr>
-                <td><img src="${img}" class="thumb"></td>
-                <td><strong>${item[0]}</strong><br><small>${item[1]}</small></td>
+                <td><strong>${item[0]}</strong></td>
                 <td>
-                    <div style="display:flex; gap:5px;">
-                        <button class="btn btn-edit" onclick='siapkanEdit(${JSON.stringify(item).replace(/"/g, '&quot;')})'><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-delete" onclick="hapusData('${item[0]}')"><i class="fas fa-trash"></i></button>
-                    </div>
+                    <button onclick="prepareEdit('${item[0]}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">Edit</button>
+                    <button onclick="deleteData('${item[0]}')" style="color:red">Hapus</button>
                 </td>
             </tr>`;
         });
-        html += `</tbody></table>`;
-        document.getElementById('daftar-konten').innerHTML = html;
+        container.innerHTML = html + `</table>`;
     }
 
-    function switchTab(sheet, el) {
-        currentSheet = sheet;
-        mode = "add";
-        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
-        document.getElementById('form-title').innerHTML = `<i class="fas fa-plus-circle"></i> Tambah ${sheet}`;
-        document.getElementById('table-title').innerHTML = `<i class="fas fa-list"></i> Daftar ${sheet}`;
-        document.getElementById('lbl_val2').innerText = sheet === "Berita" ? "Tanggal" : "Kategori/Tahun";
-        document.getElementById('box_isi').style.display = sheet === "Berita" ? "block" : "none";
-        document.getElementById('btn-submit').innerHTML = `<i class="fas fa-save"></i> SIMPAN ${sheet.toUpperCase()}`;
-        fetchData();
-    }
-
-    async function simpanData() {
-        const btn = document.getElementById('btn-submit');
-        const overlay = document.getElementById('loading-overlay');
-        
-        let rowData = [
-            document.getElementById('val1').value,
-            document.getElementById('val2').value,
-            document.getElementById('val3').value,
-            document.getElementById('val4').value
-        ];
-        if(currentSheet === "Prestasi") rowData.splice(2, 1);
-
-        overlay.style.display = 'flex';
-        try {
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: mode,
-                    sheetName: currentSheet,
-                    id: document.getElementById('old_id').value || rowData[0],
-                    data: rowData
-                })
-            });
-            alert("Data berhasil disimpan!");
-            location.reload();
-        } catch (e) {
-            alert("Terjadi kesalahan!");
-            overlay.style.display = 'none';
-        }
-    }
-
-    function siapkanEdit(item) {
-        mode = "edit";
-        window.scrollTo({top: 0, behavior: 'smooth'});
-        document.getElementById('old_id').value = item[0];
-        document.getElementById('val1').value = item[0];
-        document.getElementById('val2').value = item[1];
-        if(currentSheet === "Berita") {
-            document.getElementById('val3').value = item[2];
-            document.getElementById('val4').value = item[3];
-        } else {
-            document.getElementById('val4').value = item[2];
-        }
-        document.getElementById('btn-submit').innerHTML = `<i class="fas fa-sync"></i> UPDATE ${currentSheet.toUpperCase()}`;
-        document.getElementById('btn-cancel').style.display = "block";
-    }
-
-    async function hapusData(id) {
-        if(!confirm("Hapus '" + id + "'?")) return;
-        document.getElementById('loading-overlay').style.display = 'flex';
-        await fetch(SCRIPT_URL, { 
-            method: 'POST', 
-            body: JSON.stringify({action: "delete", sheetName: currentSheet, id: id}) 
+    function prepareEdit(id, data) {
+        editId = id;
+        data.forEach((val, i) => {
+            if(document.getElementById(`inp-${i}`)) document.getElementById(`inp-${i}`).value = val;
         });
+        document.getElementById('btn-submit').innerText = "Update Data";
+        window.scrollTo(0,0);
+    }
+
+    async function deleteData(id) {
+        if(!confirm("Hapus data ini?")) return;
+        toggleLoader(true);
+        const sheetMapping = { berita: 'Berita', prestasi: 'Prestasi', guru: 'Guru', layanan: 'Layanan', slider: 'Slider' };
+        await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', sheetName: sheetMapping[currentTab], id: id }) });
         location.reload();
     }
+
+    function toggleLoader(show) { document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none'; }
 </script>
 </body>
 </html>
