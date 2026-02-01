@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - MI Bendiljati Wetan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #043927;
+            --accent: #d4af37;
+            --bg: #f8f9fa;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); margin: 0; padding: 0; display: none; }
+        .header-admin { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--accent); }
+        .container { max-width: 800px; margin: 30px auto; padding: 20px; }
+        
+        /* Tab System */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 15px; border: none; background: #ddd; cursor: pointer; font-weight: 800; border-radius: 10px; transition: 0.3s; }
+        .tab-btn.active { background: var(--accent); color: var(--primary); }
+
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--primary); }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
+        
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: 800; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn-submit:hover { background: #065a3d; transform: translateY(-2px); }
+        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+
+        .status-msg { margin-top: 15px; padding: 15px; border-radius: 10px; display: none; text-align: center; font-weight: 600; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+    <div class="header-admin">
+        <img src="https://res.cloudinary.com/derebgfyl/image/upload/v1769782881/MIB_eyz6tv.png" height="50">
+        <h2>Panel Admin Konten</h2>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('berita')"><i class="fas fa-newspaper"></i> Update Berita</button>
+            <button class="tab-btn" onclick="showTab('prestasi')"><i class="fas fa-trophy"></i> Update Prestasi</button>
+        </div>
+
+        <div id="section-berita" class="card">
+            <h3>Tambah Warta Madrasah</h3>
+            <form id="formBerita">
+                <div class="form-group">
+                    <label>Judul Berita</label>
+                    <input type="text" id="b_judul" placeholder="Contoh: Peresmian Lab Digital" required>
+                </div>
+                <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" id="b_tgl" required>
+                </div>
+                <div class="form-group">
+                    <label>Isi Berita</label>
+                    <textarea id="b_isi" rows="5" placeholder="Tulis rincian berita di sini..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Link Gambar (URL)</label>
+                    <input type="url" id="b_img" placeholder="https://..." required>
+                </div>
+                <button type="submit" class="btn-submit">PUBLIKASIKAN BERITA</button>
+            </form>
+            <div id="status-berita" class="status-msg"></div>
+        </div>
+
+        <div id="section-prestasi" class="card" style="display:none">
+            <h3>Tambah Prestasi Siswa</h3>
+            <form id="formPrestasi">
+                <div class="form-group">
+                    <label>Nama Prestasi / Nama Siswa</label>
+                    <input type="text" id="p_judul" placeholder="Contoh: Ahmad - Juara 1 Robotik" required>
+                </div>
+                <div class="form-group">
+                    <label>Kategori / Tahun</label>
+                    <input type="text" id="p_kat" placeholder="Contoh: Nasional 2026" required>
+                </div>
+                <div class="form-group">
+                    <label>Link Foto Prestasi (URL)</label>
+                    <input type="url" id="p_img" placeholder="https://..." required>
+                </div>
+                <button type="submit" class="btn-submit">SIMPAN PRESTASI</button>
+            </form>
+            <div id="status-prestasi" class="status-msg"></div>
+        </div>
+    </div>
+
+    <script>
+        // GANTI INI DENGAN URL WEB APP ANDA
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
+
+        // 1. Keamanan Sederhana
+        const pass = prompt("Masukkan Password Admin:");
+        if (pass === "biasabisa") { // Silakan ganti password ini
+            document.body.style.display = "block";
+        } else {
+            alert("Password Salah!");
+            window.location.href = "index.html";
+        }
+
+        // 2. Navigasi Tab
+        function showTab(tab) {
+            document.querySelectorAll('.card').forEach(c => c.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('section-' + tab).style.display = 'block';
+            event.currentTarget.classList.add('active');
+        }
+
+        // 3. Proses Kirim Data
+        async function handleSubmit(formId, statusId, payload) {
+            const statusDiv = document.getElementById(statusId);
+            const btn = document.querySelector(`#${formId} button`);
+            
+            btn.disabled = true;
+            btn.innerText = "Sedang Mengirim...";
+            statusDiv.style.display = "none";
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    statusDiv.className = "status-msg success";
+                    statusDiv.innerText = "Berhasil! Data telah ditambahkan ke website.";
+                    document.getElementById(formId).reset();
+                } else {
+                    throw new Error();
+                }
+            } catch (err) {
+                statusDiv.className = "status-msg error";
+                statusDiv.innerText = "Gagal mengirim data. Pastikan URL Script benar.";
+            } finally {
+                statusDiv.style.display = "block";
+                btn.disabled = false;
+                btn.innerText = formId === "formBerita" ? "PUBLIKASIKAN BERITA" : "SIMPAN PRESTASI";
+            }
+        }
+
+        document.getElementById('formBerita').onsubmit = (e) => {
+            e.preventDefault();
+            const data = {
+                action: "addBerita",
+                judul: document.getElementById('b_judul').value,
+                tanggal: document.getElementById('b_tgl').value,
+                isi: document.getElementById('b_isi').value,
+                gambar: document.getElementById('b_img').value
+            };
+            handleSubmit('formBerita', 'status-berita', data);
+        };
+
+        document.getElementById('formPrestasi').onsubmit = (e) => {
+            e.preventDefault();
+            const data = {
+                action: "addPrestasi",
+                judul: document.getElementById('p_judul').value,
+                kategori: document.getElementById('p_kat').value,
+                gambar: document.getElementById('p_img').value
+            };
+            handleSubmit('formPrestasi', 'status-prestasi', data);
+        };
+    </script>
+</body>
+</html>
