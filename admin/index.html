@@ -5,17 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel MI Bendiljati</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  
-  <script>
-    var configUrl = window.location.origin + window.location.pathname.replace('admin/', '') + 'config.yml';
-    var link = document.createElement('link');
-    link.rel = 'cms-config-url';
-    link.type = 'text/yaml';
-    link.href = configUrl;
-    document.head.appendChild(link);
-  </script>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // Memaksa CMS menggunakan Netlify Identity meskipun config.yml belum terbaca sempurna
+    CMS.init({
+      config: {
+        backend: {
+          name: 'git-gateway',
+          branch: 'main',
+        },
+      },
+    });
+  </script>
 </body>
 </html>
