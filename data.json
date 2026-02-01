@@ -4,15 +4,75 @@
     "guru": 12,
     "ekskul": 8
   },
+  "slider": [
+    "https://images.unsplash.com/photo-1523050853064-dbad350c700a?q=80&w=800",
+    "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800"
+  ],
   "layanan": [
-    { "nama": "Berita Madrasah", "url": "#", "ikon": "fas fa-newspaper" },
-    { "nama": "Data Guru", "url": "#", "ikon": "fas fa-users" },
-    { "nama": "Visi & Misi", "url": "#", "ikon": "fas fa-bullseye" }
+    {
+      "nama": "Berita Madrasah",
+      "url": "#",
+      "ikon": "fas fa-newspaper"
+    },
+    {
+      "nama": "Data Guru & Staf",
+      "url": "#",
+      "ikon": "fas fa-users"
+    },
+    {
+      "nama": "Visi & Misi",
+      "url": "#",
+      "ikon": "fas fa-bullseye"
+    },
+    {
+      "nama": "Pendaftaran Siswa Baru",
+      "url": "https://wa.me/6282130053330",
+      "ikon": "fas fa-user-plus"
+    },
+    {
+      "nama": "E-Learning",
+      "url": "#",
+      "ikon": "fas fa-laptop-code"
+    },
+    {
+      "nama": "Perpustakaan Digital",
+      "url": "#",
+      "ikon": "fas fa-book"
+    }
   ],
   "visiMisi": {
-    "visi": "Visi Anda di sini",
-    "misi": "Misi Anda di sini"
+    "visi": "Mencetak generasi rabbani yang cerdas, berakhlak mulia, dan siap menghadapi tantangan zaman melalui integrasi teknologi digital.",
+    "misi": "1. Menyelenggarakan pendidikan dasar Islam yang unggul.\n2. Mengembangkan potensi siswa berbasis literasi digital.\n3. Membangun lingkungan madrasah yang islami dan berprestasi."
   },
-  "dataGuru": [],
-  "prestasi": []
+  "dataGuru": [
+    {
+      "nama": "Nama Kepala Madrasah",
+      "jabatan": "Kepala Madrasah",
+      "foto": "https://i.ibb.co.com/jcSRVbd/MIB.png"
+    },
+    {
+      "nama": "Nama Guru 1",
+      "jabatan": "Wali Kelas 1",
+      "foto": "https://i.ibb.co.com/jcSRVbd/MIB.png"
+    }
+  ],
+  "prestasi": [
+    {
+      "judul": "Juara 1 Lomba Tahfidz",
+      "tahun": "Tingkat Kabupaten 2025",
+      "gambar": "https://images.unsplash.com/photo-1523287562758-66c7fc58967f?q=80&w=800"
+    },
+    {
+      "judul": "Madrasah Digital Inovatif",
+      "tahun": "Penghargaan Nasional 2024",
+      "gambar": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800"
+    }
+  ],
+  "berita": [
+    {
+      "judul": "Pembukaan PSB TP 2026/2027",
+      "isi": "MI Bendiljati Wetan resmi membuka pendaftaran siswa baru. Segera bergabung dengan madrasah digital unggulan kami.",
+      "gambar": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=800"
+    }
+  ]
 }
