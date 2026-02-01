@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: USERNAME_ANDA/mibendiljatiwetan # GANTI DENGAN USERNAME/REPO ANDA
+  repo: mibendiljatiwetan/mibendiljatiwetan # GANTI DENGAN USERNAME/REPO ANDA
   branch: main
 
 # Pengaturan media (gambar yang diupload via admin akan masuk ke folder ini)
