@@ -363,21 +363,22 @@
   let dataVisiMisi = { visi: "", misi: "" };
 
   async function loadData() {
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      
-      allBerita = data.berita || [];
-      allGuru = data.dataGuru || [];
-      dataVisiMisi = data.visiMisi || { visi: "Visi Belum Diatur", misi: "Misi Belum Diatur" };
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    
+    // Simpan data ke variabel global
+    allBerita = data.berita || [];
+    allGuru = data.dataGuru || [];
+    dataVisiMisi = data.visiMisi || { visi: "", misi: "" };
 
-      // 1. Render Dashboard Stats (Siswa, Guru, Ekskul)
-      // Asumsi data.stats adalah objek {siswa: 100, guru: 20, ekskul: 10}
-      if(data.stats) {
-        animateCounter('count-siswa', data.stats.siswa || 0);
-        animateCounter('count-guru', data.stats.guru || 0);
-        animateCounter('count-ekskul', data.stats.ekskul || 0);
-      }
+    // Update Dashboard Stats (Siswa, Guru, Ekskul)
+    // Pastikan ID 'count-siswa' dll sesuai dengan HTML Anda
+    if(data.stats) {
+      animateCounter('count-siswa', data.stats.siswa);
+      animateCounter('count-guru', data.stats.guru);
+      animateCounter('count-ekskul', data.stats.ekskul);
+    }
 
       // 2. Render Slider
       const slider = document.getElementById('slider');
@@ -387,27 +388,23 @@
         `).join('');
       }
 
-      // 3. Render Layanan Digital (LOGIKA KLIK)
-      const servicesList = document.getElementById('main-services-list');
-      if(data.layanan) {
-        servicesList.innerHTML = data.layanan.map(row => {
-          const judul = row[0].toLowerCase();
-          const link = row[1];
-          const icon = row[2];
-          
-          if (judul.includes("berita")) {
-            return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${icon}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
-          } 
-          if (judul.includes("guru") || judul.includes("staf")) {
-            return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${icon}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
-          }
-          if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
-            return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${icon}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
-          }
-          // Default ke link eksternal
-          return `<a href="${link}" target="_blank" class="card"><i class="${icon}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
-        }).join('');
-      }
+      // Render Layanan Digital dengan Logika Klik
+    const servicesList = document.getElementById('main-services-list');
+    if(data.layanan) {
+      servicesList.innerHTML = data.layanan.map(row => {
+        const judul = row[0].toLowerCase();
+        if (judul.includes("berita")) {
+          return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
+        } 
+        if (judul.includes("guru") || judul.includes("staf")) {
+          return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+        }
+        if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
+          return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+        }
+        return `<a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
+      }).join('');
+    }
 
       // 4. Render Prestasi
       const prestasiList = document.getElementById('prestasi-list');
