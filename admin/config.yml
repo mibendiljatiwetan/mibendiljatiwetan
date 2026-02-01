@@ -1,0 +1,23 @@
+backend:
+  name: git-gateway
+  repo: mibendiljatiwetan/mibendiljatiwetan
+  branch: main
+
+media_folder: "images"
+public_folder: "images"
+
+collections:
+  - name: "konfigurasi"
+    label: "Update Konten Website"
+    files:
+      - file: "../data.json" # TAMBAHKAN ../ AGAR BISA KELUAR FOLDER ADMIN
+        label: "Database Master Madrasah"
+        name: "data"
+        fields:
+          - label: "Statistik Dashboard (Angka)"
+            name: "stats"
+            widget: "object"
+            fields:
+              - {label: "Jumlah Siswa Aktif", name: "siswa", widget: "number"}
+              - {label: "Jumlah Guru & Staf", name: "guru", widget: "number"}
+              - {label: "Jumlah Ekstrakurikuler", name: "ekskul", widget: "number"}
