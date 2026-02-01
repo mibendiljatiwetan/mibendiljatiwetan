@@ -61,70 +61,64 @@
         try {
             const res = await fetch(SCRIPT_URL);
             const data = await res.json();
-            let html = `<table><tr><th>Judul</th><th>Aksi</th></tr>`;
-            
-            // Gabungkan berita & prestasi untuk daftar
-            const semua = [
-                ...data.berita.map(x => ({type: 'Berita', data: x})),
-                ...data.prestasi.map(x => ({type: 'Prestasi', data: x}))
-            ];
+            const container = document.getElementById('daftar-konten');
+            container.innerHTML = ""; // Bersihkan kontainer
 
-            semua.forEach(item => {
-                html += `<tr>
-                    <td>[${item.type}] ${item.data[0]}</td>
+            // 1. Render Tabel Berita
+            let htmlBerita = `<h3><i class="fas fa-newspaper"></i> Daftar Berita</h3><table>
+                <tr><th>Judul Berita</th><th>Aksi</th></tr>`;
+            data.berita.forEach(item => {
+                htmlBerita += `<tr>
+                    <td>${item[0]}</td>
                     <td>
-                        <button class="btn btn-edit" onclick='siapkanEdit("${item.type}", ${JSON.stringify(item.data)})'>Edit</button>
-                        <button class="btn btn-delete" onclick="hapusData('${item.type}', '${item.data[0]}')">Hapus</button>
+                        <button class="btn btn-edit" onclick='siapkanEdit("Berita", ${JSON.stringify(item).replace(/"/g, '&quot;')})'>Edit</button>
+                        <button class="btn btn-delete" onclick="hapusData('Berita', '${item[0]}')">Hapus</button>
                     </td>
                 </tr>`;
             });
-            html += `</table>`;
-            document.getElementById('daftar-konten').innerHTML = html;
+            htmlBerita += `</table><br>`;
+
+            // 2. Render Tabel Prestasi
+            let htmlPrestasi = `<h3><i class="fas fa-trophy"></i> Daftar Prestasi</h3><table>
+                <tr><th>Nama Prestasi</th><th>Aksi</th></tr>`;
+            data.prestasi.forEach(item => {
+                htmlPrestasi += `<tr>
+                    <td>${item[0]}</td>
+                    <td>
+                        <button class="btn btn-edit" onclick='siapkanEdit("Prestasi", ${JSON.stringify(item).replace(/"/g, '&quot;')})'>Edit</button>
+                        <button class="btn btn-delete" onclick="hapusData('Prestasi', '${item[0]}')">Hapus</button>
+                    </td>
+                </tr>`;
+            });
+            htmlPrestasi += `</table>`;
+
+            container.innerHTML = htmlBerita + htmlPrestasi;
             document.getElementById('loading').style.display = 'none';
         } catch (e) {
-            document.getElementById('loading').innerText = "Gagal ambil data. Cek URL SCRIPT.";
+            document.getElementById('loading').innerText = "Gagal memuat data.";
         }
-    }
-
-    async function simpanData() {
-        const btn = document.getElementById('btn-submit');
-        btn.innerText = "Proses...";
-        btn.disabled = true;
-
-        const sheet = document.getElementById('sheetName').value;
-        const rowData = [
-            document.getElementById('val1').value,
-            document.getElementById('val2').value,
-            document.getElementById('val3').value,
-            document.getElementById('val4').value
-        ];
-        if(sheet === "Prestasi") rowData.splice(2,1);
-
-        const payload = {
-            action: mode,
-            sheetName: sheet,
-            id: document.getElementById('old_id').value || rowData[0],
-            data: rowData
-        };
-
-        await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-        alert("Sukses!");
-        location.reload();
     }
 
     function siapkanEdit(type, data) {
         mode = "edit";
         document.getElementById('sheetName').value = type;
-        document.getElementById('old_id').value = data[0];
-        document.getElementById('val1').value = data[0];
-        document.getElementById('val2').value = data[1];
+        document.getElementById('old_id').value = data[0]; // Judul lama sebagai kunci
+        
+        // Mengisi form berdasarkan tipe
+        document.getElementById('val1').value = data[0]; // Judul
+        document.getElementById('val2').value = data[1]; // Tanggal/Kategori
+        
         if(type === "Berita") {
-            document.getElementById('val3').value = data[2];
-            document.getElementById('val4').value = data[3];
+            document.getElementById('val3').style.display = "block";
+            document.getElementById('val3').value = data[2]; // Isi
+            document.getElementById('val4').value = data[3]; // Gambar
         } else {
-            document.getElementById('val4').value = data[2];
+            document.getElementById('val3').style.display = "none";
+            document.getElementById('val3').value = "";      // Kosongkan isi
+            document.getElementById('val4').value = data[2]; // Gambar (di prestasi index ke-2)
         }
-        document.getElementById('btn-submit').innerText = "UPDATE DATA";
+        
+        document.getElementById('btn-submit').innerText = "UPDATE DATA " + type.toUpperCase();
         document.getElementById('btn-cancel').style.display = "block";
         window.scrollTo(0,0);
     }
