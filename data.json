@@ -1,0 +1,18 @@
+{
+  "stats": {
+    "siswa": 150,
+    "guru": 12,
+    "ekskul": 8
+  },
+  "layanan": [
+    { "nama": "Berita Madrasah", "url": "#", "ikon": "fas fa-newspaper" },
+    { "nama": "Data Guru", "url": "#", "ikon": "fas fa-users" },
+    { "nama": "Visi & Misi", "url": "#", "ikon": "fas fa-bullseye" }
+  ],
+  "visiMisi": {
+    "visi": "Visi Anda di sini",
+    "misi": "Misi Anda di sini"
+  },
+  "dataGuru": [],
+  "prestasi": []
+}
