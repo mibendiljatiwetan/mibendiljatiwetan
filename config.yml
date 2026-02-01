@@ -24,57 +24,10 @@ collections:
               - {label: "Jumlah Siswa Aktif", name: "siswa", widget: "number"}
               - {label: "Jumlah Guru & Staf", name: "guru", widget: "number"}
               - {label: "Jumlah Ekstrakurikuler", name: "ekskul", widget: "number"}
-          # ... (lanjutkan sisa fields di bawahnya sesuai kode sebelumnya)
-          # --- SEKSI SLIDER HERO ---
-          - label: "Gambar Slider (Beranda)"
-            name: "slider"
-            widget: "list"
-            field: {label: "Link Gambar", name: "url", widget: "image"}
 
-          # --- SEKSI LAYANAN ---
-          - label: "Menu Layanan Digital"
-            name: "layanan"
-            widget: "list"
-            summary: "{{fields.nama}}"
-            fields:
-              - {label: "Nama Layanan", name: "nama", widget: "string"}
-              - {label: "URL Link (Gunakan # jika ingin buka Modal)", name: "url", widget: "string"}
-              - {label: "Ikon FontAwesome (Contoh: fas fa-book)", name: "ikon", widget: "string"}
-
-          # --- SEKSI VISI MISI ---
           - label: "Profil Visi & Misi"
             name: "visiMisi"
             widget: "object"
             fields:
               - {label: "Visi Madrasah", name: "visi", widget: "string"}
-              - {label: "Misi Madrasah (Gunakan Baris Baru)", name: "misi", widget: "markdown"}
-
-          # --- SEKSI GURU ---
-          - label: "Daftar Guru & Staf"
-            name: "dataGuru"
-            widget: "list"
-            summary: "{{fields.nama}}"
-            fields:
-              - {label: "Nama Lengkap", name: "nama", widget: "string"}
-              - {label: "Jabatan", name: "jabatan", widget: "string"}
-              - {label: "Foto Guru", name: "foto", widget: "image"}
-
-          # --- SEKSI PRESTASI ---
-          - label: "Galeri Prestasi Siswa"
-            name: "prestasi"
-            widget: "list"
-            summary: "{{fields.judul}}"
-            fields:
-              - {label: "Judul Prestasi", name: "judul", widget: "string"}
-              - {label: "Tahun / Tingkat", name: "tahun", widget: "string"}
-              - {label: "Foto Kegiatan", name: "gambar", widget: "image"}
-
-          # --- SEKSI BERITA ---
-          - label: "Warta Madrasah (Berita)"
-            name: "berita"
-            widget: "list"
-            summary: "{{fields.judul}}"
-            fields:
-              - {label: "Judul Berita", name: "judul", widget: "string"}
-              - {label: "Isi Berita Lengkap", name: "isi", widget: "markdown"}
-              - {label: "Foto Berita", name: "gambar", widget: "image"}
+              - {label: "Misi Madrasah", name: "misi", widget: "markdown"}
