@@ -481,17 +481,17 @@
   }
 
   function openNewsModal() {
-    const modal = document.getElementById('newsOverlay');
-    const content = document.getElementById('newsContent');
-    content.innerHTML = `<h2 style="text-align:center">Warta Madrasah</h2>` + 
-      (allBerita.length ? allBerita.map(item => `
-        <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
-          <img src="${item[3]}" style="width:100%; border-radius:10px;">
-          <h3>${item[0]}</h3>
-          <p>${item[2]}</p>
-        </div>`).join('') : "<p>Tidak ada berita.</p>");
-    modal.style.display = 'flex';
-  }
+  const modal = document.getElementById('newsOverlay');
+  const content = document.getElementById('newsContent');
+  content.innerHTML = `<h2 style="text-align:center">Warta Madrasah</h2>` + 
+    (allBerita.length ? allBerita.map(item => `
+      <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
+        <img src="${item[3]}" style="width:100%; border-radius:10px;">
+        <h3>${item[0]}</h3>
+        <p style="white-space: pre-line; text-align: justify; line-height: 1.6;">${item[2]}</p>
+      </div>`).join('') : "<p>Tidak ada berita.</p>");
+  modal.style.display = 'flex';
+}
 
   function openGuruModal() {
     const modal = document.getElementById('newsOverlay');
@@ -502,15 +502,17 @@
   }
 
   function openVisiModal() {
-    const modal = document.getElementById('newsOverlay');
-    const content = document.getElementById('newsContent');
-    content.innerHTML = `
-      <div style="padding:20px;">
-        <h2 style="color:var(--primary)">Visi</h2><p>${dataVisiMisi.visi}</p>
-        <h2 style="color:var(--primary)">Misi</h2><div style="white-space:pre-line">${dataVisiMisi.misi}</div>
-      </div>`;
-    modal.style.display = 'flex';
-  }
+  const modal = document.getElementById('newsOverlay');
+  const content = document.getElementById('newsContent');
+  content.innerHTML = `
+    <div style="padding:20px; text-align: justify;">
+      <h2 style="color:var(--primary); text-align: center;">Visi</h2>
+      <p style="white-space: pre-line;">${dataVisiMisi.visi}</p>
+      <h2 style="color:var(--primary); text-align: center;">Misi</h2>
+      <div style="white-space: pre-line;">${dataVisiMisi.misi}</div>
+    </div>`;
+  modal.style.display = 'flex';
+}
 
   function closeNews() {
     document.getElementById('newsOverlay').style.display = 'none';
