@@ -33,428 +33,215 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
   
   <style>
-    :root {
-  --primary: #043927;
-  --primary-glow: #065a3d;
-  --accent: #d4af37; /* Gold Metallic */
-  --accent-light: #f1d592; 
-  --bg: #f8faf9;
-  --text: #1a1c1b;
-  --card: #ffffff;
-  --glass: rgba(255, 255, 255, 0.8);
-}
-
-[data-theme="dark"] {
-  --bg: #050a09;
-  --text: #e4e6e5;
-  --card: #0d1412;
-  --primary: #10b981; /* Hijau Emerald terang agar mewah di mode gelap */
-  --primary-glow: rgba(16, 185, 129, 0.3);
-  --glass: rgba(13, 20, 18, 0.8);
-  --accent: #ffcc33;
-}
-
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0; padding: 0;  
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg); color: var(--text);
-      scroll-behavior: smooth; overflow-x: hidden;
-    }
-
-    /* Pengumuman Ticker */
-    .announcement-bar {
-      background: var(--accent); color: var(--primary);
-      padding: 8px 0; font-size: 0.8rem; font-weight: 600;
-      overflow: hidden; white-space: nowrap;
-    }
-    .ticker { display: inline-block; animation: ticker 30s linear infinite; padding-left: 100%; }
-    @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
-
-    /* Top Bar */
-    .top-bar {
-      background: var(--primary); color: white;
-      padding: 10px 10%; display: flex;
-      justify-content: space-between; align-items: center; font-size: 0.8rem;
-    }
-
-    /* Header Navigasi */
-    header {
-      background: var(--glass); backdrop-filter: blur(15px);
-      padding: 15px 10%; display: flex;
-      justify-content: space-between; align-items: center;
-      position: sticky; top: 0; z-index: 2000;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    }
-    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; cursor: pointer; color: inherit; }
-    .brand img { height: 45px; }
-    .brand h1 { font-size: 1rem; margin: 0; color: var(--primary); font-weight: 800; }
-
-    nav ul { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
-    nav ul li a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
-    nav ul li a:hover { color: var(--accent); }
-
-    /* Hero Section - Anti Numpuk */
-    .hero-container { position: relative; height: 85vh; background: #000; overflow: hidden; }
-    .bg-slideshow { list-style: none; padding: 0; margin: 0; }
-    .bg-slideshow li {
-      position: absolute; width: 100%; height: 100%;
-      background-size: cover; background-position: center;
-      opacity: 0; transition: opacity 1.5s ease-in-out;
-    }
-    .bg-slideshow li.active { opacity: 0.6; }
-    .hero-overlay {
-      position: absolute; inset: 0; display: flex;
-      align-items: center; justify-content: center;
-      text-align: center; color: white; padding: 0 5%;
-    }
-    .hero-content h2 { 
-      font-size: clamp(1.8rem, 5vw, 3.5rem); 
-      line-height: 1.2; 
-      margin-bottom: 20px; 
-    }
-    .hero-content p { font-size: clamp(0.9rem, 2vw, 1.2rem); max-width: 700px; margin: 0 auto 35px; line-height: 1.6; }
-
-    /* Container Tombol */
-.hero-buttons {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.btn-primary-glow {
-  background: linear-gradient(45deg, #d4af37, #f1d592, #d4af37);
-  background-size: 200% auto;
-  color: #043927 !important;
-  border: none;
-  padding: 18px 40px;
-  border-radius: 100px;
-  font-weight: 800;
-  box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
-  transition: 0.5s;
-}
-
-.btn-primary-glow:hover {
-  background-position: right center; /* Efek kilau bergerak */
-  transform: translateY(-5px) scale(1.02);
-}
-
-/* Tombol Outline (Pendaftaran) */
-.btn-outline-glow {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  padding: 14px 35px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  backdrop-filter: blur(5px);
-  transition: all 0.4s ease;
-}
-
-.btn-outline-glow:hover {
-  background: white;
-  color: var(--primary);
-  border-color: white;
-  transform: translateY(-5px);
-}
-
-/* Responsif Mobile untuk Tombol */
-@media (max-width: 600px) {
-  .hero-buttons {
-    flex-direction: column;
-    width: 100%;
-    padding: 0 20px;
+  :root {
+    /* Palette Mewah - Mode Terang */
+    --primary: #043927;
+    --primary-glow: rgba(4, 57, 39, 0.2);
+    --accent: #d4af37; /* Emas Klasik */
+    --accent-light: #f1d592;
+    --bg: #f8faf9;
+    --text: #1a1c1b;
+    --card: #ffffff;
+    --glass: rgba(255, 255, 255, 0.85);
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .btn-primary-glow, .btn-outline-glow {
-    width: 100%;
-    justify-content: center;
+
+  [data-theme="dark"] {
+    /* Palette Mewah - Mode Gelap */
+    --bg: #030706; /* Onyx Black */
+    --text: #f0f2f1;
+    --card: #0a110f;
+    --primary: #10b981; /* Emerald Green */
+    --primary-light: #34d399;
+    --accent: #fbbf24; /* Amber Gold */
+    --glass: rgba(10, 17, 15, 0.9);
+    --primary-glow: rgba(16, 185, 129, 0.3);
   }
-}
 
-    .dashboard-container {
-  width: 90%;
-  max-width: 1100px;
-  margin: -100px auto 60px;
-  padding: 45px;
-  border-radius: 35px;
-  position: relative;
-  z-index: 100;
-  /* Efek Kaca */
-  background: var(--glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  /* Bayangan Mewah */
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
-}
+  /* --- Base Reset --- */
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg); color: var(--text);
+    scroll-behavior: smooth; overflow-x: hidden;
+  }
 
-[data-theme="dark"] .dashboard-container {
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-}
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .stat-item h3 {
-  font-size: 3.5rem;
-  font-weight: 800;
-  margin: 0;
-  letter-spacing: -2px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  /* Memberikan sedikit filter drop-shadow agar teks menyala */
-  filter: drop-shadow(0 5px 15px var(--primary-glow));
-}
+  /* --- Global Text Enhancements --- */
+  h1, h2, h3 { letter-spacing: -0.02em; }
+  
+  [data-theme="dark"] .section-title h2,
+  [data-theme="dark"] .brand h1,
+  [data-theme="dark"] .prayer-time {
+    background: linear-gradient(135deg, var(--primary-light), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px var(--primary-glow));
+  }
 
-.stat-item p {
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 2px;
-  font-weight: 700;
-  opacity: 0.7;
-  margin-top: 10px;
-}
-    /* Prayer Widget */
-    .prayer-widget { border-top: 1px solid rgba(0,0,0,0.05); padding-top: 25px; }
-    .prayer-times-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; }
-    .prayer-box { background: var(--bg); padding: 12px 5px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03); }
-    .prayer-name { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block; }
-    .prayer-time { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+  /* --- Top Components --- */
+  .announcement-bar {
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    color: #043927;
+    padding: 10px 0; font-size: 0.85rem; font-weight: 800;
+    overflow: hidden; white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  .ticker { display: inline-block; animation: ticker 40s linear infinite; padding-left: 100%; }
+  @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-    /* Section Styling */
-    .section-padding { padding: 80px 10%; }
-    .section-title { text-align: center; margin-bottom: 50px; }
-    .section-title h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; }
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-    
-    .card {
-      background: var(--card); padding: 40px 30px; border-radius: 20px; text-align: center;
-      transition: var(--transition); border: 1px solid rgba(0,0,0,0.05);
-      text-decoration: none; color: inherit;
-    }
-    .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-    .card i { font-size: 3rem; color: var(--accent); margin-bottom: 25px; }
+  .top-bar {
+    background: var(--primary); color: white;
+    padding: 12px 10%; display: flex;
+    justify-content: space-between; align-items: center; font-size: 0.75rem;
+    letter-spacing: 1px; font-weight: 600;
+  }
 
-    /* Pastikan ini ada agar modal bisa muncul */
-.news-overlay {
-    display: none; /* Default sembunyi */
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    z-index: 5000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
+  header {
+    background: var(--glass); backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 18px 10%; display: flex;
+    justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 2000;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .brand { display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit; }
+  .brand img { height: 50px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1)); }
+  .brand h1 { font-size: 1.1rem; margin: 0; color: var(--primary); font-weight: 800; }
 
-.news-modal {
-    background: var(--card);
-    padding: 30px;
-    border-radius: 20px;
-    max-width: 800px;
-    width: 95%;
-    max-height: 80vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
+  nav ul { list-style: none; display: flex; gap: 30px; margin: 0; padding: 0; }
+  nav ul li a { 
+    text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.9rem; 
+    transition: var(--transition); opacity: 0.8;
+  }
+  nav ul li a:hover { color: var(--accent); opacity: 1; transform: translateY(-2px); }
 
-.close-news {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: var(--accent);
-    border: none;
-    color: white;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-}
+  /* --- Hero Section --- */
+  .hero-container { position: relative; height: 85vh; background: #000; overflow: hidden; }
+  .bg-slideshow { list-style: none; padding: 0; margin: 0; }
+  .bg-slideshow li {
+    position: absolute; width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+    opacity: 0; transition: opacity 2s ease-in-out;
+  }
+  .bg-slideshow li.active { opacity: 0.5; }
+  .hero-overlay {
+    position: absolute; inset: 0; display: flex;
+    align-items: center; justify-content: center;
+    text-align: center; color: white; padding: 0 5%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7));
+  }
+  .hero-content h2 { font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; line-height: 1.1; margin-bottom: 25px; }
+  .hero-content p { font-size: 1.1rem; max-width: 800px; margin: 0 auto 40px; opacity: 0.9; line-height: 1.8; }
 
-/* Style tambahan untuk grid guru di dalam modal */
-.guru-grid-modal {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-.guru-item { text-align: center; }
-.guru-item img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
+  /* --- Hero Buttons --- */
+  .hero-buttons { display: flex; gap: 20px; justify-content: center; }
+  .btn-primary-glow {
+    background: linear-gradient(45deg, var(--accent), var(--accent-light), var(--accent));
+    background-size: 200% auto;
+    color: #043927 !important; border: none; padding: 18px 45px;
+    border-radius: 100px; font-weight: 800; font-size: 0.95rem;
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4); transition: var(--transition);
+  }
+  .btn-primary-glow:hover { background-position: right center; transform: translateY(-5px); }
+  
+  .btn-outline-glow {
+    background: rgba(255, 255, 255, 0.1); color: white;
+    border: 2px solid rgba(255, 255, 255, 0.4); padding: 16px 45px;
+    border-radius: 100px; font-weight: 700; backdrop-filter: blur(10px);
+    transition: var(--transition);
+  }
+  .btn-outline-glow:hover { background: white; color: var(--primary); transform: translateY(-5px); }
 
-    /* Container Form Modern */
-.contact-form-premium {
-  background: var(--card);
-  padding: 35px;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  border: 1px solid rgba(0,0,0,0.03);
-}
+  /* --- Dashboard Container (Luxury Glass) --- */
+  .dashboard-container {
+    width: 90%; max-width: 1150px; margin: -100px auto 80px;
+    padding: 50px; border-radius: 40px; position: relative; z-index: 100;
+    background: var(--glass); backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.08);
+  }
 
-.form-header h3 {
-  color: var(--primary);
-  margin: 0 0 5px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.4rem;
-}
+  [data-theme="dark"] .dashboard-container {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 10, 9, 0.95));
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    box-shadow: 0 40px 120px rgba(0,0,0,0.6);
+  }
 
-.form-header p {
-  color: #777;
-  font-size: 0.85rem;
-  margin-bottom: 10px;
-}
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  .stat-item h3 {
+    font-size: 4rem; font-weight: 800; margin: 0;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 10px 15px var(--primary-glow));
+  }
+  [data-theme="dark"] .stat-item h3 {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+  }
+  .stat-item p { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 3px; font-weight: 800; opacity: 0.6; }
 
-/* Grouping Ikon dan Input */
-.input-group {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
+  /* --- Prayer Widget --- */
+  .prayer-widget { border-top: 1px solid rgba(0,0,0,0.05); padding-top: 35px; margin-top: 20px; }
+  .prayer-times-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; }
+  .prayer-box { 
+    background: rgba(0,0,0,0.02); padding: 20px 10px; border-radius: 20px; 
+    border: 1px solid rgba(0,0,0,0.03); transition: var(--transition);
+  }
+  .prayer-box:hover { background: white; transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+  .prayer-name { font-size: 0.75rem; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .prayer-time { font-size: 1.3rem; font-weight: 800; color: var(--primary); }
 
-.input-group i {
-  position: absolute;
-  left: 15px;
-  color: var(--accent);
-  font-size: 0.9rem;
-}
+  /* --- Cards & Content --- */
+  .section-padding { padding: 100px 10%; }
+  .section-title h2 { font-size: 2.8rem; font-weight: 800; color: var(--primary); }
+  
+  .card {
+    background: var(--card); padding: 50px 35px; border-radius: 30px; 
+    transition: var(--transition); border: 1px solid rgba(0,0,0,0.03);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  }
+  .card:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(0,0,0,0.1); border-color: var(--accent); }
+  .card i { font-size: 3.5rem; color: var(--accent); margin-bottom: 30px; filter: drop-shadow(0 5px 10px rgba(212,175,55,0.3)); }
 
-.input-group input, 
-.input-group textarea {
-  width: 100%;
-  padding: 14px 15px 14px 45px;
-  border: 2px solid #f1f1f1;
-  border-radius: 12px;
-  background: #fcfcfc;
-  font-family: inherit;
-  transition: all 0.3s ease;
-}
+  /* --- Contact Form Premium --- */
+  .contact-form-premium {
+    background: var(--card); padding: 45px; border-radius: 35px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02);
+  }
+  .input-group input, .input-group textarea {
+    background: #fcfcfc; border: 2px solid #f1f1f1; border-radius: 18px;
+    padding: 16px 20px 16px 50px; transition: var(--transition);
+  }
+  .input-group input:focus { border-color: var(--accent); background: white; box-shadow: 0 10px 25px rgba(212,175,55,0.1); }
 
-.input-group textarea { resize: none; }
+  /* --- Floating Elements --- */
+  .wa-float {
+    position: fixed; bottom: 35px; right: 35px; background: #25d366;
+    color: white; width: 65px; height: 65px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; z-index: 1000; box-shadow: 0 15px 35px rgba(37,211,102,0.4);
+    transition: var(--transition);
+  }
+  .wa-float:hover { transform: scale(1.1) rotate(10deg); }
 
-/* Efek Fokus */
-.input-group input:focus, 
-.input-group textarea:focus {
-  border-color: var(--accent);
-  background: #fff;
-  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.1);
-  outline: none;
-}
-/* Tombol WhatsApp Gradient */
-.btn-send-wa {
-  background: linear-gradient(45deg, #25d366, #128c7e);
-  color: white;
-  border: none;
-  padding: 16px;
-  border-radius: 12px;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  transition: 0.3s;
-  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.2);
-}
+  /* --- Mobile Optimization --- */
+  @media (max-width: 992px) {
+    .section-padding { padding: 60px 5%; }
+    header { padding: 15px 5%; }
+    .dashboard-container { width: 94%; margin-top: -60px; padding: 35px 20px; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .stat-item h3 { font-size: 2rem; }
+    .prayer-times-grid { grid-template-columns: repeat(3, 1fr); }
+    .hero-content h2 { font-size: 2.2rem; }
+    .hero-buttons { flex-direction: column; }
+    .btn-primary-glow, .btn-outline-glow { width: 100%; text-align: center; }
+  }
 
-.btn-send-wa:hover {
-  transform: translateY(-3px);
-  filter: brightness(1.1);
-  box-shadow: 0 12px 25px rgba(37, 211, 102, 0.3);
-}
-
-/* Dark Mode Form */
-[data-theme="dark"] .input-group input,
-[data-theme="dark"] .input-group textarea {
-  background: #1a2421;
-  border-color: #2d3834;
-  color: white;
-}
-
-    /* Contact & Footer */
-    .contact-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; gap: 50px; background: var(--card); padding: 45px; border-radius: 25px; }
-    .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 1000; }
-
-    /* --- MOBILE OPTIMIZATION --- */
-    @media (max-width: 992px) {
-      header, .section-padding { padding-left: 5%; padding-right: 5%; }
-      .top-bar { display: none; }
-      .menu-toggle { display: flex; flex-direction: column; gap: 5px; cursor: pointer; z-index: 4000; }
-      .menu-toggle span { width: 28px; height: 3px; background: var(--primary); border-radius: 5px; }
-      
-      nav {
-        position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
-        background: var(--card); padding: 100px 30px; transition: 0.5s ease; z-index: 3000;
-      }
-      nav.active { right: 0; }
-      nav ul { flex-direction: column; gap: 25px; }
-
-      .hero-container { height: 75vh; }
-      .hero-content h2 { font-size: 1.8rem; line-height: 1.3; }
-      .hero-content p { font-size: 0.95rem; }
-      .hero-content div.reveal { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-      .hero-content .btn-submit { width: 100%; margin: 0 !important; }
-
-      /* Dashboard Stats - Nuansa Gradasi Premium */
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  width: 90%; /* Sedikit lebih lebar di mobile */
-  max-width: 1100px;
-  margin: -80px auto 60px;
-  padding: 40px;
-  border-radius: 30px;
-  position: relative;
-  z-index: 100;
-  text-align: center;
-  /* Gradiasi ditingkatkan agar lebih terlihat */
-  background: linear-gradient(145deg, #ffffff 0%, #f0fdf4 50%, #e8f5e9 100%);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 25px 50px rgba(4, 57, 39, 0.15);
-  backdrop-filter: blur(15px);
-}
-
-/* Gradiasi untuk Mode Gelap */
-[data-theme="dark"] .dashboard-container {
-  background: linear-gradient(145deg, #1a2421 0%, #0b110f 100%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-}
-
-/* Memberikan gradiasi pada teks angka */
-.stat-item h3 {
-  font-size: 3rem;
-  font-weight: 800;
-  margin: 0;
-  /* Efek Gradient Text */
-  background: linear-gradient(45deg, var(--primary) 30%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-}
-      .stats-row { grid-template-columns: 1fr; gap: 20px; }
-      .stat-item h3 { font-size: 2.2rem; }
-      .prayer-times-grid { grid-template-columns: repeat(3, 1fr); }
-
-      #main-services-list { grid-template-columns: 1fr 1fr; gap: 12px; }
-      .contact-wrapper { grid-template-columns: 1fr; padding: 25px; }
-    }
-
-    .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s ease; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-  </style>
+  /* Animation Reveal */
+  .reveal { opacity: 0; transform: translateY(40px); transition: 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.active { opacity: 1; transform: translateY(0); }
+</style>
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
