@@ -390,7 +390,44 @@
       .hero-content div.reveal { display: flex; flex-direction: column; gap: 10px; align-items: center; }
       .hero-content .btn-submit { width: 100%; margin: 0 !important; }
 
-      .dashboard-container { width: 92%; margin-top: -60px; padding: 25px 15px; }
+      /* Dashboard Stats - Nuansa Gradasi Premium */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 90%; /* Sedikit lebih lebar di mobile */
+  max-width: 1100px;
+  margin: -80px auto 60px;
+  padding: 40px;
+  border-radius: 30px;
+  position: relative;
+  z-index: 100;
+  text-align: center;
+  /* Gradiasi ditingkatkan agar lebih terlihat */
+  background: linear-gradient(145deg, #ffffff 0%, #f0fdf4 50%, #e8f5e9 100%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 25px 50px rgba(4, 57, 39, 0.15);
+  backdrop-filter: blur(15px);
+}
+
+/* Gradiasi untuk Mode Gelap */
+[data-theme="dark"] .dashboard-container {
+  background: linear-gradient(145deg, #1a2421 0%, #0b110f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* Memberikan gradiasi pada teks angka */
+.stat-item h3 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0;
+  /* Efek Gradient Text */
+  background: linear-gradient(45deg, var(--primary) 30%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
       .stats-row { grid-template-columns: 1fr; gap: 20px; }
       .stat-item h3 { font-size: 2.2rem; }
       .prayer-times-grid { grid-template-columns: repeat(3, 1fr); }
