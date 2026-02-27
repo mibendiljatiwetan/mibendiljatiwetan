@@ -34,7 +34,6 @@
   
   <style>
   :root {
-    /* Palette Mewah - Mode Terang */
     --primary: #043927;
     --primary-glow: rgba(4, 57, 39, 0.2);
     --accent: #d4af37;
@@ -47,7 +46,6 @@
   }
 
   [data-theme="dark"] {
-    /* Palette Mewah - Mode Gelap */
     --bg: #030706; 
     --text: #f0f2f1;
     --card: #0a110f;
@@ -58,7 +56,7 @@
     --primary-glow: rgba(16, 185, 129, 0.3);
   }
 
-  /* --- Base Reset --- */
+  /* --- 1. BASE RESET & TYPOGRAPHY --- */
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0;
@@ -66,57 +64,35 @@
     background: var(--bg); color: var(--text);
     scroll-behavior: smooth; overflow-x: hidden;
   }
-
-  /* --- Typography Mewah --- */
-  h1, h2, h3 { letter-spacing: -0.02em; text-align: center; }
   
+  h1, h2, h3 { text-align: center; letter-spacing: -0.02em; }
+
   [data-theme="dark"] .section-title h2,
   [data-theme="dark"] .brand h1,
   [data-theme="dark"] .prayer-time {
     background: linear-gradient(135deg, var(--primary-light), var(--accent));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 10px var(--primary-glow));
   }
 
-  /* Pastikan teks deskripsi statistik terlihat terang di mode gelap */
-[data-theme="dark"] .stat-item p {
-    color: var(--text); /* Menggunakan warna f0f2f1 yang sudah kita set di root */
-    opacity: 0.8;
-    font-weight: 600;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* Memberi sedikit bayangan agar teks 'muncul' */
-}
-
-/* Mempertegas kotak stat-item agar tidak flat */
-.stat-item {
-    padding: 10px;
-    border-radius: 20px;
-    transition: var(--transition);
-}
-
-[data-theme="dark"] .stat-item {
-    background: rgba(255, 255, 255, 0.03); /* Memberi kesan box transparan tipis */
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-  /* --- Navigation Components --- */
+  /* --- 2. COMPONENTS (TICKER & TOP BAR) --- */
   .announcement-bar {
     background: linear-gradient(90deg, var(--accent), var(--accent-light));
-    color: #043927; padding: 10px 0; font-size: 0.85rem; font-weight: 800;
+    color: #043927; padding: 8px 0; font-size: 0.8rem; font-weight: 800;
     overflow: hidden; white-space: nowrap;
   }
-  .ticker { display: inline-block; animation: ticker 40s linear infinite; padding-left: 100%; }
+  .ticker { display: inline-block; animation: ticker 30s linear infinite; padding-left: 100%; }
   @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
   .top-bar {
     background: var(--primary); color: white;
-    padding: 12px 10%; display: flex;
-    justify-content: space-between; align-items: center; font-size: 0.75rem;
+    padding: 10px 10%; display: flex;
+    justify-content: space-between; align-items: center; font-size: 0.8rem;
   }
 
   header {
     background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    padding: 18px 10%; display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 10%; display: flex; justify-content: space-between; align-items: center;
     position: sticky; top: 0; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
   }
   .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
@@ -127,7 +103,7 @@
   nav ul li a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.85rem; transition: 0.3s; }
   nav ul li a:hover { color: var(--accent); }
 
-  /* --- Hero Section --- */
+  /* --- 3. HERO SLIDESHOW & BUTTONS --- */
   .hero-container { position: relative; height: 85vh; background: #000; overflow: hidden; }
   .bg-slideshow { list-style: none; padding: 0; margin: 0; }
   .bg-slideshow li {
@@ -135,109 +111,127 @@
     background-size: cover; background-position: center;
     opacity: 0; transition: opacity 2s ease-in-out;
   }
-  .bg-slideshow li.active { opacity: 0.5; }
+  .bg-slideshow li.active { opacity: 0.6; }
   .hero-overlay {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
     text-align: center; color: white; padding: 0 5%;
   }
   .hero-content h2 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.2; margin-bottom: 20px; }
-  .hero-content p { font-size: 1rem; max-width: 700px; margin: 0 auto 35px; line-height: 1.6; }
-
-  .hero-buttons { display: flex; gap: 20px; justify-content: center; }
+  .hero-buttons { display: flex; gap: 20px; justify-content: center; margin-top: 20px; }
+  
   .btn-primary-glow {
     background: linear-gradient(45deg, var(--accent), var(--accent-light), var(--accent));
     background-size: 200% auto; color: #043927 !important; border: none;
-    padding: 16px 40px; border-radius: 100px; font-weight: 800;
-    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3); transition: var(--transition);
+    padding: 18px 40px; border-radius: 100px; font-weight: 800;
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4); transition: 0.5s;
   }
   .btn-primary-glow:hover { background-position: right center; transform: translateY(-5px); }
 
   .btn-outline-glow {
     background: rgba(255, 255, 255, 0.1); color: white; border: 2px solid rgba(255, 255, 255, 0.5);
-    padding: 14px 40px; border-radius: 100px; font-weight: 700; backdrop-filter: blur(5px);
-    transition: var(--transition);
+    padding: 14px 35px; border-radius: 50px; font-weight: 700; backdrop-filter: blur(5px); transition: 0.4s;
   }
-  .btn-outline-glow:hover { background: white; color: var(--primary); transform: translateY(-5px); }
 
-  /* --- DASHBOARD CONTAINER FIXED (RATA TENGAH) --- */
+  /* --- 4. DASHBOARD & STATS (FIXED CENTER & DARK MODE) --- */
   .dashboard-container {
     width: 90%; max-width: 1100px;
-    margin: -100px auto 60px; /* 'auto' memastikan posisi di tengah */
+    margin: -100px auto 60px;
     padding: 45px; border-radius: 35px;
     position: relative; z-index: 100;
-    display: flex; flex-direction: column; align-items: center; text-align: center;
     background: var(--glass); backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
+    text-align: center;
   }
 
   [data-theme="dark"] .dashboard-container {
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(3, 7, 6, 0.95));
-    border: 1px solid rgba(251, 191, 36, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
   }
 
-  .stats-row { 
-    display: grid; grid-template-columns: repeat(3, 1fr); 
-    gap: 20px; width: 100%; margin-bottom: 30px; 
-  }
-
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; }
+  
+  .stat-item { display: flex; flex-direction: column; align-items: center; }
+  
   .stat-item h3 {
     font-size: 3.5rem; font-weight: 800; margin: 0;
     background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 5px 15px var(--primary-glow));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   }
+
   [data-theme="dark"] .stat-item h3 {
     background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    filter: none; /* MEMPERBAIKI MASALAH KOTAK HITAM */
+    text-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
   }
-  .stat-item p { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; font-weight: 700; opacity: 0.6; }
 
-  /* --- Prayer Widget --- */
-  .prayer-widget { width: 100%; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px; }
-  .prayer-times-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 100%; }
-  .prayer-box { 
-    background: rgba(0,0,0,0.02); padding: 15px 5px; border-radius: 15px; 
-    border: 1px solid rgba(0,0,0,0.03); transition: 0.3s;
-  }
-  .prayer-box:hover { background: white; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-  .prayer-name { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 5px; }
-  .prayer-time { font-size: 1.15rem; font-weight: 800; color: var(--primary); }
+  .stat-item p { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; font-weight: 700; opacity: 0.7; margin-top: 10px; }
 
-  /* --- Content Styling --- */
+  /* --- 5. PRAYER WIDGET --- */
+  .prayer-widget { border-top: 1px solid rgba(0,0,0,0.05); padding-top: 25px; margin-top: 25px; width: 100%; }
+  .prayer-times-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
+  .prayer-box { background: var(--bg); padding: 15px 5px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03); }
+  .prayer-name { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block; }
+  .prayer-time { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+
+  /* --- 6. SERVICES (FIXED CENTER) --- */
   .section-padding { padding: 80px 10%; }
-  .section-title h2 { font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 40px; }
+  .section-title { text-align: center; margin-bottom: 50px; }
+  .section-title h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; }
 
   .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+  
   .card {
-    background: var(--card); padding: 40px 30px; border-radius: 25px; text-align: center;
-    transition: var(--transition); border: 1px solid rgba(0,0,0,0.04);
+    background: var(--card); padding: 40px 30px; border-radius: 20px; 
+    display: flex; flex-direction: column; align-items: center; text-align: center; /* FIXED CENTER */
+    transition: var(--transition); border: 1px solid rgba(0,0,0,0.05);
+    text-decoration: none; color: inherit;
   }
-  .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--accent); }
+  .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
   .card i { font-size: 3rem; color: var(--accent); margin-bottom: 25px; }
 
-  /* --- Contact Form --- */
-  .contact-form-premium {
-    background: var(--card); padding: 40px; border-radius: 30px;
-    display: flex; flex-direction: column; gap: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+  /* --- 7. MODAL NEWS & GURU --- */
+  .news-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8); z-index: 5000;
+    justify-content: center; align-items: center; padding: 20px;
   }
-  .input-group input, .input-group textarea {
-    width: 100%; padding: 15px 15px 15px 45px; border: 2px solid #f1f1f1;
-    border-radius: 15px; background: #fcfcfc; transition: 0.3s;
+  .news-modal {
+    background: var(--card); padding: 30px; border-radius: 20px;
+    max-width: 800px; width: 95%; max-height: 80vh; overflow-y: auto;
+    position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   }
-  .input-group input:focus { border-color: var(--accent); background: #fff; outline: none; }
+  .close-news { position: absolute; top: 15px; right: 15px; background: var(--accent); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+  .guru-grid-modal { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin-top: 20px; }
+  .guru-item { text-align: center; }
+  .guru-item img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
 
-  /* --- Mobile Optimization --- */
+  /* --- 8. CONTACT FORM & WA --- */
+  .contact-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; gap: 50px; background: var(--card); padding: 45px; border-radius: 25px; }
+  .contact-form-premium { display: flex; flex-direction: column; gap: 18px; }
+  .input-group { position: relative; display: flex; align-items: center; }
+  .input-group i { position: absolute; left: 15px; color: var(--accent); }
+  .input-group input, .input-group textarea {
+    width: 100%; padding: 14px 15px 14px 45px; border: 2px solid #f1f1f1; border-radius: 12px; background: #fcfcfc; color: var(--text); font-family: inherit;
+  }
+  [data-theme="dark"] .input-group input, [data-theme="dark"] .input-group textarea { background: #1a2421; border-color: #2d3834; }
+  
+  .btn-send-wa { background: linear-gradient(45deg, #25d366, #128c7e); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s; }
+  .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 1000; text-decoration: none; }
+
+  /* --- 9. MOBILE OPTIMIZATION --- */
   @media (max-width: 992px) {
-    header, .section-padding { padding: 20px 5%; }
-    .dashboard-container { width: 92%; margin-top: -60px; padding: 30px 15px; }
-    .stats-row { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .stat-item h3 { font-size: 1.8rem; }
-    .prayer-times-grid { grid-template-columns: repeat(3, 1fr); }
+    header, .section-padding { padding: 15px 5%; }
+    .top-bar { display: none; }
+    nav ul { gap: 15px; }
     .hero-content h2 { font-size: 1.8rem; }
-    .hero-buttons { flex-direction: column; align-items: center; }
-    .btn-primary-glow, .btn-outline-glow { width: 100%; max-width: 300px; }
+    .hero-buttons { flex-direction: column; width: 100%; }
+    .dashboard-container { width: 95%; padding: 30px 15px; margin-top: -70px; }
+    .stats-row { grid-template-columns: 1fr; }
+    .prayer-times-grid { grid-template-columns: repeat(3, 1fr); }
+    .contact-wrapper { grid-template-columns: 1fr; padding: 25px; }
   }
 
   .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s ease; }
