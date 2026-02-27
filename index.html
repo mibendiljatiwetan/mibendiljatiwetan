@@ -59,11 +59,16 @@
   /* --- 1. BASE RESET & TYPOGRAPHY --- */
   * { box-sizing: border-box; }
   html, body {
-    margin: 0; padding: 0;
+    margin: 0;
+    padding: 0;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background: var(--bg); color: var(--text);
-    scroll-behavior: smooth; overflow-x: hidden;
-  }
+    background: var(--bg);
+    color: var(--text);
+    scroll-behavior: smooth;
+    /* Tambahkan dua baris ini */
+    overflow-x: hidden; 
+    width: 100%;
+}
   
   h1, h2, h3 { text-align: center; letter-spacing: -0.02em; }
 
@@ -256,18 +261,12 @@
   }
 
   @media (max-width: 992px) {
-    /* Tombol Hamburger */
-    .menu-toggle {
-        display: flex !important;
-        position: relative;
-        z-index: 3001; /* Di atas menu */
-    }
-
-    /* List Menu Mobile */
     #main-nav ul {
         position: fixed;
         top: 0;
-        right: -100%; /* Sembunyi di kanan luar layar */
+        /* Gunakan -300px atau lebih besar dari lebar menu (280px) 
+           untuk memastikan benar-benar sembunyi */
+        right: -320px; 
         width: 280px;
         height: 100vh;
         background: var(--card);
@@ -279,14 +278,18 @@
         box-shadow: -10px 0 40px rgba(0,0,0,0.3);
         z-index: 3000;
         display: flex !important;
-        padding: 0;
         margin: 0;
+        padding: 0;
+        /* Pastikan tidak bisa diklik saat sembunyi */
+        visibility: hidden; 
     }
 
     /* Saat Menu Aktif */
     #main-nav ul.active {
         right: 0 !important;
+        visibility: visible;
     }
+}
 
     /* Animasi Ikon Hamburger Jadi X */
     .menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
