@@ -256,35 +256,46 @@
   }
 
   @media (max-width: 992px) {
+    /* Tombol Hamburger */
     .menu-toggle {
-      display: flex; /* Muncul hanya di mobile */
+        display: flex !important;
+        position: relative;
+        z-index: 3001; /* Di atas menu */
     }
 
-    nav ul {
-      position: fixed;
-      top: 0;
-      right: -100%; /* Sembunyi di kanan */
-      width: 70%;
-      height: 100vh;
-      background: var(--card);
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 30px;
-      transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    /* List Menu Mobile */
+    #main-nav ul {
+        position: fixed;
+        top: 0;
+        right: -100%; /* Sembunyi di kanan luar layar */
+        width: 280px;
+        height: 100vh;
+        background: var(--card);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 25px;
+        transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: -10px 0 40px rgba(0,0,0,0.3);
+        z-index: 3000;
+        display: flex !important;
+        padding: 0;
+        margin: 0;
     }
 
-    nav ul.active {
-      right: 0; /* Muncul saat diklik */
+    /* Saat Menu Aktif */
+    #main-nav ul.active {
+        right: 0 !important;
     }
 
-    /* Animasi Hamburger jadi X */
+    /* Animasi Ikon Hamburger Jadi X */
     .menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .menu-toggle.active span:nth-child(2) { opacity: 0; }
     .menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-  }
-
+    
+    /* Overlay Background saat menu buka (opsional tapi bagus) */
+    body.menu-open { overflow: hidden; }
+}
   .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s ease; }
   .reveal.active { opacity: 1; transform: translateY(0); }
 </style>
@@ -472,7 +483,7 @@
       <p><i class="fas fa-envelope" style="color:var(--accent)"></i> misbendiljatiwetan@gmail.com</p>
       
       <div style="width:100%; height:320px; margin-top:20px; border-radius:15px; overflow:hidden; border: 1px solid #ddd;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.44376136152!2d111.9568943!3d-8.056155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e30f9a2e88f7%3A0xc3f8e916a9a3b2b!2sMI%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d429.17452558120357!2d111.96361715932238!3d-8.094378156694455!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e47153a25b7f%3A0xcc99a627fe8b89a2!2sMadrasah%20Ibtidaiyah%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1772215651647!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
 
@@ -535,12 +546,13 @@
   let allGuru = [];
   let dataVisiMisi = { visi: "", misi: "" };
 
-  // Jalankan fungsi saat halaman dimuat
+  // 1. INITIALIZATION
   window.onload = () => {
     loadData();
     initScrollReveal();
   };
 
+  // 2. DATA LOADING (Google Sheets)
   async function loadData() {
     fetchPrayerTimes(); 
 
@@ -553,14 +565,14 @@
       allGuru = data.dataGuru || [];
       dataVisiMisi = data.visiMisi || { visi: "", misi: "" };
 
-      // 1. Stats
+      // Stats
       if(data.stats) {
         animateCounter('count-siswa', data.stats.siswa);
         animateCounter('count-guru', data.stats.guru);
         animateCounter('count-ekskul', data.stats.ekskul);
       }
 
-      // 2. Slider
+      // Slider
       const slider = document.getElementById('slider');
       if(data.slider && data.slider.length > 0) {
         slider.innerHTML = data.slider.map((url, i) => `
@@ -569,7 +581,7 @@
         startSlider();
       }
 
-      // 3. Layanan Digital
+      // Layanan Digital
       const servicesList = document.getElementById('main-services-list');
       if(data.layanan) {
         servicesList.innerHTML = data.layanan.map(row => {
@@ -588,7 +600,7 @@
         }).join('');
       }
 
-      // 4. Prestasi
+      // Prestasi
       const prestasiList = document.getElementById('prestasi-list');
       if(data.prestasi) {
         prestasiList.innerHTML = data.prestasi.map(row => `
@@ -605,27 +617,72 @@
     }
   }
 
-  // Ganti fungsi openNewsModal lama dengan yang lebih aman ini
-function openNewsModal() {
-  const modal = document.getElementById('newsOverlay');
-  const content = document.getElementById('newsContent');
-  
-  if (allBerita.length === 0) {
-    alert("Data berita belum siap atau masih kosong di Google Sheets.");
-    return;
+  // 3. NAVIGATION & MENU LOGIC
+  function toggleMenu() {
+    const btn = document.getElementById('menu-btn');
+    const menuList = document.querySelector('#main-nav ul');
+
+    if (btn && menuList) {
+      btn.classList.toggle('active');
+      menuList.classList.toggle('active');
+      
+      // Cegah scroll pada body saat menu terbuka
+      if (menuList.classList.contains('active')) {
+          document.body.style.overflow = 'hidden';
+      } else {
+          document.body.style.overflow = 'auto';
+      }
+    }
   }
 
-  content.innerHTML = `<h2 style="text-align:center; color:var(--primary);">Warta Madrasah</h2><br>` + 
-    allBerita.map(item => `
-      <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
-        ${item[3] ? `<img src="${item[3]}" style="width:100%; border-radius:15px; margin-bottom:15px;">` : ''}
-        <h3 style="color:var(--primary)">${item[0]}</h3>
-        <p style="white-space: pre-line; text-align: justify; margin-top:10px; color:#555;">${item[2]}</p>
-      </div>`).join('');
+  function scrollToSection(id) {
+    const element = document.getElementById(id);
+    const btn = document.getElementById('menu-btn');
+    const menuList = document.querySelector('#main-nav ul');
 
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
+    // Tutup menu otomatis setelah klik (Mobile)
+    if (btn && menuList) {
+      btn.classList.remove('active');
+      menuList.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Eksekusi Scroll
+    if (id === 'top') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  // 4. MODAL FUNCTIONS
+  function openNewsModal() {
+    const modal = document.getElementById('newsOverlay');
+    const content = document.getElementById('newsContent');
+    
+    if (allBerita.length === 0) {
+      alert("Data berita belum siap atau masih kosong.");
+      return;
+    }
+
+    content.innerHTML = `<h2 style="text-align:center; color:var(--primary);">Warta Madrasah</h2><br>` + 
+      allBerita.map(item => `
+        <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
+          ${item[3] ? `<img src="${item[3]}" style="width:100%; border-radius:15px; margin-bottom:15px;">` : ''}
+          <h3 style="color:var(--primary)">${item[0]}</h3>
+          <p style="white-space: pre-line; text-align: justify; margin-top:10px; color:#555;">${item[2]}</p>
+        </div>`).join('');
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
 
   function openGuruModal() {
     const modal = document.getElementById('newsOverlay');
@@ -665,7 +722,20 @@ function openNewsModal() {
     document.body.style.overflow = 'auto';
   }
 
-  // --- UTILS ---
+  // 5. THEME & UTILS
+  function toggleTheme() {
+    const body = document.body;
+    const icon = document.getElementById('theme-icon');
+    
+    if (body.getAttribute('data-theme') === 'light') {
+      body.setAttribute('data-theme', 'dark');
+      icon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+      body.setAttribute('data-theme', 'light');
+      icon.classList.replace('fa-sun', 'fa-moon');
+    }
+  }
+
   function fetchPrayerTimes() {
     fetch('https://api.aladhan.com/v1/timingsByCity?city=Tulungagung&country=Indonesia&method=11')
       .then(res => res.json())
@@ -707,55 +777,16 @@ function openNewsModal() {
   }
 
   function initScrollReveal() {
+    const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('active');
       });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    reveals.forEach(el => observer.observe(el));
   }
 
-  // Fungsi Buka-Tutup Menu Hamburger
-function toggleMenu() {
-    const menuBtn = document.getElementById('menu-btn');
-    const navList = document.getElementById('main-nav');
-
-    // Menambah/menghapus class 'active'
-    menuBtn.classList.toggle('active');
-    navList.querySelector('ul').classList.toggle('active');
-}
-
-// Fungsi Scroll Halus & Otomatis Tutup Menu setelah klik (untuk Mobile)
-function scrollToSection(id) {
-    const element = document.getElementById(id);
-    if (element) {
-        // Tutup menu dulu jika sedang terbuka (mobile)
-        document.getElementById('menu-btn').classList.remove('active');
-        document.querySelector('#main-nav ul').classList.remove('active');
-
-        // Scroll ke tujuan
-        window.scrollTo({
-            top: element.offsetTop - 80, // Offset 80px agar tidak tertutup header
-            behavior: 'smooth'
-        });
-    }
-}
-
-// Tambahan Fungsi Theme Toggle (Agar tombol Bulan berfungsi)
-function toggleTheme() {
-    const body = document.body;
-    const icon = document.getElementById('theme-icon');
-    
-    if (body.getAttribute('data-theme') === 'light') {
-        body.setAttribute('data-theme', 'dark');
-        icon.classList.replace('fa-moon', 'fa-sun');
-    } else {
-        body.setAttribute('data-theme', 'light');
-        icon.classList.replace('fa-sun', 'fa-moon');
-    }
-}
-
-  // Form WA
+  // WhatsApp Form Handler
   document.getElementById('whatsappForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const nama = document.getElementById('wa_nama').value;
@@ -763,32 +794,6 @@ function toggleTheme() {
     const pesan = document.getElementById('wa_pesan').value;
     const text = `*HALO ADMIN MI BENDILJATI WETAN*%0A*Nama:* ${nama}%0A*Kontak:* ${kontak}%0A*Pesan:* ${pesan}`;
     window.open(`https://wa.me/6282130053330?text=${text}`, '_blank');
-  });
-
-  // Nav scroll
-  function scrollToSection(id) {
-    const el = document.getElementById(id);
-    window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
-  }
-  
-  function toggleMenu() {
-    document.getElementById('main-nav').classList.toggle('active');
-  }
-
-   const menuToggle = document.getElementById('mobile-menu');
-  const navList = document.getElementById('nav-list');
-
-  menuToggle.addEventListener('click', () => {
-    menuToggle.classList.toggle('active');
-    navList.classList.toggle('active');
-  });
-
-  // Menutup menu saat salah satu link diklik
-  document.querySelectorAll('nav ul li a').forEach(link => {
-    link.addEventListener('click', () => {
-      menuToggle.classList.remove('active');
-      navList.classList.remove('active');
-    });
   });
 </script>
 </body>
