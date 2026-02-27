@@ -454,7 +454,7 @@
   let dataVisiMisi = { visi: "", misi: "" };
 
   async function loadData() {
-    // 1. Panggil jadwal sholat segera
+    // 1. Jalankan jadwal sholat segera tanpa menunggu Google Sheet
     fetchPrayerTimes();
 
     try {
@@ -466,14 +466,14 @@
       allGuru = data.dataGuru || [];
       dataVisiMisi = data.visiMisi || { visi: "", misi: "" };
 
-      // Update Dashboard Stats
+      // Update Dashboard Stats dengan animasi
       if(data.stats) {
         animateCounter('count-siswa', data.stats.siswa);
         animateCounter('count-guru', data.stats.guru);
         animateCounter('count-ekskul', data.stats.ekskul);
       }
 
-      // 2. Render Slider
+      // 2. Render Slider Hero
       const slider = document.getElementById('slider');
       if(data.slider && data.slider.length > 0) {
         slider.innerHTML = data.slider.map((url, i) => `
@@ -481,11 +481,12 @@
         `).join('');
       }
 
-      // 3. Render Layanan Digital
+      // 3. Render Layanan Digital dengan Logika Klik Otomatis
       const servicesList = document.getElementById('main-services-list');
       if(data.layanan) {
         servicesList.innerHTML = data.layanan.map(row => {
           const judul = row[0].toLowerCase();
+          // Logika pembukaan modal berdasarkan nama layanan di Sheet
           if (judul.includes("berita")) {
             return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
           } 
@@ -495,11 +496,12 @@
           if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
             return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
           }
+          // Link standar jika bukan modal
           return `<a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
         }).join('');
       }
 
-      // 4. Render Prestasi
+      // 4. Render Galeri Prestasi
       const prestasiList = document.getElementById('prestasi-list');
       if(data.prestasi) {
         prestasiList.innerHTML = data.prestasi.map(row => `
@@ -509,6 +511,14 @@
           </div>
         `).join('');
       }
+
+      // Trigger scroll reveal agar elemen yang baru muncul langsung teranimasi
+      window.dispatchEvent(new Event('scroll'));
+
+    } catch (e) { 
+      console.error("Gagal memuat data dari Google Sheet:", e); 
+    }
+  }
 
       // Trigger animasi muncul
       window.dispatchEvent(new Event('scroll'));
