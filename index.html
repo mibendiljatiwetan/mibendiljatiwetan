@@ -234,6 +234,57 @@
     .contact-wrapper { grid-template-columns: 1fr; padding: 25px; }
   }
 
+    /* --- Hamburger Menu Style --- */
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    z-index: 3000;
+  }
+
+  .menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 10px;
+    transition: 0.3s;
+  }
+
+  [data-theme="dark"] .menu-toggle span {
+    background: var(--primary-light);
+  }
+
+  @media (max-width: 992px) {
+    .menu-toggle {
+      display: flex; /* Muncul hanya di mobile */
+    }
+
+    nav ul {
+      position: fixed;
+      top: 0;
+      right: -100%; /* Sembunyi di kanan */
+      width: 70%;
+      height: 100vh;
+      background: var(--card);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    }
+
+    nav ul.active {
+      right: 0; /* Muncul saat diklik */
+    }
+
+    /* Animasi Hamburger jadi X */
+    .menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+  }
+
   .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s ease; }
   .reveal.active { opacity: 1; transform: translateY(0); }
 </style>
