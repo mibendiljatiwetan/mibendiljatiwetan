@@ -659,6 +659,39 @@ function closeNews() {
       slides[current].classList.add('active');
     }, 5000);
   }
+   // --- Fungsi Dark Mode ---
+function toggleTheme() {
+  const body = document.body;
+  const themeIcon = document.getElementById('theme-icon');
+  
+  // Ambil tema saat ini
+  const currentTheme = body.getAttribute('data-theme');
+  
+  if (currentTheme === 'light') {
+    // Ubah ke Dark
+    body.setAttribute('data-theme', 'dark');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+    localStorage.setItem('theme', 'dark'); // Simpan pilihan user
+  } else {
+    // Ubah ke Light
+    body.setAttribute('data-theme', 'light');
+    themeIcon.classList.remove('fa-sun');
+    themeIcon.classList.add('fa-moon');
+    localStorage.setItem('theme', 'light'); // Simpan pilihan user
+  }
+}
+
+// Cek preferensi tema saat halaman dibuka
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme');
+  const themeIcon = document.getElementById('theme-icon');
+  
+  if (savedTheme === 'dark') {
+    document.body.setAttribute('data-theme', 'dark');
+    themeIcon.classList.remove('fa-moon');
+    themeIcon.classList.add('fa-sun');
+}
 </script>
 </body>
 </html>
