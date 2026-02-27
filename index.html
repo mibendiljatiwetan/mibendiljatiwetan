@@ -34,21 +34,25 @@
   
   <style>
     :root {
-      --primary: #043927;
-      --accent: #d4af37;
-      --bg: #fdfdfd;
-      --text: #1a1c1b;
-      --card: #ffffff;
-      --glass: rgba(255, 255, 255, 0.95);
-      --transition: 0.3s ease-in-out;
-    }
+  --primary: #043927;
+  --primary-glow: #065a3d;
+  --accent: #d4af37; /* Gold Metallic */
+  --accent-light: #f1d592; 
+  --bg: #f8faf9;
+  --text: #1a1c1b;
+  --card: #ffffff;
+  --glass: rgba(255, 255, 255, 0.8);
+}
 
-    [data-theme="dark"] {
-      --bg: #0b110f;
-      --text: #e4e6e5;
-      --card: #151d1a;
-      --glass: rgba(21, 29, 26, 0.95);
-    }
+[data-theme="dark"] {
+  --bg: #050a09;
+  --text: #e4e6e5;
+  --card: #0d1412;
+  --primary: #10b981; /* Hijau Emerald terang agar mewah di mode gelap */
+  --primary-glow: rgba(16, 185, 129, 0.3);
+  --glass: rgba(13, 20, 18, 0.8);
+  --accent: #ffcc33;
+}
 
     * { box-sizing: border-box; }
     html, body {
@@ -119,28 +123,21 @@
   margin-top: 20px;
 }
 
-/* Tombol Utama (Layanan Digital) */
 .btn-primary-glow {
-  background: linear-gradient(45deg, var(--accent), #ffeb3b);
-  color: var(--primary);
+  background: linear-gradient(45deg, #d4af37, #f1d592, #d4af37);
+  background-size: 200% auto;
+  color: #043927 !important;
   border: none;
-  padding: 16px 35px;
-  border-radius: 50px;
+  padding: 18px 40px;
+  border-radius: 100px;
   font-weight: 800;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.4s ease;
-  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+  transition: 0.5s;
 }
 
 .btn-primary-glow:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(212, 175, 55, 0.5);
-  filter: brightness(1.1);
+  background-position: right center; /* Efek kilau bergerak */
+  transform: translateY(-5px) scale(1.02);
 }
 
 /* Tombol Outline (Pendaftaran) */
@@ -181,29 +178,48 @@
   }
 }
 
-    /* Dashboard Stats - Nuansa Gradasi */
     .dashboard-container {
-      display: flex; flex-direction: column; gap: 30px;
-      width: 80%; margin: -80px auto 60px;
-      padding: 40px; border-radius: 24px;
-      position: relative; z-index: 100; text-align: center;
-      background: linear-gradient(135deg, var(--card) 0%, #f0f7f4 100%);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 20px 50px rgba(4, 57, 39, 0.12);
-      backdrop-filter: blur(10px);
-    }
-    [data-theme="dark"] .dashboard-container {
-      background: linear-gradient(135deg, #151d1a 0%, #0b110f 100%);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    }
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .stat-item h3 { 
-      font-size: 2.8rem; font-weight: 800; margin: 0;
-      background: linear-gradient(45deg, var(--primary), var(--accent));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .stat-item p { font-weight: 600; color: #777; margin: 5px 0 0; }
+  width: 90%;
+  max-width: 1100px;
+  margin: -100px auto 60px;
+  padding: 45px;
+  border-radius: 35px;
+  position: relative;
+  z-index: 100;
+  /* Efek Kaca */
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* Bayangan Mewah */
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
+}
 
+[data-theme="dark"] .dashboard-container {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+}
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .stat-item h3 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Memberikan sedikit filter drop-shadow agar teks menyala */
+  filter: drop-shadow(0 5px 15px var(--primary-glow));
+}
+
+.stat-item p {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+  opacity: 0.7;
+  margin-top: 10px;
+}
     /* Prayer Widget */
     .prayer-widget { border-top: 1px solid rgba(0,0,0,0.05); padding-top: 25px; }
     .prayer-times-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; }
