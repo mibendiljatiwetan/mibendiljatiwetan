@@ -743,6 +743,22 @@ function openNewsModal() {
   function toggleMenu() {
     document.getElementById('main-nav').classList.toggle('active');
   }
+
+   const menuToggle = document.getElementById('mobile-menu');
+  const navList = document.getElementById('nav-list');
+
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    navList.classList.toggle('active');
+  });
+
+  // Menutup menu saat salah satu link diklik
+  document.querySelectorAll('nav ul li a').forEach(link => {
+    link.addEventListener('click', () => {
+      menuToggle.classList.remove('active');
+      navList.classList.remove('active');
+    });
+  });
 </script>
 </body>
 </html>
