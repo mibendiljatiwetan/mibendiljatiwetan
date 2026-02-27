@@ -566,6 +566,59 @@
     else if(el) { window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' }); }
   }
 
+   // --- Fungsi Modal Data Guru ---
+function openGuruModal() {
+  const modal = document.getElementById('newsOverlay');
+  const content = document.getElementById('newsContent');
+  
+  if (allGuru.length === 0) {
+    content.innerHTML = "<h2>Data Guru</h2><p>Data sedang dimuat atau kosong.</p>";
+  } else {
+    content.innerHTML = `
+      <h2 style="text-align:center; margin-bottom:30px;">Tenaga Pendidik & Staf</h2>
+      <div class="guru-grid-modal">
+        ${allGuru.map(g => `
+          <div class="guru-item">
+            <img src="${g[3] || 'https://via.placeholder.com/100'}" alt="${g[0]}">
+            <h4 style="margin:10px 0 5px;">${g[0]}</h4>
+            <p style="font-size:0.8rem; color:#666;">${g[1]}</p>
+          </div>
+        `).join('')}
+      </div>`;
+  }
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+// --- Fungsi Modal Visi & Misi ---
+function openVisiModal() {
+  const modal = document.getElementById('newsOverlay');
+  const content = document.getElementById('newsContent');
+  
+  content.innerHTML = `
+    <div style="padding:10px;">
+      <h2 style="text-align:center; color:var(--primary);">Profil Madrasah</h2>
+      <hr style="border:0; border-top:2px solid var(--accent); width:50px; margin:20px auto;">
+      
+      <div style="margin-bottom:30px;">
+        <h3 style="color:var(--primary);"><i class="fas fa-eye"></i> Visi</h3>
+        <p style="line-height:1.6; text-align:justify;">${dataVisiMisi.visi || "Visi belum diisi di Google Sheets."}</p>
+      </div>
+      
+      <div>
+        <h3 style="color:var(--primary);"><i class="fas fa-bullseye"></i> Misi</h3>
+        <div style="line-height:1.6; text-align:justify; white-space: pre-line;">${dataVisiMisi.misi || "Misi belum diisi di Google Sheets."}</div>
+      </div>
+    </div>`;
+    
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+// --- Fungsi Menutup Modal (Pastikan ini ada) ---
+function closeNews() {
+  document.getElementById('newsOverlay').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
   function openNewsModal() {
     const modal = document.getElementById('newsOverlay');
     const content = document.getElementById('newsContent');
