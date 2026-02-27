@@ -106,15 +106,36 @@
     }
     .hero-content h2 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 20px; }
 
-    /* Dashboard Stats */
+    /* Dashboard Stats & Sholat */
     .dashboard-container {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+      display: flex; flex-direction: column; gap: 30px;
       width: 80%; margin: -60px auto 60px; background: var(--card);
       padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
       position: relative; z-index: 100; text-align: center;
     }
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .stat-item h3 { font-size: 2.5rem; color: var(--primary); margin: 0; }
     .stat-item p { font-weight: 600; color: #777; margin: 5px 0 0; }
+
+    /* Prayer Widget Styling */
+    .prayer-widget {
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding-top: 25px;
+    }
+    .prayer-widget h4 { margin: 0 0 15px; color: var(--primary); font-size: 0.9rem; letter-spacing: 1px; }
+    .prayer-times-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 10px;
+    }
+    .prayer-box {
+      background: var(--bg);
+      padding: 12px 5px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    .prayer-name { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block; }
+    .prayer-time { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
 
     /* Section Styling */
     .section-padding { padding: 80px 10%; }
@@ -292,10 +313,40 @@
   </section>
 
   <div class="dashboard-container reveal">
+  <div class="stats-row">
     <div class="stat-item"><h3 id="count-siswa">0</h3><p>Siswa Aktif</p></div>
     <div class="stat-item"><h3 id="count-guru">0</h3><p>Guru & Staf</p></div>
     <div class="stat-item"><h3 id="count-ekskul">0</h3><p>Ekstrakurikuler</p></div>
   </div>
+
+  <div class="prayer-widget" style="border-top: 1px solid rgba(0,0,0,0.05); padding-top: 25px; margin-top: 10px;">
+    <h4 style="margin: 0 0 15px; color: var(--primary); font-size: 0.9rem; letter-spacing: 1px;">
+      <i class="fas fa-clock"></i> JADWAL SHOLAT TULUNGAGUNG
+    </h4>
+    <div class="prayer-times-grid" id="prayer-times" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px;">
+      <div class="prayer-box" style="background: var(--bg); padding: 12px 5px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03);">
+        <span style="font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block;">Subuh</span>
+        <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);" id="sholat-fajr">--:--</div>
+      </div>
+      <div class="prayer-box" style="background: var(--bg); padding: 12px 5px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03);">
+        <span style="font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block;">Dzuhur</span>
+        <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);" id="sholat-dhuhr">--:--</div>
+      </div>
+      <div class="prayer-box" style="background: var(--bg); padding: 12px 5px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03);">
+        <span style="font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block;">Ashar</span>
+        <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);" id="sholat-asr">--:--</div>
+      </div>
+      <div class="prayer-box" style="background: var(--bg); padding: 12px 5px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03);">
+        <span style="font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block;">Maghrib</span>
+        <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);" id="sholat-maghrib">--:--</div>
+      </div>
+      <div class="prayer-box" style="background: var(--bg); padding: 12px 5px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.03);">
+        <span style="font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block;">Isya</span>
+        <div style="font-size: 1.1rem; font-weight: 700; color: var(--primary);" id="sholat-isha">--:--</div>
+      </div>
+    </div>
+  </div>
+</div>
 
   <section id="main-services" class="section-padding">
     <div class="section-title reveal">
@@ -464,6 +515,23 @@
       console.error("Data Load Error", e); 
     }
   }
+
+    // Fungsi untuk mengambil jadwal sholat
+async function fetchPrayerTimes() {
+  try {
+    const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Tulungagung&country=Indonesia&method=11');
+    const data = await res.json();
+    const t = data.data.timings;
+    
+    document.getElementById('sholat-fajr').innerText = t.Fajr;
+    document.getElementById('sholat-dhuhr').innerText = t.Dhuhr;
+    document.getElementById('sholat-asr').innerText = t.Asr;
+    document.getElementById('sholat-maghrib').innerText = t.Maghrib;
+    document.getElementById('sholat-isha').innerText = t.Isha;
+  } catch (err) {
+    console.error("Gagal memuat jadwal sholat", err);
+  }
+}
 
   // Fungsi Animasi Angka
   function animateCounter(id, target) {
