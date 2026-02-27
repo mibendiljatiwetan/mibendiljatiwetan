@@ -715,14 +715,45 @@ function openNewsModal() {
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   }
 
-  function toggleTheme() {
+  // Fungsi Buka-Tutup Menu Hamburger
+function toggleMenu() {
+    const menuBtn = document.getElementById('menu-btn');
+    const navList = document.getElementById('main-nav');
+
+    // Menambah/menghapus class 'active'
+    menuBtn.classList.toggle('active');
+    navList.querySelector('ul').classList.toggle('active');
+}
+
+// Fungsi Scroll Halus & Otomatis Tutup Menu setelah klik (untuk Mobile)
+function scrollToSection(id) {
+    const element = document.getElementById(id);
+    if (element) {
+        // Tutup menu dulu jika sedang terbuka (mobile)
+        document.getElementById('menu-btn').classList.remove('active');
+        document.querySelector('#main-nav ul').classList.remove('active');
+
+        // Scroll ke tujuan
+        window.scrollTo({
+            top: element.offsetTop - 80, // Offset 80px agar tidak tertutup header
+            behavior: 'smooth'
+        });
+    }
+}
+
+// Tambahan Fungsi Theme Toggle (Agar tombol Bulan berfungsi)
+function toggleTheme() {
     const body = document.body;
     const icon = document.getElementById('theme-icon');
-    const isDark = body.getAttribute('data-theme') === 'dark';
-    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    icon.classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
-    localStorage.setItem('theme', isDark ? 'light' : 'dark');
-  }
+    
+    if (body.getAttribute('data-theme') === 'light') {
+        body.setAttribute('data-theme', 'dark');
+        icon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+        body.setAttribute('data-theme', 'light');
+        icon.classList.replace('fa-sun', 'fa-moon');
+    }
+}
 
   // Form WA
   document.getElementById('whatsappForm').addEventListener('submit', function(e) {
