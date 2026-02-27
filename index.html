@@ -214,8 +214,18 @@
   .guru-item img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
 
   /* --- 8. CONTACT FORM & WA --- */
-  .contact-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; gap: 50px; background: var(--card); padding: 45px; border-radius: 25px; }
-  .contact-form-premium { display: flex; flex-direction: column; gap: 18px; }
+  /* Styling Dasar Wrapper */
+.contact-wrapper {
+    display: flex;
+    gap: 30px;
+    margin-top: 40px;
+    align-items: flex-start;
+}
+
+.contact-info, .contact-form-premium {
+    flex: 1;
+    width: 100%; /* Pastikan mengambil lebar penuh di container masing-masing */
+}
   .input-group { position: relative; display: flex; align-items: center; }
   .input-group i { position: absolute; left: 15px; color: var(--accent); }
   .input-group input, .input-group textarea {
@@ -226,6 +236,21 @@
   .btn-send-wa { background: linear-gradient(45deg, #25d366, #128c7e); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s; }
   .wa-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 1000; text-decoration: none; }
 
+    /* PERBAIKAN UNTUK MOBILE */
+@media (max-width: 992px) {
+    .contact-wrapper {
+        flex-direction: column; /* Tumpuk ke bawah agar tidak melebar ke samping */
+        gap: 40px;
+    }
+
+    .contact-info iframe {
+        height: 250px; /* Perkecil sedikit tinggi peta di HP agar hemat ruang */
+    }
+
+    .contact-form-premium {
+        padding: 20px; /* Kurangi padding di HP agar form tidak terasa sempit */
+    }
+}
   /* --- 9. MOBILE OPTIMIZATION --- */
   @media (max-width: 992px) {
     header, .section-padding { padding: 15px 5%; }
@@ -506,7 +531,7 @@
   </section>
 
   <section id="contact-section" class="section-padding">
-  <div class="contact-wrapper reveal">
+  <div class="contact-wrapper reveal active">
     <div class="contact-info">
       <h2 style="color:var(--primary)">Lokasi Kami</h2>
       <p><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> Setonokalong, RT. 01 RW. 01, Sumbergempol, Bendiljati Wetan, Tulungagung.</p>
@@ -514,7 +539,13 @@
       <p><i class="fas fa-envelope" style="color:var(--accent)"></i> misbendiljatiwetan@gmail.com</p>
       
       <div style="width:100%; height:320px; margin-top:20px; border-radius:15px; overflow:hidden; border: 1px solid #ddd;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d429.17452558120357!2d111.96361715932238!3d-8.094378156694455!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e47153a25b7f%3A0xcc99a627fe8b89a2!2sMadrasah%20Ibtidaiyah%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1772215651647!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d429.17452558120357!2d111.96361715932238!3d-8.094378156694455!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e47153a25b7f%3A0xcc99a627fe8b89a2!2sMadrasah%20Ibtidaiyah%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1772215651647!5m2!1sid!2sid"width="100%" 
+          height="100%" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
       </div>
     </div>
 
