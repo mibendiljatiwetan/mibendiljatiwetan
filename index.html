@@ -530,46 +530,46 @@
   </section>
 
   <section id="contact-section" class="section-padding">
-    <div class="contact-wrapper reveal">
-      <div class="contact-info">
-        <h2 style="color:var(--primary)">Lokasi Kami</h2>
-        <p><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> Setonokalong, RT. 01 RW. 01, Sumbergempol, Bendiljati Wetan, Tulungagung.</p>
-        <p><i class="fas fa-phone" style="color:var(--accent)"></i> +62 821 3005 3330</p>
-        <p><i class="fas fa-envelope" style="color:var(--accent)"></i> misbendiljatiwetan@gmail.com</p>
-        
-        <div style="width:100%; height:320px; margin-top:20px; border-radius:15px; overflow:hidden; border: 1px solid #ddd;">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.067939214643!2d111.9607924758904!3d-8.09455448095447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e47153a25b7f%3A0xcc99a627fe8b89a2!2sMadrasah%20Ibtidaiyah%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1769434643567!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
+  <div class="contact-wrapper reveal">
+    <div class="contact-info">
+      <h2 style="color:var(--primary)">Lokasi Kami</h2>
+      <p><i class="fas fa-map-marker-alt" style="color:var(--accent)"></i> Setonokalong, RT. 01 RW. 01, Sumbergempol, Bendiljati Wetan, Tulungagung.</p>
+      <p><i class="fas fa-phone" style="color:var(--accent)"></i> +62 821 3005 3330</p>
+      <p><i class="fas fa-envelope" style="color:var(--accent)"></i> misbendiljatiwetan@gmail.com</p>
+      
+      <div style="width:100%; height:320px; margin-top:20px; border-radius:15px; overflow:hidden; border: 1px solid #ddd;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3950.44376136152!2d111.9568943!3d-8.056155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78e30f9a2e88f7%3A0xc3f8e916a9a3b2b!2sMI%20Bendiljati%20Wetan!5e0!3m2!1sid!2sid!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
       </div>
-     <form class="contact-form" id="whatsappForm">
-  <form class="contact-form-premium" id="whatsappForm">
-        <div class="form-header">
-          <h3><i class="fas fa-paper-plane"></i> Hubungi Admin</h3>
-          <p>Tanyakan informasi seputar PPDB atau layanan madrasah.</p>
-        </div>
-        
-        <div class="input-group">
-          <i class="fas fa-user"></i>
-          <input type="text" id="wa_nama" placeholder="Nama Lengkap Anda" required>
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-phone-alt"></i>
-          <input type="text" id="wa_kontak" placeholder="No. WhatsApp / Email" required>
-        </div>
-
-        <div class="input-group">
-          <i class="fas fa-envelope-open-text"></i>
-          <textarea id="wa_pesan" placeholder="Tulis pesan atau pertanyaan Anda di sini..." rows="4" required></textarea>
-        </div>
-
-        <button type="submit" class="btn-send-wa">
-          <span>KIRIM PESAN</span>
-          <i class="fab fa-whatsapp"></i>
-        </button>
-      </form>
     </div>
-  </section>
+
+    <form class="contact-form-premium" id="whatsappForm">
+      <div class="form-header">
+        <h3><i class="fas fa-paper-plane"></i> Hubungi Admin</h3>
+        <p>Tanyakan informasi seputar PPDB atau layanan madrasah.</p>
+      </div>
+      
+      <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="wa_nama" placeholder="Nama Lengkap Anda" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-phone-alt"></i>
+        <input type="text" id="wa_kontak" placeholder="No. WhatsApp / Email" required>
+      </div>
+
+      <div class="input-group">
+        <i class="fas fa-envelope-open-text"></i>
+        <textarea id="wa_pesan" placeholder="Tulis pesan atau pertanyaan Anda di sini..." rows="4" required></textarea>
+      </div>
+
+      <button type="submit" class="btn-send-wa">
+        <span>KIRIM PESAN</span>
+        <i class="fab fa-whatsapp"></i>
+      </button>
+    </form>
+  </div>
+</section>
 
   <footer style="background: var(--primary); color: white; padding: 60px 10% 30px; text-align: center;">
     <img src="https://i.ibb.co.com/jcSRVbd/MIB.png" alt="Logo" style="height:60px; margin-bottom:20px;">
@@ -841,6 +841,66 @@ document.addEventListener('DOMContentLoaded', () => {
     themeIcon.classList.add('fa-sun');
 }
 });
+<script>
+  // Logika Pengiriman WhatsApp
+  document.getElementById('whatsappForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const nama = document.getElementById('wa_nama').value;
+    const kontak = document.getElementById('wa_kontak').value;
+    const pesan = document.getElementById('wa_pesan').value;
+    const noAdmin = "6282130053330"; 
+    
+    const text = `*HALO ADMIN MI BENDILJATI WETAN*%0A` +
+                 `----------------------------------%0A` +
+                 `*Nama:* ${nama}%0A` +
+                 `*Kontak:* ${kontak}%0A` +
+                 `*Pesan:* ${pesan}%0A` +
+                 `----------------------------------%0A` +
+                 `_Dikirim via Website Resmi_`;
+    
+    window.open(`https://wa.me/${noAdmin}?text=${text}`, '_blank');
+  });
+
+  // Melanjutkan script modal Anda yang terpotong tadi
+  function closeNews() {
+    document.getElementById('newsOverlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  function startSlider() {
+    let slides = document.querySelectorAll('#slider li');
+    let current = 0;
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 5000);
+  }
+
+  function initScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }
+
+  function toggleTheme() {
+    const body = document.body;
+    const icon = document.getElementById('theme-icon');
+    if (body.getAttribute('data-theme') === 'light') {
+      body.setAttribute('data-theme', 'dark');
+      icon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+      body.setAttribute('data-theme', 'light');
+      icon.classList.replace('fa-sun', 'fa-moon');
+    }
+  }
 </script>
 </body>
 </html>
