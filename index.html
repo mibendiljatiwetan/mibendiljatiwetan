@@ -454,26 +454,24 @@
   let dataVisiMisi = { visi: "", misi: "" };
 
   async function loadData() {
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    
-    // Simpan data ke variabel global
-    allBerita = data.berita || [];
-    allGuru = data.dataGuru || [];
-    dataVisiMisi = data.visiMisi || { visi: "", misi: "" };
+    // 1. Panggil jadwal sholat segera
+    fetchPrayerTimes();
 
-    // Update Dashboard Stats (Siswa, Guru, Ekskul)
-    // Pastikan ID 'count-siswa' dll sesuai dengan HTML Anda
-    if(data.stats) {
-      animateCounter('count-siswa', data.stats.siswa);
-      animateCounter('count-guru', data.stats.guru);
-      animateCounter('count-ekskul', data.stats.ekskul);
-    }
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      
+      // Simpan data ke variabel global
+      allBerita = data.berita || [];
+      allGuru = data.dataGuru || [];
+      dataVisiMisi = data.visiMisi || { visi: "", misi: "" };
 
-    fetchPrayerTimes(); // <--- TAMBAHKAN BARIS INI
-  try {
-    const res = await fetch(API_URL);
+      // Update Dashboard Stats
+      if(data.stats) {
+        animateCounter('count-siswa', data.stats.siswa);
+        animateCounter('count-guru', data.stats.guru);
+        animateCounter('count-ekskul', data.stats.ekskul);
+      }
 
       // 2. Render Slider
       const slider = document.getElementById('slider');
@@ -483,23 +481,23 @@
         `).join('');
       }
 
-      // Render Layanan Digital dengan Logika Klik
-    const servicesList = document.getElementById('main-services-list');
-    if(data.layanan) {
-      servicesList.innerHTML = data.layanan.map(row => {
-        const judul = row[0].toLowerCase();
-        if (judul.includes("berita")) {
-          return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
-        } 
-        if (judul.includes("guru") || judul.includes("staf")) {
-          return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
-        }
-        if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
-          return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
-        }
-        return `<a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
-      }).join('');
-    }
+      // 3. Render Layanan Digital
+      const servicesList = document.getElementById('main-services-list');
+      if(data.layanan) {
+        servicesList.innerHTML = data.layanan.map(row => {
+          const judul = row[0].toLowerCase();
+          if (judul.includes("berita")) {
+            return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
+          } 
+          if (judul.includes("guru") || judul.includes("staf")) {
+            return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+          }
+          if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
+            return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
+          }
+          return `<a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
+        }).join('');
+      }
 
       // 4. Render Prestasi
       const prestasiList = document.getElementById('prestasi-list');
@@ -511,6 +509,14 @@
           </div>
         `).join('');
       }
+
+      // Trigger animasi muncul
+      window.dispatchEvent(new Event('scroll'));
+
+    } catch (e) { 
+      console.error("Data Load Error", e); 
+    }
+  }
 
       // Trigger animasi muncul
       window.dispatchEvent(new Event('scroll'));
