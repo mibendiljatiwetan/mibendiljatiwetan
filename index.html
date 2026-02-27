@@ -471,6 +471,10 @@
       animateCounter('count-ekskul', data.stats.ekskul);
     }
 
+    fetchPrayerTimes(); // <--- TAMBAHKAN BARIS INI
+  try {
+    const res = await fetch(API_URL);
+
       // 2. Render Slider
       const slider = document.getElementById('slider');
       if(data.slider && data.slider.length > 0) {
@@ -518,26 +522,23 @@
 
    async function fetchPrayerTimes() {
   try {
-    // Menggunakan koordinat Tulungagung agar lebih akurat
+    // Menggunakan HTTPS dan parameter yang lebih jelas
     const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Tulungagung&country=Indonesia&method=11');
+    const result = await res.json();
     
-    if (!res.ok) throw new Error("Respon API tidak OK");
-    
-    const data = await res.json();
-    const t = data.data.timings;
-    
-    // Update teks di HTML
-    document.getElementById('sholat-fajr').innerText = t.Fajr;
-    document.getElementById('sholat-dhuhr').innerText = t.Dhuhr;
-    document.getElementById('sholat-asr').innerText = t.Asr;
-    document.getElementById('sholat-maghrib').innerText = t.Maghrib;
-    document.getElementById('sholat-isha').innerText = t.Isha;
-    
-    console.log("Jadwal Sholat berhasil dimuat");
+    if (result.code === 200) {
+      const t = result.data.timings;
+      document.getElementById('sholat-fajr').innerText = t.Fajr;
+      document.getElementById('sholat-dhuhr').innerText = t.Dhuhr;
+      document.getElementById('sholat-asr').innerText = t.Asr;
+      document.getElementById('sholat-maghrib').innerText = t.Maghrib;
+      document.getElementById('sholat-isha').innerText = t.Isha;
+      console.log("Jadwal sholat berhasil diperbarui");
+    }
   } catch (err) {
     console.error("Gagal memuat jadwal sholat:", err);
-    // Jika gagal, tampilkan pesan error di salah satu kotak
-    document.getElementById('sholat-dhuhr').innerText = "Err";
+    // Opsional: Tampilkan pesan jika gagal
+    document.querySelectorAll('.prayer-time').forEach(el => el.innerText = "Error");
   }
 }
   // Fungsi Animasi Angka
