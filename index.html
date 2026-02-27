@@ -516,23 +516,30 @@
     }
   }
 
-    // Fungsi untuk mengambil jadwal sholat
-async function fetchPrayerTimes() {
+   async function fetchPrayerTimes() {
   try {
+    // Menggunakan koordinat Tulungagung agar lebih akurat
     const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Tulungagung&country=Indonesia&method=11');
+    
+    if (!res.ok) throw new Error("Respon API tidak OK");
+    
     const data = await res.json();
     const t = data.data.timings;
     
+    // Update teks di HTML
     document.getElementById('sholat-fajr').innerText = t.Fajr;
     document.getElementById('sholat-dhuhr').innerText = t.Dhuhr;
     document.getElementById('sholat-asr').innerText = t.Asr;
     document.getElementById('sholat-maghrib').innerText = t.Maghrib;
     document.getElementById('sholat-isha').innerText = t.Isha;
+    
+    console.log("Jadwal Sholat berhasil dimuat");
   } catch (err) {
-    console.error("Gagal memuat jadwal sholat", err);
+    console.error("Gagal memuat jadwal sholat:", err);
+    // Jika gagal, tampilkan pesan error di salah satu kotak
+    document.getElementById('sholat-dhuhr').innerText = "Err";
   }
 }
-
   // Fungsi Animasi Angka
   function animateCounter(id, target) {
     let current = 0;
