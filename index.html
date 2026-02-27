@@ -261,12 +261,38 @@
   }
 
   @media (max-width: 992px) {
+    /* 1. Pastikan Tombol Muncul */
+    .menu-toggle {
+        display: flex !important;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        z-index: 3001; /* Harus lebih tinggi dari nav ul */
+        position: relative;
+    }
+
+    .menu-toggle span {
+        width: 25px;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+
+    [data-theme="dark"] .menu-toggle span {
+        background: var(--primary-light);
+    }
+
+    /* 2. Sembunyikan Navigasi Asli */
+    nav ul {
+        display: none; 
+    }
+
+    /* 3. Atur Sidebar Mobile */
     #main-nav ul {
         position: fixed;
         top: 0;
-        /* Gunakan -300px atau lebih besar dari lebar menu (280px) 
-           untuk memastikan benar-benar sembunyi */
-        right: -320px; 
+        right: -320px; /* Sembunyi total di kanan */
         width: 280px;
         height: 100vh;
         background: var(--card);
@@ -275,29 +301,31 @@
         justify-content: center;
         gap: 25px;
         transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: -10px 0 40px rgba(0,0,0,0.3);
+        box-shadow: -10px 0 40px rgba(0,0,0,0.2);
         z-index: 3000;
         display: flex !important;
         margin: 0;
         padding: 0;
-        /* Pastikan tidak bisa diklik saat sembunyi */
-        visibility: hidden; 
+        visibility: hidden;
     }
 
-    /* Saat Menu Aktif */
+    /* 4. Munculkan Sidebar Saat Aktif */
     #main-nav ul.active {
         right: 0 !important;
         visibility: visible;
     }
-}
 
-    /* Animasi Ikon Hamburger Jadi X */
+    /* 5. Animasi Tombol Jadi X */
     .menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .menu-toggle.active span:nth-child(2) { opacity: 0; }
     .menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-    
-    /* Overlay Background saat menu buka (opsional tapi bagus) */
-    body.menu-open { overflow: hidden; }
+
+    /* 6. Penyesuaian Konten Lain di Mobile */
+    header, .section-padding { padding: 15px 5%; }
+    .top-bar { display: none; }
+    .hero-content h2 { font-size: 1.8rem; }
+    .dashboard-container { width: 95%; margin-top: -70px; }
+    .stats-row { grid-template-columns: 1fr; }
 }
   .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s ease; }
   .reveal.active { opacity: 1; transform: translateY(0); }
