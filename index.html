@@ -445,7 +445,7 @@
   </div>
 </div>
   
-  <script>
+ <script>
   const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
 
   // Variabel Global
@@ -453,126 +453,41 @@
   let allGuru = [];
   let dataVisiMisi = { visi: "", misi: "" };
 
+  // Jalankan fungsi saat halaman dimuat
+  window.onload = () => {
+    loadData();
+    initScrollReveal();
+  };
+
   async function loadData() {
-    // 1. Jalankan jadwal sholat segera tanpa menunggu Google Sheet
-    fetchPrayerTimes();
+    fetchPrayerTimes(); // Tetap jalan meski Sheets error
 
     try {
       const res = await fetch(API_URL);
+      if (!res.ok) throw new Error("Gagal mengambil data");
       const data = await res.json();
       
-      // Simpan data ke variabel global
       allBerita = data.berita || [];
       allGuru = data.dataGuru || [];
       dataVisiMisi = data.visiMisi || { visi: "", misi: "" };
 
-      // Update Dashboard Stats dengan animasi
+      // 1. Stats
       if(data.stats) {
         animateCounter('count-siswa', data.stats.siswa);
         animateCounter('count-guru', data.stats.guru);
         animateCounter('count-ekskul', data.stats.ekskul);
       }
 
-      // 2. Render Slider Hero
+      // 2. Slider
       const slider = document.getElementById('slider');
       if(data.slider && data.slider.length > 0) {
         slider.innerHTML = data.slider.map((url, i) => `
           <li class="${i===0?'active':''}" style="background-image:url('${url}')"></li>
         `).join('');
+        startSlider();
       }
 
-      // 3. Render Layanan Digital dengan Logika Klik Otomatis
-      const servicesList = document.getElementById('main-services-list');
-      if(data.layanan) {
-        servicesList.innerHTML = data.layanan.map(row => {
-          const judul = row[0].toLowerCase();
-          // Logika pembukaan modal berdasarkan nama layanan di Sheet
-          if (judul.includes("berita")) {
-            return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
-          } 
-          if (judul.includes("guru") || judul.includes("staf")) {
-            return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
-          }
-          if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
-            return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
-          }
-          // Link standar jika bukan modal
-          return `<a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
-        }).join('');
-      }
-
-      // 4. Render Galeri Prestasi
-      const prestasiList = document.getElementById('prestasi-list');
-      if(data.prestasi) {
-        prestasiList.innerHTML = data.prestasi.map(row => `
-          <div class="card" style="padding:0; overflow:hidden; text-align:left;">
-            <img src="${row[2]}" style="width:100%; height:220px; object-fit:cover" loading="lazy">
-            <div style="padding:25px"><h3>${row[0]}</h3><p style="color:var(--accent); font-weight:800; margin-top:5px;">${row[1]}</p></div>
-          </div>
-        `).join('');
-      }
-
-      // Trigger scroll reveal agar elemen yang baru muncul langsung teranimasi
-      window.dispatchEvent(new Event('scroll'));
-
-    } catch (e) { 
-      console.error("Gagal memuat data dari Google Sheet:", e); 
-    }
-  }
-
-      // Trigger animasi muncul
-      window.dispatchEvent(new Event('scroll'));
-
-    } catch (e) { 
-      console.error("Data Load Error", e); 
-    }
-  }
-
-      // Trigger animasi muncul
-      window.dispatchEvent(new Event('scroll'));
-
-    } catch (e) { 
-      console.error("Data Load Error", e); 
-    }
-  }
-
-   <script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbzXZIrK-08GhyfiNBo7ErWeM8dtWQTTYoORGubt0HBM-Df03xdVOIheF19asYHpm7TKPw/exec";
-
-  // Variabel Global
-  let allBerita = []; 
-  let allGuru = [];
-  let dataVisiMisi = { visi: "", misi: "" };
-
-  async function loadData() {
-    // 1. Jalankan jadwal sholat segera
-    fetchPrayerTimes();
-
-    try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      
-      // Simpan data ke variabel global
-      allBerita = data.berita || [];
-      allGuru = data.dataGuru || [];
-      dataVisiMisi = data.visiMisi || { visi: "", misi: "" };
-
-      // Update Dashboard Stats
-      if(data.stats) {
-        animateCounter('count-siswa', data.stats.siswa);
-        animateCounter('count-guru', data.stats.guru);
-        animateCounter('count-ekskul', data.stats.ekskul);
-      }
-
-      // 2. Render Slider
-      const slider = document.getElementById('slider');
-      if(data.slider && data.slider.length > 0) {
-        slider.innerHTML = data.slider.map((url, i) => `
-          <li class="${i===0?'active':''}" style="background-image:url('${url}')"></li>
-        `).join('');
-      }
-
-      // 3. Render Layanan Digital (INI YANG TADI ERROR)
+      // 3. Layanan Digital
       const servicesList = document.getElementById('main-services-list');
       if(data.layanan) {
         servicesList.innerHTML = data.layanan.map(row => {
@@ -590,7 +505,7 @@
         }).join('');
       }
 
-      // 4. Render Prestasi
+      // 4. Prestasi
       const prestasiList = document.getElementById('prestasi-list');
       if(data.prestasi) {
         prestasiList.innerHTML = data.prestasi.map(row => `
@@ -601,14 +516,14 @@
         `).join('');
       }
 
-      // Trigger animasi muncul
-      window.dispatchEvent(new Event('scroll'));
-
     } catch (e) { 
-      console.error("Data Load Error", e); 
+      console.error("Data Load Error:", e);
+      document.getElementById('main-services-list').innerHTML = "<p>Gagal memuat layanan. Pastikan koneksi internet stabil.</p>";
     }
   }
 
+  // --- Fungsi Pendukung ---
+  
   async function fetchPrayerTimes() {
     try {
       const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Tulungagung&country=Indonesia&method=11');
@@ -621,16 +536,14 @@
         document.getElementById('sholat-maghrib').innerText = t.Maghrib;
         document.getElementById('sholat-isha').innerText = t.Isha;
       }
-    } catch (err) {
-      console.error("Gagal memuat jadwal sholat:", err);
-    }
+    } catch (err) { console.error("Error Sholat:", err); }
   }
 
   function animateCounter(id, target) {
     let current = 0;
-    const increment = target / 50;
     const el = document.getElementById(id);
     if(!el) return;
+    const increment = target / 30;
     const timer = setInterval(() => {
       current += increment;
       if (current >= target) {
@@ -639,14 +552,7 @@
       } else {
         el.innerText = Math.floor(current);
       }
-    }, 30);
-  }
-
-  function toggleTheme() {
-    const b = document.body;
-    const isDark = b.getAttribute('data-theme') === 'dark';
-    b.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    document.getElementById('theme-icon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+    }, 50);
   }
 
   function toggleMenu() {
@@ -656,11 +562,8 @@
   function scrollToSection(id) {
     document.getElementById('main-nav').classList.remove('active');
     const el = document.getElementById(id);
-    if(id === 'top') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if(el) {
-        window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
-    }
+    if(id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else if(el) { window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' }); }
   }
 
   function openNewsModal() {
@@ -671,31 +574,8 @@
         <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
           <img src="${item[3]}" style="width:100%; border-radius:10px;">
           <h3>${item[0]}</h3>
-          <p style="white-space: pre-line; text-align: justify; line-height: 1.6;">${item[2]}</p>
+          <p style="white-space: pre-line; text-align: justify;">${item[2]}</p>
         </div>`).join('') : "<p>Tidak ada berita.</p>");
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-
-  function openGuruModal() {
-    const modal = document.getElementById('newsOverlay');
-    const content = document.getElementById('newsContent');
-    content.innerHTML = `<h2 style="text-align:center">Tenaga Pendidik</h2><div class="guru-grid-modal">` + 
-      allGuru.map(g => `<div class="guru-item"><img src="${g[3]}"><h4>${g[0]}</h4><p>${g[1]}</p></div>`).join('') + `</div>`;
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-
-  function openVisiModal() {
-    const modal = document.getElementById('newsOverlay');
-    const content = document.getElementById('newsContent');
-    content.innerHTML = `
-      <div style="padding:20px; text-align: justify;">
-        <h2 style="color:var(--primary); text-align: center;">Visi</h2>
-        <p style="white-space: pre-line;">${dataVisiMisi.visi}</p>
-        <h2 style="color:var(--primary); text-align: center;">Misi</h2>
-        <div style="white-space: pre-line;">${dataVisiMisi.misi}</div>
-      </div>`;
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
@@ -705,21 +585,27 @@
     document.body.style.overflow = 'auto';
   }
 
-  window.addEventListener('scroll', () => {
-    document.querySelectorAll('.reveal').forEach(r => {
-      if (r.getBoundingClientRect().top < window.innerHeight - 50) r.classList.add('active');
+  function initScrollReveal() {
+    const reveals = document.querySelectorAll('.reveal');
+    window.addEventListener('scroll', () => {
+      reveals.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const revealTop = el.getBoundingClientRect().top;
+        if (revealTop < windowHeight - 100) el.classList.add('active');
+      });
     });
-  });
+  }
 
-  setInterval(() => {
-    const s = document.querySelectorAll('#slider li');
-    if(s.length < 2) return;
-    let c = Array.from(s).findIndex(i => i.classList.contains('active'));
-    s[c].classList.remove('active');
-    s[(c + 1) % s.length].classList.add('active');
-  }, 5000);
-
-  window.onload = loadData;
+  function startSlider() {
+    const slides = document.querySelectorAll('#slider li');
+    let current = 0;
+    if(slides.length <= 1) return;
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 5000);
+  }
 </script>
 </body>
 </html>
