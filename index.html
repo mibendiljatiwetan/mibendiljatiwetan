@@ -608,7 +608,7 @@
   };
 
   async function loadData() {
-    fetchPrayerTimes(); // Tetap jalan meski Sheets error
+    fetchPrayerTimes(); 
 
     try {
       const res = await fetch(API_URL);
@@ -640,16 +640,17 @@
       if(data.layanan) {
         servicesList.innerHTML = data.layanan.map(row => {
           const judul = row[0].toLowerCase();
-          if (judul.includes("berita")) {
-            return `<div onclick="openNewsModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Baca</p></div>`;
-          } 
-          if (judul.includes("guru") || judul.includes("staf")) {
-            return `<div onclick="openGuruModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
-          }
-          if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) {
-            return `<div onclick="openVisiModal()" class="card" style="cursor:pointer"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Lihat</p></div>`;
-          }
-          return `<a href="${row[1]}" target="_blank" class="card"><i class="${row[2]}"></i><h3>${row[0]}</h3><p>Klik untuk Akses</p></a>`;
+          let clickFunc = `window.open('${row[1]}', '_blank')`;
+          
+          if (judul.includes("berita")) clickFunc = "openNewsModal()";
+          else if (judul.includes("guru") || judul.includes("staf")) clickFunc = "openGuruModal()";
+          else if (judul.includes("visi") || judul.includes("misi") || judul.includes("profil")) clickFunc = "openVisiModal()";
+          
+          return `<div onclick="${clickFunc}" class="card" style="cursor:pointer">
+                    <i class="${row[2]}"></i>
+                    <h3>${row[0]}</h3>
+                    <p>Klik untuk Akses</p>
+                  </div>`;
         }).join('');
       }
 
@@ -666,25 +667,75 @@
 
     } catch (e) { 
       console.error("Data Load Error:", e);
-      document.getElementById('main-services-list').innerHTML = "<p>Gagal memuat layanan. Pastikan koneksi internet stabil.</p>";
+      document.getElementById('main-services-list').innerHTML = "<p>Gagal memuat layanan.</p>";
     }
   }
 
-  // --- Fungsi Pendukung ---
-  
-  async function fetchPrayerTimes() {
-    try {
-      const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Tulungagung&country=Indonesia&method=11');
-      const result = await res.json();
-      if (result.code === 200) {
+  // --- MODAL FUNCTIONS ---
+  function openNewsModal() {
+    const modal = document.getElementById('newsOverlay');
+    const content = document.getElementById('newsContent');
+    content.innerHTML = `<h2 style="text-align:center">Warta Madrasah</h2>` + 
+      (allBerita.length ? allBerita.map(item => `
+        <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
+          <img src="${item[3]}" style="width:100%; border-radius:10px; margin-bottom:15px;">
+          <h3>${item[0]}</h3>
+          <p style="white-space: pre-line; text-align: justify;">${item[2]}</p>
+        </div>`).join('') : "<p>Tidak ada berita.</p>");
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function openGuruModal() {
+    const modal = document.getElementById('newsOverlay');
+    const content = document.getElementById('newsContent');
+    content.innerHTML = `<h2 style="text-align:center; margin-bottom:30px;">Data Guru & Staff</h2>
+      <div class="guru-grid-modal">
+        ${allGuru.map(g => `
+          <div class="guru-item">
+            <img src="${g[3] || 'https://via.placeholder.com/100'}" alt="${g[0]}">
+            <h4>${g[0]}</h4>
+            <p>${g[1]}</p>
+          </div>`).join('')}
+      </div>`;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function openVisiModal() {
+    const modal = document.getElementById('newsOverlay');
+    const content = document.getElementById('newsContent');
+    content.innerHTML = `
+      <div style="padding:10px;">
+        <h2 style="text-align:center;">Visi & Misi</h2>
+        <div style="margin-top:20px;">
+          <h3 style="color:var(--primary);">Visi</h3>
+          <p>${dataVisiMisi.visi || "Data kosong"}</p>
+          <h3 style="color:var(--primary); margin-top:20px;">Misi</h3>
+          <p style="white-space: pre-line;">${dataVisiMisi.misi || "Data kosong"}</p>
+        </div>
+      </div>`;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNews() {
+    document.getElementById('newsOverlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  // --- UTILS ---
+  function fetchPrayerTimes() {
+    fetch('https://api.aladhan.com/v1/timingsByCity?city=Tulungagung&country=Indonesia&method=11')
+      .then(res => res.json())
+      .then(result => {
         const t = result.data.timings;
         document.getElementById('sholat-fajr').innerText = t.Fajr;
         document.getElementById('sholat-dhuhr').innerText = t.Dhuhr;
         document.getElementById('sholat-asr').innerText = t.Asr;
         document.getElementById('sholat-maghrib').innerText = t.Maghrib;
         document.getElementById('sholat-isha').innerText = t.Isha;
-      }
-    } catch (err) { console.error("Error Sholat:", err); }
+      }).catch(err => console.error(err));
   }
 
   function animateCounter(id, target) {
@@ -703,100 +754,6 @@
     }, 50);
   }
 
-  function toggleMenu() {
-    document.getElementById('main-nav').classList.toggle('active');
-  }
-
-  function scrollToSection(id) {
-    document.getElementById('main-nav').classList.remove('active');
-    const el = document.getElementById(id);
-    if(id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    else if(el) { window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' }); }
-  }
-
-   // --- Fungsi Modal Data Guru ---
-function openGuruModal() {
-  const modal = document.getElementById('newsOverlay');
-  const content = document.getElementById('newsContent');
-  
-  if (allGuru.length === 0) {
-    content.innerHTML = "<h2>Data Guru</h2><p>Data sedang dimuat atau kosong.</p>";
-  } else {
-    content.innerHTML = `
-      <h2 style="text-align:center; margin-bottom:30px;">Data Guru & Staff</h2>
-      <div class="guru-grid-modal">
-        ${allGuru.map(g => `
-          <div class="guru-item">
-            <img src="${g[3] || 'https://via.placeholder.com/100'}" alt="${g[0]}">
-            <h4 style="margin:10px 0 5px;">${g[0]}</h4>
-            <p style="font-size:0.8rem; color:#666;">${g[1]}</p>
-          </div>
-        `).join('')}
-      </div>`;
-  }
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-// --- Fungsi Modal Visi & Misi ---
-function openVisiModal() {
-  const modal = document.getElementById('newsOverlay');
-  const content = document.getElementById('newsContent');
-  
-  content.innerHTML = `
-    <div style="padding:10px;">
-      <h2 style="text-align:center; color:var(--primary);">Visi & Misi</h2>
-      <hr style="border:0; border-top:2px solid var(--accent); width:50px; margin:20px auto;">
-      
-      <div style="margin-bottom:30px;">
-        <h3 style="color:var(--primary);"><i class="fas fa-eye"></i> Visi</h3>
-        <p style="line-height:1.6; text-align:justify;">${dataVisiMisi.visi || "Visi belum diisi di Google Sheets."}</p>
-      </div>
-      
-      <div>
-        <h3 style="color:var(--primary);"><i class="fas fa-bullseye"></i> Misi</h3>
-        <div style="line-height:1.6; text-align:justify; white-space: pre-line;">${dataVisiMisi.misi || "Misi belum diisi di Google Sheets."}</div>
-      </div>
-    </div>`;
-    
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-// --- Fungsi Menutup Modal (Pastikan ini ada) ---
-function closeNews() {
-  document.getElementById('newsOverlay').style.display = 'none';
-  document.body.style.overflow = 'auto';
-}
-
-  function openNewsModal() {
-    const modal = document.getElementById('newsOverlay');
-    const content = document.getElementById('newsContent');
-    content.innerHTML = `<h2 style="text-align:center">Warta Madrasah</h2>` + 
-      (allBerita.length ? allBerita.map(item => `
-        <div style="margin-bottom:30px; border-bottom:1px solid #eee; padding-bottom:20px;">
-          <img src="${item[3]}" style="width:100%; border-radius:10px;">
-          <h3>${item[0]}</h3>
-          <p style="white-space: pre-line; text-align: justify;">${item[2]}</p>
-        </div>`).join('') : "<p>Tidak ada berita.</p>");
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeNews() {
-    document.getElementById('newsOverlay').style.display = 'none';
-    document.body.style.overflow = 'auto';
-  }
-
-  function initScrollReveal() {
-    const reveals = document.querySelectorAll('.reveal');
-    window.addEventListener('scroll', () => {
-      reveals.forEach(el => {
-        const windowHeight = window.innerHeight;
-        const revealTop = el.getBoundingClientRect().top;
-        if (revealTop < windowHeight - 100) el.classList.add('active');
-      });
-    });
-  }
-
   function startSlider() {
     const slides = document.querySelectorAll('#slider li');
     let current = 0;
@@ -807,99 +764,43 @@ function closeNews() {
       slides[current].classList.add('active');
     }, 5000);
   }
-   // --- Fungsi Dark Mode ---
-function toggleTheme() {
-  const body = document.body;
-  const themeIcon = document.getElementById('theme-icon');
-  
-  // Ambil tema saat ini
-  const currentTheme = body.getAttribute('data-theme');
-  
-  if (currentTheme === 'light') {
-    // Ubah ke Dark
-    body.setAttribute('data-theme', 'dark');
-    themeIcon.classList.remove('fa-moon');
-    themeIcon.classList.add('fa-sun');
-    localStorage.setItem('theme', 'dark'); // Simpan pilihan user
-  } else {
-    // Ubah ke Light
-    body.setAttribute('data-theme', 'light');
-    themeIcon.classList.remove('fa-sun');
-    themeIcon.classList.add('fa-moon');
-    localStorage.setItem('theme', 'light'); // Simpan pilihan user
-  }
-}
-
-// Cek preferensi tema saat halaman dibuka
-document.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('theme');
-  const themeIcon = document.getElementById('theme-icon');
-  
-  if (savedTheme === 'dark') {
-    document.body.setAttribute('data-theme', 'dark');
-    themeIcon.classList.remove('fa-moon');
-    themeIcon.classList.add('fa-sun');
-}
-});
-<script>
-  // Logika Pengiriman WhatsApp
-  document.getElementById('whatsappForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const nama = document.getElementById('wa_nama').value;
-    const kontak = document.getElementById('wa_kontak').value;
-    const pesan = document.getElementById('wa_pesan').value;
-    const noAdmin = "6282130053330"; 
-    
-    const text = `*HALO ADMIN MI BENDILJATI WETAN*%0A` +
-                 `----------------------------------%0A` +
-                 `*Nama:* ${nama}%0A` +
-                 `*Kontak:* ${kontak}%0A` +
-                 `*Pesan:* ${pesan}%0A` +
-                 `----------------------------------%0A` +
-                 `_Dikirim via Website Resmi_`;
-    
-    window.open(`https://wa.me/${noAdmin}?text=${text}`, '_blank');
-  });
-
-  // Melanjutkan script modal Anda yang terpotong tadi
-  function closeNews() {
-    document.getElementById('newsOverlay').style.display = 'none';
-    document.body.style.overflow = 'auto';
-  }
-
-  function startSlider() {
-    let slides = document.querySelectorAll('#slider li');
-    let current = 0;
-    setInterval(() => {
-      slides[current].classList.remove('active');
-      current = (current + 1) % slides.length;
-      slides[current].classList.add('active');
-    }, 5000);
-  }
 
   function initScrollReveal() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('active');
       });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   }
 
   function toggleTheme() {
     const body = document.body;
     const icon = document.getElementById('theme-icon');
-    if (body.getAttribute('data-theme') === 'light') {
-      body.setAttribute('data-theme', 'dark');
-      icon.classList.replace('fa-moon', 'fa-sun');
-    } else {
-      body.setAttribute('data-theme', 'light');
-      icon.classList.replace('fa-sun', 'fa-moon');
-    }
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    icon.classList.replace(isDark ? 'fa-sun' : 'fa-moon', isDark ? 'fa-moon' : 'fa-sun');
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  }
+
+  // Form WA
+  document.getElementById('whatsappForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nama = document.getElementById('wa_nama').value;
+    const kontak = document.getElementById('wa_kontak').value;
+    const pesan = document.getElementById('wa_pesan').value;
+    const text = `*HALO ADMIN MI BENDILJATI WETAN*%0A*Nama:* ${nama}%0A*Kontak:* ${kontak}%0A*Pesan:* ${pesan}`;
+    window.open(`https://wa.me/6282130053330?text=${text}`, '_blank');
+  });
+
+  // Nav scroll
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    window.scrollTo({ top: id === 'top' ? 0 : el.offsetTop - 80, behavior: 'smooth' });
+  }
+  
+  function toggleMenu() {
+    document.getElementById('main-nav').classList.toggle('active');
   }
 </script>
 </body>
