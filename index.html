@@ -34,6 +34,7 @@
   
   <style>
   :root {
+    /* Palette Mewah - Mode Terang */
     --primary: #043927;
     --primary-glow: rgba(4, 57, 39, 0.2);
     --accent: #d4af37;
@@ -46,6 +47,7 @@
   }
 
   [data-theme="dark"] {
+    /* Palette Mewah - Mode Gelap */
     --bg: #030706; 
     --text: #f0f2f1;
     --card: #0a110f;
@@ -56,6 +58,7 @@
     --primary-glow: rgba(16, 185, 129, 0.3);
   }
 
+  /* --- Base Reset --- */
   * { box-sizing: border-box; }
   html, body {
     margin: 0; padding: 0;
@@ -64,9 +67,39 @@
     scroll-behavior: smooth; overflow-x: hidden;
   }
 
+  /* --- Typography Mewah --- */
   h1, h2, h3 { letter-spacing: -0.02em; text-align: center; }
+  
+  [data-theme="dark"] .section-title h2,
+  [data-theme="dark"] .brand h1,
+  [data-theme="dark"] .prayer-time {
+    background: linear-gradient(135deg, var(--primary-light), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 10px var(--primary-glow));
+  }
 
-  /* --- Header & Nav --- */
+  /* Pastikan teks deskripsi statistik terlihat terang di mode gelap */
+[data-theme="dark"] .stat-item p {
+    color: var(--text); /* Menggunakan warna f0f2f1 yang sudah kita set di root */
+    opacity: 0.8;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5); /* Memberi sedikit bayangan agar teks 'muncul' */
+}
+
+/* Mempertegas kotak stat-item agar tidak flat */
+.stat-item {
+    padding: 10px;
+    border-radius: 20px;
+    transition: var(--transition);
+}
+
+[data-theme="dark"] .stat-item {
+    background: rgba(255, 255, 255, 0.03); /* Memberi kesan box transparan tipis */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+  /* --- Navigation Components --- */
   .announcement-bar {
     background: linear-gradient(90deg, var(--accent), var(--accent-light));
     color: #043927; padding: 10px 0; font-size: 0.85rem; font-weight: 800;
@@ -75,14 +108,20 @@
   .ticker { display: inline-block; animation: ticker 40s linear infinite; padding-left: 100%; }
   @keyframes ticker { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
+  .top-bar {
+    background: var(--primary); color: white;
+    padding: 12px 10%; display: flex;
+    justify-content: space-between; align-items: center; font-size: 0.75rem;
+  }
+
   header {
     background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     padding: 18px 10%; display: flex; justify-content: space-between; align-items: center;
     position: sticky; top: 0; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
   }
   .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
-  .brand h1 { font-size: 1.1rem; margin: 0; color: var(--primary); font-weight: 800; transition: 0.3s; }
-  [data-theme="dark"] .brand h1 { color: var(--primary-light); }
+  .brand img { height: 45px; }
+  .brand h1 { font-size: 1rem; margin: 0; color: var(--primary); font-weight: 800; }
 
   nav ul { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
   nav ul li a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.85rem; transition: 0.3s; }
@@ -102,8 +141,9 @@
     text-align: center; color: white; padding: 0 5%;
   }
   .hero-content h2 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.2; margin-bottom: 20px; }
-  .hero-content p { font-size: 1rem; max-width: 700px; margin: 0 auto 35px; line-height: 1.6; opacity: 0.9; }
+  .hero-content p { font-size: 1rem; max-width: 700px; margin: 0 auto 35px; line-height: 1.6; }
 
+  .hero-buttons { display: flex; gap: 20px; justify-content: center; }
   .btn-primary-glow {
     background: linear-gradient(45deg, var(--accent), var(--accent-light), var(--accent));
     background-size: 200% auto; color: #043927 !important; border: none;
@@ -112,100 +152,92 @@
   }
   .btn-primary-glow:hover { background-position: right center; transform: translateY(-5px); }
 
-  /* --- DASHBOARD & STATS (FIXED) --- */
+  .btn-outline-glow {
+    background: rgba(255, 255, 255, 0.1); color: white; border: 2px solid rgba(255, 255, 255, 0.5);
+    padding: 14px 40px; border-radius: 100px; font-weight: 700; backdrop-filter: blur(5px);
+    transition: var(--transition);
+  }
+  .btn-outline-glow:hover { background: white; color: var(--primary); transform: translateY(-5px); }
+
+  /* --- DASHBOARD CONTAINER FIXED (RATA TENGAH) --- */
   .dashboard-container {
     width: 90%; max-width: 1100px;
-    margin: -100px auto 60px;
-    padding: 50px 40px; border-radius: 40px;
+    margin: -100px auto 60px; /* 'auto' memastikan posisi di tengah */
+    padding: 45px; border-radius: 35px;
     position: relative; z-index: 100;
-    display: flex; flex-direction: column; align-items: center;
-    background: var(--glass); backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    background: var(--glass); backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
   }
 
   [data-theme="dark"] .dashboard-container {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(5, 10, 9, 0.95));
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(3, 7, 6, 0.95));
     border: 1px solid rgba(251, 191, 36, 0.2);
-    box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
   }
 
   .stats-row { 
     display: grid; grid-template-columns: repeat(3, 1fr); 
-    gap: 20px; width: 100%; margin-bottom: 40px; 
+    gap: 20px; width: 100%; margin-bottom: 30px; 
   }
 
   .stat-item h3 {
-    font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; margin: 0;
-    /* Ganti background-clip dengan color solid jika gradient bermasalah, 
-       atau gunakan cara yang lebih aman di bawah ini */
+    font-size: 3.5rem; font-weight: 800; margin: 0;
     background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    /* Jangan gunakan filter: drop-shadow di sini jika text-fill transparan */
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 5px 15px var(--primary-glow));
   }
-
   [data-theme="dark"] .stat-item h3 {
     background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    /* Efek glow eksternal dipindah ke text-shadow agar teks tidak hilang */
-    text-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
   }
+  .stat-item p { text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; font-weight: 700; opacity: 0.6; }
 
-  .stat-item p { 
-    text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; 
-    font-weight: 700; opacity: 0.8; margin-top: 5px; color: var(--text);
+  /* --- Prayer Widget --- */
+  .prayer-widget { width: 100%; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 30px; }
+  .prayer-times-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; width: 100%; }
+  .prayer-box { 
+    background: rgba(0,0,0,0.02); padding: 15px 5px; border-radius: 15px; 
+    border: 1px solid rgba(0,0,0,0.03); transition: 0.3s;
   }
+  .prayer-box:hover { background: white; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+  .prayer-name { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .prayer-time { font-size: 1.15rem; font-weight: 800; color: var(--primary); }
 
-  /* --- HUBUNGI KAMI (NEW UI) --- */
-  .contact-wrapper {
-    display: grid; grid-template-columns: 1fr 1.3fr; gap: 30px;
-    margin-top: 40px;
+  /* --- Content Styling --- */
+  .section-padding { padding: 80px 10%; }
+  .section-title h2 { font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 40px; }
+
+  .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+  .card {
+    background: var(--card); padding: 40px 30px; border-radius: 25px; text-align: center;
+    transition: var(--transition); border: 1px solid rgba(0,0,0,0.04);
   }
+  .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--accent); }
+  .card i { font-size: 3rem; color: var(--accent); margin-bottom: 25px; }
 
-  .contact-info-panel {
-    background: var(--primary); color: white; padding: 40px; border-radius: 30px;
-    display: flex; flex-direction: column; gap: 25px;
-    box-shadow: 0 20px 40px rgba(4, 57, 39, 0.2);
-  }
-
-  .contact-method { display: flex; align-items: center; gap: 15px; }
-  .contact-method i {
-    width: 45px; height: 45px; background: rgba(255,255,255,0.1);
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 12px; color: var(--accent); font-size: 1.1rem;
-  }
-
+  /* --- Contact Form --- */
   .contact-form-premium {
     background: var(--card); padding: 40px; border-radius: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02);
+    display: flex; flex-direction: column; gap: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.04);
   }
-
-  .input-group { position: relative; margin-bottom: 20px; }
-  .input-group i { position: absolute; left: 18px; top: 18px; color: var(--accent); }
   .input-group input, .input-group textarea {
-    width: 100%; padding: 16px 16px 16px 50px; border-radius: 15px;
-    border: 2px solid transparent; background: var(--bg); color: var(--text);
-    font-family: inherit; transition: 0.3s;
+    width: 100%; padding: 15px 15px 15px 45px; border: 2px solid #f1f1f1;
+    border-radius: 15px; background: #fcfcfc; transition: 0.3s;
   }
-  .input-group input:focus { border-color: var(--accent); background: var(--card); outline: none; }
-
-  .btn-send-wa {
-    width: 100%; background: linear-gradient(45deg, #25d366, #128c7e);
-    color: white; border: none; padding: 18px; border-radius: 15px;
-    font-weight: 800; cursor: pointer; transition: 0.3s;
-  }
+  .input-group input:focus { border-color: var(--accent); background: #fff; outline: none; }
 
   /* --- Mobile Optimization --- */
   @media (max-width: 992px) {
-    .contact-wrapper { grid-template-columns: 1fr; }
+    header, .section-padding { padding: 20px 5%; }
+    .dashboard-container { width: 92%; margin-top: -60px; padding: 30px 15px; }
     .stats-row { grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .stat-item h3 { font-size: 1.8rem; }
-    .dashboard-container { width: 94%; margin-top: -60px; padding: 30px 15px; }
+    .prayer-times-grid { grid-template-columns: repeat(3, 1fr); }
+    .hero-content h2 { font-size: 1.8rem; }
+    .hero-buttons { flex-direction: column; align-items: center; }
+    .btn-primary-glow, .btn-outline-glow { width: 100%; max-width: 300px; }
   }
 
   .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s ease; }
